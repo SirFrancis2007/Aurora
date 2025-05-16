@@ -1,6 +1,7 @@
 using System.Data;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
+using Dapper;
 
 namespace Aurora.Dapper.ADO;
 
@@ -10,28 +11,39 @@ public class RepoRuta : RepoGenerico, IRepoRuta
     {
     }
 
-    public void CrearRuta(Ruta NewRuta)
+    public void Alta(Ruta elemento)
     {
-        throw new NotImplementedException();
+        var parametros = new DynamicParameters();
+        parametros.Add("xOrigen", elemento.Origen);
+        parametros.Add("xDestino", elemento.Destino);
+
+        try
+        {
+            Conexion.Execute("SPCrearRuta", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("¡Error al generar la ruta!");
+        }
     }
 
-    public void EliminarRura(int idRuta)
+    public Ruta? Detalle(int indiceABuscar)
     {
-        throw new NotImplementedException();
+        var query = @"Select * from Ruta where idRuta = {indiceABuscar}";
+        var Resultado = Conexion.QueryFirstOrDefault<Ruta>(query);
+        return Resultado;
     }
 
-    public List<Ruta> ListarRutas()
+    public IEnumerable<Ruta> Obtener()
     {
-        throw new NotImplementedException();
+        var query = @"Select * from Ruta";
+        var Resultados = Conexion.Query<Ruta>(query);
+        return Resultados;
     }
 
-    public void ObtenerRutaPorCondicion()
+    public void ObtenerRutaPorCondicion(int? idRuta, string xOrigen, string xDestino)
     {
-        throw new NotImplementedException();
-    }
-
-    public Ruta ObtenerRutaPorId(int idRuta)
-    {
-        throw new NotImplementedException();
+        var query = @"Select * from Ruta where idRuta = {indiceABuscar} or Origen = {xOrigen} or Destino = {xDestino}";
+        var Resultado = Conexion.QueryFirstOrDefault<Ruta>(query);
     }
 }

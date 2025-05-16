@@ -1,10 +1,6 @@
 namespace Aurora.Core.Interfaces;
 
-public interface IRepoRuta
+public interface IRepoRuta : IRepoAlta<Ruta>, IRepoDetalle<Ruta, int>, IRepoListado<Ruta> 
 {
-    public void CrearRuta(Ruta NewRuta);
-    public void EliminarRura(int idRuta);
-    public Ruta ObtenerRutaPorId(int idRuta);
-    public void ObtenerRutaPorCondicion();
-    public List<Ruta> ListarRutas();
+    public void ObtenerRutaPorCondicion(int? idRuta, string Origen, string Destino);
 }
