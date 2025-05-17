@@ -32,7 +32,18 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
 
     public void CambiarEstado(int vehiculoId, bool disponible)
     {
-        throw new NotImplementedException();
+        var parametros = new DynamicParameters();
+        parametros.Add("xidVehiculo", vehiculoId);
+        parametros.Add("xdisponible", disponible);    
+
+        try
+        {
+            Conexion.Execute("SPActualizarEstadoVehiculo", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error al actualizar el estado del vehiculo");
+        }
     }
 
     public void EliminarVehiculo(int idVehiculo)

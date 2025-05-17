@@ -4,6 +4,6 @@ public interface IRepoAdministrador : IRepoAlta<Administrador>, IRepoDetalle<Adm
 {
     //public void Loguearse (string Nombre, string password);
     //public void CerrarSesion();
-    public void CrearPedido(Pedido xNewPedido);
-    public void ObtenerPedidoXAdmin(int idadministrador);
+    //public void CrearPedido(Pedido xNewPedido);
+    //public void ObtenerPedidoXAdmin(int idadministrador);
 }

@@ -15,8 +15,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
     public void Alta(Empresa NuevaEmpresa)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("@xNombre", NuevaEmpresa.Nombre);
-
+        parametros.Add("xNombre", NuevaEmpresa.Nombre);
         try
         {
             Conexion.Execute("PSCrearEmpresa", parametros); // "PSCrearEmpresa" SP para crear empresa
@@ -29,10 +28,10 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
     public void AgregarAdministrador(Administrador xAdministrador)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("@xidAdministrador", xAdministrador.IdAdministrador);
-        parametros.Add("@xNombre", xAdministrador.Nombre);
-        parametros.Add("@xpassword", xAdministrador.Password);
-        parametros.Add("@xidEmpresa", xAdministrador.IdEmpresa);
+        parametros.Add("xidAdministrador", xAdministrador.IdAdministrador);
+        parametros.Add("xNombre", xAdministrador.Nombre);
+        parametros.Add("xpassword", xAdministrador.Password);
+        parametros.Add("xidEmpresa", xAdministrador.IdEmpresa);
 
         try
         {
@@ -54,7 +53,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
     public void EliminarAdministrador(int xidadministrador)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("@xidAdministrador", xidadministrador);
+        parametros.Add("xidAdministrador", xidadministrador);
 
         try
         {

@@ -1,6 +1,7 @@
 using System.Data;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
+using Dapper;
 #pragma warning restore format
 namespace Aurora.Dapper.ADO;
 
@@ -10,38 +11,53 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
     {
     }
 
-    public void Alta(Administrador elemento)
+    public void Alta(Administrador NewAdmin)
     {
-        throw new NotImplementedException();
+        var parametros = new DynamicParameters();
+        parametros.Add("xName",NewAdmin.Nombre);
+        parametros.Add("xPassword", NewAdmin.Password);
+        parametros.Add("xEmpresa_idEmpresa", NewAdmin.IdEmpresa);
+
+        try
+        {
+            Conexion.Execute("SPNuevoAdministrador", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error al agregar un nuevo administrador");
+        }
     }
 
-    /*public void CerrarSesion()
+    public Administrador? Detalle(int xidAdmin)
     {
-        throw new NotImplementedException();
-    }*/
-
-    public void CrearPedido(Pedido xNewPedido)
-    {
-        throw new NotImplementedException();
+        var Query = @"SELECT * FROM Administrador where idAdministrador = {xidAdmin}";
+        var repuesta = Conexion.QueryFirstOrDefault<Administrador>(Query);
+        return repuesta;
     }
 
-    public Administrador? Detalle(int indiceABuscar)
-    {
-        throw new NotImplementedException();
-    }
-
-    /*public void Loguearse(string Nombre, string password)
-    {
-        throw new NotImplementedException();
-    }*/
 
     public IEnumerable<Administrador> Obtener()
     {
-        throw new NotImplementedException();
+        var Query = @"SELECT * FROM Administrador";
+        var repuesta = Conexion.Query<Administrador>(Query);
+        return repuesta;
     }
 
     public void ObtenerPedidoXAdmin(int idadministrador)
     {
-        throw new NotImplementedException();
+        var Query = @"SELECT 
+                        a.Name AS NombreAdministrador,
+                        p.idPedido,
+                        p.Name AS NombrePedido,
+                        p.Volumen,
+                        p.Peso,
+                        p.EstadoPedido,
+                        p.FechaDespacho,
+                        p.EmpresaDestino,
+                        p.Ruta_idRuta
+                        FROM Administrador a
+                        JOIN Pedido p USING (idAdministrador)
+                        WHERE a.idAdministrador = @idadministrador;";
+        var repuesta = Conexion.QueryFirstOrDefault<Administrador>(Query);
     }
 }
