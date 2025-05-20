@@ -25,6 +25,19 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
             throw new Exception("Esta empresa ya se encuentra Registrada");
         }
     }
+    public async Task AltaAsync(Empresa NuevaEmpresa)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xNombre", NuevaEmpresa.Nombre);
+        try
+        {
+            await Conexion.ExecuteAsync("PSCrearEmpresa", parametros); // "PSCrearEmpresa" SP para crear empresa
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Esta empresa ya se encuentra Registrada");
+        }
+    }
     public void AgregarAdministrador(Administrador xAdministrador)
     {
         var parametros = new DynamicParameters();

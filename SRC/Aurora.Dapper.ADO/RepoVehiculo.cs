@@ -12,24 +12,6 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     {
     }
 
-    public void AñadirVehiculo(Vehiculo NewVehiculo)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xTipo", NewVehiculo.Tipo);
-        parametros.Add("xEstado", NewVehiculo.Estado);
-        parametros.Add("xCapacidadMax", NewVehiculo.CapacidadMax);
-        parametros.Add("xMatricula", NewVehiculo.Matricula);
-
-        try
-        {
-            Conexion.Execute("SPCrearVehiculo", parametros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception(@"Error al agregar el vehiculo {Exception}");
-        }
-    }
-
     public void CambiarEstado(int vehiculoId, bool disponible)
     {
         var parametros = new DynamicParameters();
@@ -72,5 +54,44 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
 
         var pedidos = Conexion.Query<Pedido>(query, new { vehiculoId }).ToList();
         return pedidos;
+    }
+
+    void IRepoAlta<Vehiculo>.Alta(Vehiculo elemento)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xTipo", elemento.Tipo);
+        parametros.Add("xEstado", elemento.Estado);
+        parametros.Add("xCapacidadMax", elemento.CapacidadMax);
+        parametros.Add("xMatricula", elemento.Matricula);
+
+        try
+        {
+            Conexion.Execute("SPCrearVehiculo", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception(@"Error al agregar el vehiculo {Exception}");
+        }
+    }
+
+    Vehiculo? IRepoDetalle<Vehiculo, int>.Detalle(int indiceABuscar)
+    {
+        string query = @"
+            SELECT *
+            FROM Vehiculo 
+            WHERE idVehiculo = @vehiculoId";
+
+        var vehiculo = Conexion.QueryFirstOrDefault<Vehiculo>(query, new { vehiculoId = indiceABuscar });
+        return vehiculo;    
+    }
+
+    IEnumerable<Vehiculo> IRepoListado<Vehiculo>.Obtener()
+    {
+        string query = @"
+            SELECT *
+            FROM Vehiculo";
+
+        var pedidos = Conexion.Query<Pedido>(query).ToList();
+        return (IEnumerable<Vehiculo>)pedidos;
     }
 }
