@@ -142,24 +142,24 @@ DELIMITER ;
 
 -- Procedimiento para crear un nuevo vehículo (por administrador)
 DELIMITER $$
-CREATE PROCEDURE CreateVehiculo(
-    OUT p_idVehiculo INT,
-    IN p_Tipo VARCHAR(45),
-    IN p_Matricula VARCHAR(45),
-    IN p_CapacidadMax DOUBLE,
-    IN p_Estado TINYINT
+CREATE PROCEDURE SPCrearVehiculo(
+    OUT xidVehiculo INT,
+    IN xTipo VARCHAR(45),
+    IN xMatricula VARCHAR(45),
+    IN xCapacidadMax DOUBLE,
+    IN xEstado TINYINT
 )
 BEGIN
     INSERT INTO Vehiculo (Tipo, Matricula, CapacidadMaz, Estado)
-    VALUES (p_Tipo, p_Matricula, p_CapacidadMax, p_Estado);
+    VALUES (xTipo, xMatricula, xCapacidadMax, xEstado);
     
-    set p_idVehiculo = last_insert_id();
+    set xidVehiculo = last_insert_id();
 END $$
 DELIMITER ;
 
 -- Procedimiento para eliminar un vehículo
 DELIMITER $$
-CREATE PROCEDURE DeleteVehiculo(IN p_idVehiculo INT)
+CREATE PROCEDURE SPDelVehiculo(IN xidVehiculo INT)
 BEGIN
     -- Se Verifica que el vehiculo no posea actualmente un conductor asignado
     DECLARE asignaciones_conductores INT;
@@ -169,11 +169,11 @@ BEGIN
     
     SELECT COUNT(*) INTO asignaciones_conductores 
     FROM Conductor_has_Vehiculo 
-    WHERE Vehiculo_idVehiculo = p_idVehiculo;
+    WHERE Vehiculo_idVehiculo = xidVehiculo;
     
     SELECT COUNT(*) INTO asignaciones_pedidos 
     FROM Vehiculo_has_Pedido 
-    WHERE Vehiculo_idVehiculo = p_idVehiculo;
+    WHERE Vehiculo_idVehiculo = xidVehiculo;
     
     IF asignaciones_conductores > 0 THEN
         SIGNAL SQLSTATE '45000'
@@ -182,7 +182,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede eliminar el vehículo porque tiene pedidos asignados';
     ELSE
-        DELETE FROM Vehiculo WHERE idVehiculo = p_idVehiculo;
+        DELETE FROM Vehiculo WHERE idVehiculo = xidVehiculo;
     END IF;
 END $$
 DELIMITER ;
@@ -204,6 +204,18 @@ BEGIN
     WHERE idVehiculo = p_idVehiculo;
 END $$
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE SPActualizarEstadoVehiculo(xidVehiculo INT, xdisponible BOOLEAN)
+BEGIN
+    UPDATE Vehiculo
+    SET Estado = CASE
+        WHEN xdisponible THEN 0
+        ELSE 1
+    END
+    WHERE idVehiculo = xidVehiculo;
+END //
 
 -- =====================================================================
 -- PROCEDIMIENTOS PARA ASIGNACIÓN DE VEHÍCULOS A CONDUCTORES
@@ -245,9 +257,9 @@ DELIMITER ;
 
 -- Procedimiento para desasignar un vehículo de un conductor
 DELIMITER $$
-CREATE PROCEDURE DesasignarVehiculoDeConductor(
-    IN p_idConductor INT,
-    IN p_idVehiculo INT
+CREATE PROCEDURE SPDesasignarVehiculoAConductor(
+    IN xidConductor INT,
+    IN xidVehiculo INT
 )
 BEGIN
     -- Verificamos si el vehículo tiene pedidos asignados actualmente
@@ -255,9 +267,8 @@ BEGIN
     
     SELECT COUNT(*) INTO pedidos_activos 
     FROM Vehiculo_has_Pedido vp
-    join Pedido using (idPedido)
-    -- JOIN Pedido p ON vp.Pedido_idPedido = p.idPedido
-    WHERE vp.Vehiculo_idVehiculo = p_idVehiculo
+    JOIN Pedido p ON vp.Pedido_idPedido = p.idPedido
+    WHERE vp.Vehiculo_idVehiculo = xidVehiculo
     AND p.EstadoPedido NOT IN ('Entregado', 'Cancelado');
     
     IF pedidos_activos > 0 THEN
@@ -265,8 +276,8 @@ BEGIN
         SET MESSAGE_TEXT = 'No se puede desasignar el vehículo porque tiene pedidos activos';
     ELSE
         DELETE FROM Conductor_has_Vehiculo 
-        WHERE Conductor_idConductor = p_idConductor 
-        AND Vehiculo_idVehiculo = p_idVehiculo;
+        WHERE Conductor_idConductor = xidConductor 
+        AND Vehiculo_idVehiculo = xidVehiculo;
     END IF;
 END $$
 DELIMITER ;
@@ -277,16 +288,16 @@ DELIMITER ;
 
 -- Procedimiento para crear una nueva ruta
 DELIMITER $$
-CREATE PROCEDURE CreateRuta(
-    OUT p_idRuta INT,
-    IN p_Origen VARCHAR(45),
-    IN p_Destino VARCHAR(45)
+CREATE PROCEDURE SPCrearRuta(
+    OUT xidRuta INT,
+    IN xOrigen VARCHAR(45),
+    IN xDestino VARCHAR(45)
 )
 BEGIN
     INSERT INTO Ruta (Origen, Destino)
-    VALUES (p_Origen, p_Destino);
+    VALUES (xOrigen, xDestino);
     
-    set p_idRuta = last_insert_id();
+    set xidRuta = last_insert_id();
 END $$
 DELIMITER ;
 
@@ -296,30 +307,29 @@ DELIMITER ;
 
 -- Procedimiento para crear un nuevo pedido
 DELIMITER $$
-CREATE PROCEDURE CreatePedido(
-    OUT p_idPedido INT,
-    IN p_Name VARCHAR(45),
-    IN p_Volumen VARCHAR(45),
-    IN p_Peso VARCHAR(45),
-    IN p_EstadoPedido VARCHAR(45),
-    IN p_FechaDespacho DATE,
-    IN p_Administrador_idAdministrador INT,
-    IN p_EmpresaOrigen INT,
-    IN p_EmpresaDestino INT,
-    IN p_Ruta_idRuta INT
+CREATE PROCEDURE SPCrearPedido(
+    OUT xidPedido INT,
+    IN xName VARCHAR(45),
+    IN xVolumen VARCHAR(45),
+    IN xPeso VARCHAR(45),
+    IN xEstadoPedido VARCHAR(45),
+    IN xFechaDespacho DATE,
+    IN xAdministrador_idAdministrador INT,
+    IN xEmpresaDestino INT,
+    IN xRuta_idRuta INT
 )
 BEGIN
     -- Creamos el pedido con estado inicial
     INSERT INTO Pedido (
         Name, Volumen, Peso, EstadoPedido, FechaDespacho,
-        Administrador_idAdministrador, EmpresaOrigen, EmpresaDestino, Ruta_idRuta
+        Administrador_idAdministrador, EmpresaDestino, Ruta_idRuta
     )
     VALUES (
-        p_Name, p_Volumen, p_Peso, p_EstadoPedido, p_FechaDespacho,
-        p_Administrador_idAdministrador, p_EmpresaOrigen, p_EmpresaDestino, p_Ruta_idRuta
+        xName, xVolumen, xPeso, xEstadoPedido, xFechaDespacho,
+        xAdministrador_idAdministrador, xEmpresaDestino, xRuta_idRuta
     );
     
-    set p_idPedido = last_insert_id();
+    set xidPedido = last_insert_id();
     
     -- Aclaracion: El trigger InsertHistorialPedido se encargará de crear el registro en el historial
 END $$
@@ -327,9 +337,9 @@ DELIMITER ;
 
 -- Procedimiento para actualizar el estado de un pedido
 DELIMITER $$
-CREATE PROCEDURE UpdateEstadoPedido(
-    IN p_idPedido INT,
-    IN p_NuevoEstado VARCHAR(45)
+CREATE PROCEDURE SPUpdateEstadoPedido(
+    IN xidPedido INT,
+    IN xNuevoEstado VARCHAR(45)
 )
 BEGIN
     -- Obtenemos el estado actual
@@ -337,12 +347,12 @@ BEGIN
     
     SELECT EstadoPedido INTO estado_actual 
     FROM Pedido 
-    WHERE idPedido = p_idPedido;
+    WHERE idPedido = xidPedido;
     
     -- Actualizamos el estado
     UPDATE Pedido
-    SET EstadoPedido = p_NuevoEstado
-    WHERE idPedido = p_idPedido;
+    SET EstadoPedido = xNuevoEstado
+    WHERE idPedido = xidPedido;
     
     -- Aclaracion: El trigger UpdateHistorialPedido se encargará de crear el registro en el historial
 END $$
@@ -350,9 +360,9 @@ DELIMITER ;
 
 -- Procedimiento para asignar un pedido a un vehículo
 DELIMITER $$
-CREATE PROCEDURE AsignarPedidoAVehiculo(
-    IN p_idPedido INT,
-    IN p_idVehiculo INT
+CREATE PROCEDURE SPAsignarPedidoAVehiculo(
+    IN xidPedido INT,
+    IN xidVehiculo INT
 )
 BEGIN
     -- Verificamos si el vehículo está operativo
@@ -363,11 +373,11 @@ BEGIN
     
     SELECT Estado INTO estado_vehiculo 
     FROM Vehiculo 
-    WHERE idVehiculo = p_idVehiculo;
+    WHERE idVehiculo = xidVehiculo;
     
     SELECT COUNT(*) INTO pedido_asignado 
     FROM Vehiculo_has_Pedido 
-    WHERE Pedido_idPedido = p_idPedido;
+    WHERE Pedido_idPedido = xidPedido;
     
     IF estado_vehiculo != 1 THEN
         SIGNAL SQLSTATE '45000'
@@ -378,10 +388,9 @@ BEGIN
     ELSE
         -- Asignamos el pedido al vehículo
         INSERT INTO Vehiculo_has_Pedido (Vehiculo_idVehiculo, Pedido_idPedido, FechaAsignacion)
-        VALUES (p_idVehiculo, p_idPedido, CURDATE());
+        VALUES (xidVehiculo, xidPedido, CURDATE());
         
-        -- Actualizamos el estado del pedido a "En proceso"
-        CALL UpdateEstadoPedido(p_idPedido, 'En proceso');
+        CALL UpdateEstadoPedido(xidPedido, 'En proceso');
     END IF;
 END $$
 DELIMITER ;
