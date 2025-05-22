@@ -41,9 +41,10 @@ public class RepoRuta : RepoGenerico, IRepoRuta
         return Resultados;
     }
 
-    public void ObtenerRutaPorCondicion(int? idRuta, string xOrigen, string xDestino)
+    public Ruta ObtenerRutaPorCondicion(int? idRuta, string Origen, string Destino)
     {
         var query = @"Select * from Ruta where idRuta = {indiceABuscar} or Origen = {xOrigen} or Destino = {xDestino}";
         var Resultado = Conexion.QueryFirstOrDefault<Ruta>(query);
+        return Resultado;
     }
 }

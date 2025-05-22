@@ -1,5 +1,6 @@
 using System.Data;
 using System.Linq.Expressions;
+using System.Xml.Schema;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Dapper;
@@ -12,7 +13,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     {
     }
 
-    public void CambiarEstado(int vehiculoId, bool disponible)
+    public bool CambiarEstado(int vehiculoId, bool disponible)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", vehiculoId);
@@ -20,7 +21,10 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
 
         try
         {
-            Conexion.Execute("SPActualizarEstadoVehiculo", parametros);
+            if (Convert.ToBoolean(Conexion.Execute("SPActualizarEstadoVehiculo", parametros)))
+                return true;
+            else
+                return false;
         }
         catch (System.Exception)
         {
@@ -28,13 +32,16 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }
     }
 
-    public void EliminarVehiculo(int idVehiculo)
+    public bool EliminarVehiculo(int idVehiculo)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", idVehiculo);
         try
         {
-            Conexion.Execute("SPDelVehiculo", parametros);
+            if (Convert.ToBoolean(Conexion.Execute("SPDelVehiculo", parametros)))
+                return true;
+            else
+                return false;
         }
         catch (System.Exception)
         {
