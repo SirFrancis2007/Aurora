@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(255,250,250);
+    width: 100%;
+    height: 100vh;
+}
+
+header {
+    /*border: 1px solid green;*/
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 10vh;
+    justify-content: space-between;
+    align-items: center;
+}
+
+figure img {
+    scale: 0.5;
+}
+
+nav {
+    /*border: 1px solid red;*/
+    position: relative;
+    display: block;
+    padding: 100px;
+}
+
+ul {
+    display: flex;
+    flex-direction: row;
+    /*border: 1px solid red;*/
+}
+
+ul a{
+    font-family: Cabin;
+    padding-left: 150px;
+    color: #112d4e;
+    text-decoration: none;
+    transition: all 1s ease-in;
+}
+
+ul a:hover {
+    scale: 1.1;
+}
+
+/*Main Text*/
+.main-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    height: 60vh;
+    max-width: 100%; 
+    margin: 0 auto;
+    padding: 60px; 
+    box-sizing: border-box;
+    margin-top: 50px;
+}
+
+.main-text img {
+    width: 50%; 
+    height: auto;
+    object-fit: contain; 
+}
+
+.text {
+    font-family: Cabin;
+    width: 50%;
+    padding-right: 20px;
+}
+
+#t1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+#span-text{
+    font-size: 1.4rem;
+}
+
+#btn-header {
+    margin-top: 20px;
+    font-family: Cabin;
+    color: #e6e6e6;
+    background-color: #081524;
+    border-radius: 16px;
+    border: 2px solid #ffff;
+    width: 200px;
+    height: 50px;
+    transition: all 1s ease-in-out;
+}
+
+#btn-header:hover {
+    background-color: #123052;
+    border-radius: 0px 16px 0px 16px;
+}
+
+/*Footer*/
+
+footer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 20vh;
+    justify-content: space-around;
+    align-items: end;
+    font-family: Cabin;
+    color: #838383;
+}
+
+
