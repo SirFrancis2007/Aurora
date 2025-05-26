@@ -1,19 +1,12 @@
 USE aurorabd;
 
+/*Store Procedures para EMPRESA*/
 DELIMITER $$
 CREATE PROCEDURE PSCrearEmpresa(OUT xidEmpresa INT, IN xNombre VARCHAR(45))
 BEGIN
     INSERT INTO Empresa (Nombre)
     VALUES (xNombre);
     set xidEmpresa = last_insert_id();
-END $$
-
-DELIMITER $$
-CREATE PROCEDURE SPNuevoAdministrador(	out xidAdministrador INT, xName VARCHAR(45), xPassword VARCHAR(45), xEmpresa_idEmpresa INT)
-BEGIN
-    INSERT INTO Administrador (Name, Passworld, Empresa_idEmpresa)
-    VALUES (xName, xPassword, xEmpresa_idEmpresa);
-    set xidAdministrador = last_insert_id();
 END $$
 
 DELIMITER $$
@@ -47,71 +40,79 @@ BEGIN
     COMMIT;
 END $$
 
+/*Stores procedures de ADMINISTRADORES*/
 DELIMITER $$
-CREATE PROCEDURE SPDelAdministrador( IN p_idAdministrador INT)
+CREATE PROCEDURE SPNuevoAdministrador(out xidAdministrador INT, xName VARCHAR(45), xPassword VARCHAR(45), xEmpresa_idEmpresa INT)
+BEGIN
+    INSERT INTO Administrador (Name, Passworld, Empresa_idEmpresa)
+    VALUES (xName, xPassword, xEmpresa_idEmpresa);
+    set xidAdministrador = last_insert_id();
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE SPDelAdministrador(xidAdministrador INT)
 BEGIN
     -- Se verifica que el administrador no tenga paquetes asignados todavia
     DECLARE pedidos_count INT;
     
     SELECT COUNT(*) INTO pedidos_count 
     FROM Pedido 
-    WHERE Administrador_idAdministrador = p_idAdministrador;
+    WHERE Administrador_idAdministrador = xidAdministrador;
     
     IF pedidos_count > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede eliminar el administrador porque tiene pedidos asociados';
     ELSE
         DELETE FROM Administrador 
-        WHERE idAdministrador = p_idAdministrador;
+        WHERE idAdministrador = xidAdministrador;
     END IF;
 END $$
 DELIMITER ;
 
+/*En la logica del negocio no iria esto pero para la bd si*/
 DELIMITER $$
 CREATE PROCEDURE SPActAdmi(
-    IN p_idAdministrador INT,
-    IN p_Name VARCHAR(45),
-    IN p_Password VARCHAR(45)
+    xidAdministrador INT,
+    xName VARCHAR(45),
+    xPassword VARCHAR(45)
 )
 BEGIN
     UPDATE Administrador
-    SET Name = p_Name,
-        Passworld = p_Password
-    WHERE idAdministrador = p_idAdministrador;
+    SET Name = xName, Passworld = xPassword
+    WHERE idAdministrador = xidAdministrador;
 END $$
 DELIMITER ;
 
-
 -- ======================================
--- Conductor
+-- Stores procedures Conductor
 -- ======================================
 DELIMITER $$
 CREATE PROCEDURE SPNewConductor(
-    OUT p_idConductor INT,
-    IN p_Name VARCHAR(45),
-    IN p_Licencia VARCHAR(45),
-    IN p_Disponibilidad TINYINT
+    OUT xidConductor INT,
+    xName VARCHAR(45),
+    xLicencia VARCHAR(45),
+    xDisponibilidad TINYINT
 )
 BEGIN
     INSERT INTO Conductor (Name, Licencia, Disponibilidad)
-    VALUES (p_Name, p_Licencia, p_Disponibilidad);
+		VALUES (xName, xLicencia, xDisponibilidad);
     
-    set p_idConductor = last_insert_id();
+    set xidConductor = last_insert_id();
 END $$
 DELIMITER ;
 
 -- Procedimiento para eliminar un conductor
 DELIMITER $$
-CREATE PROCEDURE SPDelConductor( xidConductor INT)
+CREATE PROCEDURE SPDelConductor(xidConductor INT)
 BEGIN
     -- Se verifica si el conductor tiene asignaciones de vehículos
-    DECLARE asignaciones_count INT;
+    DECLARE cantPedidos INT;
     
-    SELECT COUNT(*) INTO asignaciones_count 
+    SELECT COUNT(*) INTO cantPedidos 
     FROM Conductor_has_Vehiculo 
     WHERE Conductor_idConductor = xidConductor;
     
-    IF asignaciones_count > 0 THEN
+    IF cantPedidos > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede eliminar el conductor porque tiene vehículos asignados';
     ELSE
@@ -122,17 +123,15 @@ DELIMITER ;
 
 -- Procedimiento para actualizar datos de un conductor
 DELIMITER $$
-CREATE PROCEDURE UpdateConductor( 	IN p_idConductor INT,
-									IN p_Name VARCHAR(45),
-									IN p_Licencia VARCHAR(45),
-									IN p_Disponibilidad TINYINT
+CREATE PROCEDURE UpdateConductor( 	IN xidConductor INT,
+									IN xName VARCHAR(45),
+									IN xLicencia VARCHAR(45),
+									IN xDisponibilidad TINYINT
 )
 BEGIN
     UPDATE Conductor
-    SET Name = p_Name,
-        Licencia = p_Licencia,
-        Disponibilidad = p_Disponibilidad
-    WHERE idConductor = p_idConductor;
+    SET Name = xName, Licencia = xLicencia, Disponibilidad = xDisponibilidad
+    WHERE idConductor = xidConductor;
 END $$
 DELIMITER ;
 
@@ -205,17 +204,17 @@ BEGIN
 END $$
 DELIMITER ;
 
-DELIMITER //
-
+DELIMITER $$
 CREATE PROCEDURE SPActualizarEstadoVehiculo(xidVehiculo INT, xdisponible BOOLEAN)
 BEGIN
+	-- Ojo que esto vendria aser un trigger ya qeu al asignarle almenos un pedido/conductor ya se cambia la disponibilidad
     UPDATE Vehiculo
     SET Estado = CASE
         WHEN xdisponible THEN 0
         ELSE 1
     END
     WHERE idVehiculo = xidVehiculo;
-END //
+END $$
 
 -- =====================================================================
 -- PROCEDIMIENTOS PARA ASIGNACIÓN DE VEHÍCULOS A CONDUCTORES

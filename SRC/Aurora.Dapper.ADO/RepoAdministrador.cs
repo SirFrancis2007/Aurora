@@ -28,6 +28,21 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         }
     }
 
+    public void EliminarAdministrador(int xidadministrador)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidAdministrador", xidadministrador);
+
+        try
+        {
+            Conexion.Execute("SPDelAdministrador", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("¡Error al eliminar al administrador!");
+        }
+    }
+
     public Administrador? Detalle(int xidAdmin)
     {
         var Query = @"SELECT * FROM Administrador where idAdministrador = {xidAdmin}";

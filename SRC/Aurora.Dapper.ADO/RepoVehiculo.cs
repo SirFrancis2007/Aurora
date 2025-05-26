@@ -12,23 +12,21 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     public RepoVehiculo(IDbConnection conexion) : base(conexion)
     {
     }
-
-    public bool CambiarEstado(int vehiculoId, bool disponible)
+    public void Alta(Vehiculo elemento)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("xidVehiculo", vehiculoId);
-        parametros.Add("xdisponible", disponible);    
+        parametros.Add("xTipo", elemento.Tipo);
+        parametros.Add("xEstado", elemento.Estado);
+        parametros.Add("xCapacidadMax", elemento.CapacidadMax);
+        parametros.Add("xMatricula", elemento.Matricula);
 
         try
         {
-            if (Convert.ToBoolean(Conexion.Execute("SPActualizarEstadoVehiculo", parametros)))
-                return true;
-            else
-                return false;
+            Conexion.Execute("SPCrearVehiculo", parametros);
         }
         catch (System.Exception)
         {
-            throw new Exception("Error al actualizar el estado del vehiculo");
+            throw new Exception(@"Error al agregar el vehiculo {Exception}");
         }
     }
 
@@ -49,6 +47,25 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }
     }
 
+    public bool CambiarEstado(int vehiculoId, bool disponible)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidVehiculo", vehiculoId);
+        parametros.Add("xdisponible", disponible);    
+
+        try
+        {
+            if (Convert.ToBoolean(Conexion.Execute("SPActualizarEstadoVehiculo", parametros)))
+                return true;
+            else
+                return false;
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error al actualizar el estado del vehiculo");
+        }
+    }
+
     public List<Pedido> ListarPedidosAsignados(int vehiculoId)
     {
         string query = @"
@@ -61,24 +78,6 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
 
         var pedidos = Conexion.Query<Pedido>(query, new { vehiculoId }).ToList();
         return pedidos;
-    }
-
-    void IRepoAlta<Vehiculo>.Alta(Vehiculo elemento)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xTipo", elemento.Tipo);
-        parametros.Add("xEstado", elemento.Estado);
-        parametros.Add("xCapacidadMax", elemento.CapacidadMax);
-        parametros.Add("xMatricula", elemento.Matricula);
-
-        try
-        {
-            Conexion.Execute("SPCrearVehiculo", parametros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception(@"Error al agregar el vehiculo {Exception}");
-        }
     }
 
     Vehiculo? IRepoDetalle<Vehiculo, int>.Detalle(int indiceABuscar)

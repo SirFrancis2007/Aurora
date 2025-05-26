@@ -28,6 +28,21 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
+    public void EliminarConductor(int idConductor)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidConductor", idConductor);
+
+        try
+        {
+            Conexion.Execute("SPDelConductor", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error al eliminar al conductor");
+        }    
+    }
+
     public void AsignarVehiculo(int conductorId, int vehiculoId)
     {
         var parametros = new DynamicParameters();
@@ -65,21 +80,6 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         var Query = @"Select * From Conductor Where idConductor = {indiceABuscar}";
         var resultados = Conexion.QueryFirstOrDefault<Conductor>(Query);
         return resultados;
-    }
-
-    public void EliminarConductor(int idConductor)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidConductor", idConductor);
-
-        try
-        {
-            Conexion.Execute("SPDelConductor", parametros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("Error al eliminar al conductor");
-        }    
     }
 
     public IEnumerable<Conductor> Obtener()

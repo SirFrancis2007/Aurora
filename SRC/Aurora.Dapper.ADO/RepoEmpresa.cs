@@ -25,36 +25,6 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
             throw new Exception("Esta empresa ya se encuentra Registrada");
         }
     }
-    public async Task AltaAsync(Empresa NuevaEmpresa)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xNombre", NuevaEmpresa.Nombre);
-        try
-        {
-            await Conexion.ExecuteAsync("PSCrearEmpresa", parametros); // "PSCrearEmpresa" SP para crear empresa
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("Esta empresa ya se encuentra Registrada");
-        }
-    }
-    public void AgregarAdministrador(Administrador xAdministrador)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidAdministrador", xAdministrador.IdAdministrador);
-        parametros.Add("xNombre", xAdministrador.Nombre);
-        parametros.Add("xpassword", xAdministrador.Password);
-        parametros.Add("xidEmpresa", xAdministrador.IdEmpresa);
-
-        try
-        {
-            Conexion.Execute("SPNuevoAdministrador", parametros); // "SPNuevoAdministrador" SP para añadir Administrador
-        }
-        catch (System.Exception)
-        {
-            throw new ConstraintException($"El admnistrado ya se encuentra registrado");
-        }
-    }
 
     public Empresa? Detalle(uint indiceABuscar)
     {
@@ -63,20 +33,6 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         return Resultado;
     }
 
-    public void EliminarAdministrador(int xidadministrador)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidAdministrador", xidadministrador);
-
-        try
-        {
-            Conexion.Execute("SPDelAdministrador", parametros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("¡Error al eliminar al administrador!");
-        }
-    }
 
     public void EliminarEmpresa(int idempresa)
     {
@@ -109,4 +65,36 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         var resultados = Conexion.Query<Pedido>(query);
         return resultados;
     }
+    public async Task AltaAsync(Empresa NuevaEmpresa)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xNombre", NuevaEmpresa.Nombre);
+        try
+        {
+            await Conexion.ExecuteAsync("PSCrearEmpresa", parametros); // "PSCrearEmpresa" SP para crear empresa
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Esta empresa ya se encuentra Registrada");
+        }
+    }
+    
+    /* la regla seria que la empresa "contrate" admins pero ya esta en repoAdmin
+    public void AgregarAdministrador(Administrador xAdministrador)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidAdministrador", xAdministrador.IdAdministrador);
+        parametros.Add("xNombre", xAdministrador.Nombre);
+        parametros.Add("xpassword", xAdministrador.Password);
+        parametros.Add("xidEmpresa", xAdministrador.IdEmpresa);
+
+        try
+        {
+            Conexion.Execute("SPNuevoAdministrador", parametros); // "SPNuevoAdministrador" SP para añadir Administrador
+        }
+        catch (System.Exception)
+        {
+            throw new ConstraintException($"El admnistrado ya se encuentra registrado");
+        }
+    }*/
 }
