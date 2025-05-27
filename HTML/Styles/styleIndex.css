@@ -17,7 +17,6 @@ header {
     position: relative;
     display: flex;
     flex-direction: row;
-    width: 100%;
     height: 10vh;
     justify-content: space-between;
     align-items: center;
@@ -29,9 +28,6 @@ figure img {
 
 nav {
     /*border: 1px solid red;*/
-    position: relative;
-    display: block;
-    padding: 100px;
 }
 
 ul {
@@ -42,7 +38,7 @@ ul {
 
 ul a{
     font-family: Cabin;
-    padding-left: 150px;
+    padding-right: 100px;
     color: #112d4e;
     text-decoration: none;
     transition: all 1s ease-in;
@@ -118,6 +114,10 @@ footer {
 
 /*Modals*/
 
+.modal {
+    font-family: Cabin;
+}
+
 .modal-signup {
     position: fixed;
     top: 0;
@@ -147,13 +147,58 @@ footer {
 .Modal-close {
     text-decoration: none;
     color:#081524;
-    padding: 1em 3em;
     display: inline-block;
 }
 
 .modal-signup--show {
     opacity: 1;
     pointer-events: unset;
+}
+
+.modal form{
+    border: 1px solid rgb(199, 199, 199);
+    background-color: #f7fafc;
+    border-radius: 16px;
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form input {
+    position: relative;
+    width: 100%;
+    border: 2px solid #1b2e46;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    background: #f7fafc;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.btn-summit {
+    background-color: #1a4578;
+    color: #e6e6e6;
+    border-radius: 16px;
+    border-color: 1px solid #1a4578;
+    height:5vh;
+    transition: 1s all ease-in-out;
+}
+
+.btn-summit:hover{
+    transform: translateY(-5px);
+    background-color: #112d4e;
+}
+
+.btn-summit:focus{
+    transform: translateY(-1px);
 }
 
 /*Modal de login*/

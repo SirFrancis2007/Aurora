@@ -28,13 +28,6 @@ figure img {
     scale: 0.5;
 }
 
-nav {
-    /*border: 1px solid red;*/
-    position: relative;
-    display: block;
-    padding: 100px;
-}
-
 ul {
     display: flex;
     flex-direction: row;
@@ -43,7 +36,7 @@ ul {
 
 ul a{
     font-family: Cabin;
-    padding-left: 150px;
+    padding-right: 100px;
     color: #112d4e;
     text-decoration: none;
     transition: all 1s ease-in;
@@ -51,40 +44,6 @@ ul a{
 
 ul a:hover {
     scale: 1.1;
-}
-
-/*Main Text*/
-.main-text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    height: 60vh;
-    max-width: 100%; 
-    margin: 0 auto;
-    padding: 60px; 
-    box-sizing: border-box;
-    margin-top: 50px;
-}
-
-.main-text img {
-    width: 50%; 
-    height: auto;
-    object-fit: contain; 
-}
-
-.text {
-    font-family: Cabin;
-    width: 50%;
-    padding-right: 20px;
-}
-
-#t1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-#span-text{
-    font-size: 1.4rem;
 }
 
 /*Acordeon*/
@@ -183,7 +142,7 @@ footer {
     flex-direction: row;
     height: 10vh;
     justify-content: space-around;
-    align-items: end;
+    align-items: center;
     font-family: Cabin;
     color: #838383;
 }

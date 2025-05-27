@@ -27,13 +27,6 @@ figure img {
     scale: 0.5;
 }
 
-nav {
-    /*border: 1px solid red;*/
-    position: relative;
-    display: block;
-    padding: 100px;
-}
-
 ul {
     display: flex;
     flex-direction: row;
@@ -42,7 +35,7 @@ ul {
 
 ul a{
     font-family: Cabin;
-    padding-left: 150px;
+    padding-right: 100px;
     color: #112d4e;
     text-decoration: none;
     transition: all 1s ease-in;

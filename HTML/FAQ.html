@@ -75,61 +75,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="item">
-                    <div class="header" onclick="toggleAccordion(this)">
-                        <div class="title">¿Cuáles son las ventajas del CSS Grid?</div>
-                        <div class="icon">▼</div>
-                    </div>
-                    <div class="content">
-                        <div class="content-inner">
-                            CSS Grid permite crear layouts complejos de manera más sencilla, con control bidimensional sobre filas y columnas, facilitando la creación de diseños responsivos y mantenibles.
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="header" onclick="toggleAccordion(this)">
-                        <div class="title">¿Cuáles son las ventajas del CSS Grid?</div>
-                        <div class="icon">▼</div>
-                    </div>
-                    <div class="content">
-                        <div class="content-inner">
-                            CSS Grid permite crear layouts complejos de manera más sencilla, con control bidimensional sobre filas y columnas, facilitando la creación de diseños responsivos y mantenibles.
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="header" onclick="toggleAccordion(this)">
-                        <div class="title">¿Cuáles son las ventajas del CSS Grid?</div>
-                        <div class="icon">▼</div>
-                    </div>
-                    <div class="content">
-                        <div class="content-inner">
-                            CSS Grid permite crear layouts complejos de manera más sencilla, con control bidimensional sobre filas y columnas, facilitando la creación de diseños responsivos y mantenibles.
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="header" onclick="toggleAccordion(this)">
-                        <div class="title">¿Cuáles son las ventajas del CSS Grid?</div>
-                        <div class="icon">▼</div>
-                    </div>
-                    <div class="content">
-                        <div class="content-inner">
-                            CSS Grid permite crear layouts complejos de manera más sencilla, con control bidimensional sobre filas y columnas, facilitando la creación de diseños responsivos y mantenibles.
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="header" onclick="toggleAccordion(this)">
-                        <div class="title">¿Cuáles son las ventajas del CSS Grid?</div>
-                        <div class="icon">▼</div>
-                    </div>
-                    <div class="content">
-                        <div class="content-inner">
-                            CSS Grid permite crear layouts complejos de manera más sencilla, con control bidimensional sobre filas y columnas, facilitando la creación de diseños responsivos y mantenibles.
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -145,7 +90,6 @@
             const content = item.querySelector('.content');
             const isActive = item.classList.contains('active');
             
-            // Cerrar todos los acordeones del mismo contenedor
             const accordion = item.closest('[class*="accordion-"]');
             accordion.querySelectorAll('.item').forEach(i => {
                 i.classList.remove('active');
