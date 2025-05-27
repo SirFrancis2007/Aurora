@@ -1,6 +1,6 @@
 {
     "ConnectionStrings": {
-        "MySQL": "server=localhost;database=auroradb;user=5to_agbd;password=Trigg3rs!;Allow User Variables=true;",
+        "MySQL": "server=localhost;database=auroradb;user=root;password=root!;Allow User Variables=true;",
         "UserEmpresa": "server=localhost;database=auroradb;user=UserEmpresa;password=Empresa1234!;Allow User Variables=true;",
         "UserAdministrador": "server=localhost;database=auroradb;user=UserAdministrador;password=Admin1234!;Allow User Variables=true;"
     }

@@ -1,8 +1,9 @@
-USE aurorabd;
+-- Active: 1748344015396@@127.0.0.1@3308
 
 /*Store Procedures para EMPRESA*/
 DELIMITER $$
-CREATE PROCEDURE PSCrearEmpresa(OUT xidEmpresa INT, IN xNombre VARCHAR(45))
+Drop PROCEDURE IF EXISTS  PSCrearEmpresa $$
+CREATE PROCEDURE PSCrearEmpresa(OUT xidEmpresa INT, xNombre VARCHAR(45))
 BEGIN
     INSERT INTO Empresa (Nombre)
     VALUES (xNombre);
@@ -10,6 +11,7 @@ BEGIN
 END $$
 
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPDelEmpresa $$
 CREATE PROCEDURE SPDelEmpresa (IN xidEmpresa INT)
 BEGIN
     START TRANSACTION;
@@ -20,14 +22,8 @@ BEGIN
         SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa
     );
     
-    DELETE vp FROM Vehiculo_has_Pedido vp
-    INNER JOIN Pedido p ON vp.Pedido_idPedido = p.xidEmpresa
-    WHERE p.EmpresaDestino = xidEmpresa OR p.Administrador_idAdministrador IN (
-        SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa
-    );
-    
     DELETE FROM Pedido 
-    WHERE EmpresaDestino = p_idEmpresa OR Administrador_idAdministrador IN (
+    WHERE EmpresaDestino = xidEmpresa OR Administrador_idAdministrador IN (
         SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa
     );
     
@@ -42,6 +38,8 @@ END $$
 
 /*Stores procedures de ADMINISTRADORES*/
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPNuevoAdministrador $$
+
 CREATE PROCEDURE SPNuevoAdministrador(out xidAdministrador INT, xName VARCHAR(45), xPassword VARCHAR(45), xEmpresa_idEmpresa INT)
 BEGIN
     INSERT INTO Administrador (Name, Passworld, Empresa_idEmpresa)
@@ -50,6 +48,8 @@ BEGIN
 END $$
 
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPDelAdministrador $$
+
 CREATE PROCEDURE SPDelAdministrador(xidAdministrador INT)
 BEGIN
     -- Se verifica que el administrador no tenga paquetes asignados todavia
@@ -71,6 +71,8 @@ DELIMITER ;
 
 /*En la logica del negocio no iria esto pero para la bd si*/
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPActAdmi $$
+
 CREATE PROCEDURE SPActAdmi(
     xidAdministrador INT,
     xName VARCHAR(45),
@@ -87,6 +89,8 @@ DELIMITER ;
 -- Stores procedures Conductor
 -- ======================================
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPNewConductor $$
+
 CREATE PROCEDURE SPNewConductor(
     OUT xidConductor INT,
     xName VARCHAR(45),
@@ -103,6 +107,8 @@ DELIMITER ;
 
 -- Procedimiento para eliminar un conductor
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPDelConductor $$
+
 CREATE PROCEDURE SPDelConductor(xidConductor INT)
 BEGIN
     -- Se verifica si el conductor tiene asignaciones de vehículos
@@ -123,14 +129,12 @@ DELIMITER ;
 
 -- Procedimiento para actualizar datos de un conductor
 DELIMITER $$
-CREATE PROCEDURE UpdateConductor( 	IN xidConductor INT,
-									IN xName VARCHAR(45),
-									IN xLicencia VARCHAR(45),
-									IN xDisponibilidad TINYINT
-)
+Drop PROCEDURE IF EXISTS  UpdateConductor $$
+
+CREATE PROCEDURE UpdateConductor(xidConductor INT,xLicencia VARCHAR(45))
 BEGIN
     UPDATE Conductor
-    SET Name = xName, Licencia = xLicencia, Disponibilidad = xDisponibilidad
+    SET Licencia = xLicencia
     WHERE idConductor = xidConductor;
 END $$
 DELIMITER ;
@@ -141,12 +145,13 @@ DELIMITER ;
 
 -- Procedimiento para crear un nuevo vehículo (por administrador)
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPCrearVehiculo $$
 CREATE PROCEDURE SPCrearVehiculo(
     OUT xidVehiculo INT,
-    IN xTipo VARCHAR(45),
-    IN xMatricula VARCHAR(45),
-    IN xCapacidadMax DOUBLE,
-    IN xEstado TINYINT
+    xTipo VARCHAR(45),
+    xMatricula VARCHAR(45),
+    xCapacidadMax DOUBLE,
+    xEstado TINYINT
 )
 BEGIN
     INSERT INTO Vehiculo (Tipo, Matricula, CapacidadMaz, Estado)
@@ -158,53 +163,39 @@ DELIMITER ;
 
 -- Procedimiento para eliminar un vehículo
 DELIMITER $$
-CREATE PROCEDURE SPDelVehiculo(IN xidVehiculo INT)
+Drop PROCEDURE IF EXISTS  SPDelVehiculo $$
+CREATE PROCEDURE SPDelVehiculo(xidVehiculo INT)
 BEGIN
-    -- Se Verifica que el vehiculo no posea actualmente un conductor asignado
-    DECLARE asignaciones_conductores INT;
-    
     -- Aca Verificamos si el vehículo tiene pedidos asignados
     DECLARE asignaciones_pedidos INT;
     
-    SELECT COUNT(*) INTO asignaciones_conductores 
-    FROM Conductor_has_Vehiculo 
-    WHERE Vehiculo_idVehiculo = xidVehiculo;
-    
     SELECT COUNT(*) INTO asignaciones_pedidos 
-    FROM Vehiculo_has_Pedido 
-    WHERE Vehiculo_idVehiculo = xidVehiculo;
+    FROM pedido 
+    WHERE pedido.Vehiculo_idVehiculo = xidVehiculo;
     
-    IF asignaciones_conductores > 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'No se puede eliminar el vehículo porque está asignado a uno o más conductores';
-    ELSEIF asignaciones_pedidos > 0 THEN
+    IF asignaciones_pedidos > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede eliminar el vehículo porque tiene pedidos asignados';
     ELSE
-        DELETE FROM Vehiculo WHERE idVehiculo = xidVehiculo;
+        DELETE FROM Vehiculo WHERE `Vehiculo`.`idVehiculo` = xidVehiculo;
     END IF;
 END $$
 DELIMITER ;
 
 -- Procedimiento para actualizar datos de un vehículo
 DELIMITER $$
-CREATE PROCEDURE UpdateVehiculo(IN p_idVehiculo INT,
-								IN p_Tipo VARCHAR(45),
-								IN p_Matricula VARCHAR(45),
-								IN p_CapacidadMax DOUBLE,
-								IN p_Estado TINYINT
+Drop PROCEDURE IF EXISTS  UpdateVehiculo $$
+CREATE PROCEDURE UpdateVehiculo(xidVehiculo INT,xMatricula VARCHAR(45)
 )
 BEGIN
     UPDATE Vehiculo
-    SET Tipo = p_Tipo,
-        Matricula = p_Matricula,
-        CapacidadMaz = p_CapacidadMax,
-        Estado = p_Estado
-    WHERE idVehiculo = p_idVehiculo;
+    SET Matricula = xMatricula
+    WHERE idVehiculo = xidVehiculo;
 END $$
-DELIMITER ;
+DELIMITER $$
 
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPActualizarEstadoVehiculo $$
 CREATE PROCEDURE SPActualizarEstadoVehiculo(xidVehiculo INT, xdisponible BOOLEAN)
 BEGIN
 	-- Ojo que esto vendria aser un trigger ya qeu al asignarle almenos un pedido/conductor ya se cambia la disponibilidad
@@ -222,10 +213,8 @@ END $$
 
 -- Procedimiento para asignar un vehículo a un conductor
 DELIMITER $$
-CREATE PROCEDURE AsignarVehiculoAConductor(
-    IN xidConductor INT,
-    IN xidVehiculo INT
-)
+Drop PROCEDURE IF EXISTS  AsignarVehiculoAConductor $$
+CREATE PROCEDURE AsignarVehiculoAConductor(xidConductor INT,xidVehiculo INT)
 BEGIN
     -- Verificamos disponibilidad del conductor
     DECLARE conductor_disponible TINYINT;
@@ -252,25 +241,25 @@ BEGIN
         VALUES (xidConductor, xidVehiculo, CURDATE());
     END IF;
 END $$
-DELIMITER ;
+DELIMITER $$
 
 -- Procedimiento para desasignar un vehículo de un conductor
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPDesasignarVehiculoAConductor $$
+
 CREATE PROCEDURE SPDesasignarVehiculoAConductor(
     IN xidConductor INT,
     IN xidVehiculo INT
 )
 BEGIN
-    -- Verificamos si el vehículo tiene pedidos asignados actualmente
-    DECLARE pedidos_activos INT;
+    DECLARE pedidosEnVehiculo INT;
     
-    SELECT COUNT(*) INTO pedidos_activos 
-    FROM Vehiculo_has_Pedido vp
-    JOIN Pedido p ON vp.Pedido_idPedido = p.idPedido
-    WHERE vp.Vehiculo_idVehiculo = xidVehiculo
-    AND p.EstadoPedido NOT IN ('Entregado', 'Cancelado');
+    SELECT COUNT(*) INTO pedidosEnVehiculo 
+    FROM vehiculo  
+    JOIN Pedido using (idvehiculo)
+    WHERE Vehiculo_idVehiculo = xidVehiculo;
     
-    IF pedidos_activos > 0 THEN
+    IF pedidosEnVehiculo > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede desasignar el vehículo porque tiene pedidos activos';
     ELSE
@@ -287,6 +276,8 @@ DELIMITER ;
 
 -- Procedimiento para crear una nueva ruta
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPCrearRuta $$
+
 CREATE PROCEDURE SPCrearRuta(
     OUT xidRuta INT,
     IN xOrigen VARCHAR(45),
@@ -306,6 +297,8 @@ DELIMITER ;
 
 -- Procedimiento para crear un nuevo pedido
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPCrearPedido $$
+
 CREATE PROCEDURE SPCrearPedido(
     OUT xidPedido INT,
     IN xName VARCHAR(45),
@@ -316,16 +309,17 @@ CREATE PROCEDURE SPCrearPedido(
     IN xAdministrador_idAdministrador INT,
     IN xEmpresaDestino INT,
     IN xRuta_idRuta INT
+    IN xidVehiculo INT
 )
 BEGIN
     -- Creamos el pedido con estado inicial
     INSERT INTO Pedido (
         Name, Volumen, Peso, EstadoPedido, FechaDespacho,
-        Administrador_idAdministrador, EmpresaDestino, Ruta_idRuta
+        Administrador_idAdministrador, EmpresaDestino, Ruta_idRuta, Vehiculo_idVehiculo
     )
     VALUES (
         xName, xVolumen, xPeso, xEstadoPedido, xFechaDespacho,
-        xAdministrador_idAdministrador, xEmpresaDestino, xRuta_idRuta
+        xAdministrador_idAdministrador, xEmpresaDestino, xRuta_idRuta, xidVehiculo
     );
     
     set xidPedido = last_insert_id();
@@ -336,6 +330,8 @@ DELIMITER ;
 
 -- Procedimiento para actualizar el estado de un pedido
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPUpdateEstadoPedido $$
+
 CREATE PROCEDURE SPUpdateEstadoPedido(
     IN xidPedido INT,
     IN xNuevoEstado VARCHAR(45)
@@ -359,6 +355,8 @@ DELIMITER ;
 
 -- Procedimiento para asignar un pedido a un vehículo
 DELIMITER $$
+Drop PROCEDURE IF EXISTS  SPAsignarPedidoAVehiculo $$
+
 CREATE PROCEDURE SPAsignarPedidoAVehiculo(
     IN xidPedido INT,
     IN xidVehiculo INT

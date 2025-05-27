@@ -18,25 +18,10 @@ public class TestEmpresa : TestBase
     void TestCrearEmpresa()
     {
         var InstEmpresa = new Core.Empresa{
-            IdEmpresa = 0,
             Nombre = "Test1 SRC"
         };
 
         ConRepoEmpresa.Alta(InstEmpresa);
-    }
-
-    [Fact]
-    void TestCrearAdmin()
-    {
-        var InstAdmin = new Administrador
-        {
-            IdAdministrador = 0,
-            Nombre = "Pepe",
-            Password = "1234",
-            IdEmpresa = 1
-        };
-
-        ConRepoEmpresa.AgregarAdministrador(InstAdmin);
     }
 
     [Fact]

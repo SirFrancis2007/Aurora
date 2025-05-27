@@ -1,24 +1,25 @@
 -- MySQL Workbench Forward Engineering
-
+/*
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+*/
+-- ------------------------------------------------------ñ-
+-- Schema aurorabd
+-- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema aurorabd
 -- -----------------------------------------------------
+DROP DATABASE IF EXISTS `aurorabd` ;
+CREATE SCHEMA `aurorabd` DEFAULT CHARACTER SET utf8 ;
+USE `aurorabd` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Table `aurorabd`.`Empresa`
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
-
--- -----------------------------------------------------
--- Table `mydb`.`Empresa`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Empresa` (
-  `idEmpresa` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Empresa` (
+  `idEmpresa` INT auto_increment,
   `Nombre` VARCHAR(45) NULL,
   PRIMARY KEY (`idEmpresa`),
   UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) VISIBLE)
@@ -26,10 +27,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Administrador`
+-- Table `aurorabd`.`Administrador`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Administrador` (
-  `idAdministrador` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Administrador` (
+  `idAdministrador` INT NOT NULL auto_increment,
   `Name` VARCHAR(45) NULL,
   `Passworld` VARCHAR(45) NULL,
   `Empresa_idEmpresa` INT NOT NULL,
@@ -37,17 +38,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Administrador` (
   INDEX `fk_Administrador_Empresa_idx` (`Empresa_idEmpresa` ASC) VISIBLE,
   CONSTRAINT `fk_Administrador_Empresa`
     FOREIGN KEY (`Empresa_idEmpresa`)
-    REFERENCES `mydb`.`Empresa` (`idEmpresa`)
+    REFERENCES `aurorabd`.`Empresa` (`idEmpresa`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Ruta`
+-- Table `aurorabd`.`Ruta`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Ruta` (
-  `idRuta` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Ruta` (
+  `idRuta` INT NOT NULL auto_increment,
   `Origen` VARCHAR(45) NULL,
   `Destino` VARCHAR(45) NULL,
   PRIMARY KEY (`idRuta`))
@@ -55,10 +56,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Vehiculo`
+-- Table `aurorabd`.`Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
-  `idVehiculo` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Vehiculo` (
+  `idVehiculo` INT NOT NULL auto_increment,
   `Tipo` VARCHAR(45) NULL,
   `Matricula` VARCHAR(45) NULL,
   `CapacidadMaz` DOUBLE NULL,
@@ -68,10 +69,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Pedido`
+-- Table `aurorabd`.`Pedido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
-  `idPedido` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Pedido` (
+  `idPedido` INT NOT NULL auto_increment,
   `Name` VARCHAR(45) NULL,
   `Volumen` VARCHAR(45) NULL,
   `Peso` VARCHAR(45) NULL,
@@ -88,32 +89,32 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
   INDEX `fk_Pedido_Vehiculo1_idx` (`Vehiculo_idVehiculo` ASC) VISIBLE,
   CONSTRAINT `fk_Pedido_Administrador1`
     FOREIGN KEY (`Administrador_idAdministrador`)
-    REFERENCES `mydb`.`Administrador` (`idAdministrador`)
+    REFERENCES `aurorabd`.`Administrador` (`idAdministrador`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pedido_Pedido2`
     FOREIGN KEY (`EmpresaDestino`)
-    REFERENCES `mydb`.`Pedido` (`idPedido`)
+    REFERENCES `aurorabd`.`Pedido` (`idPedido`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pedido_Ruta1`
     FOREIGN KEY (`Ruta_idRuta`)
-    REFERENCES `mydb`.`Ruta` (`idRuta`)
+    REFERENCES `aurorabd`.`Ruta` (`idRuta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pedido_Vehiculo1`
     FOREIGN KEY (`Vehiculo_idVehiculo`)
-    REFERENCES `mydb`.`Vehiculo` (`idVehiculo`)
+    REFERENCES `aurorabd`.`Vehiculo` (`idVehiculo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Conductor`
+-- Table `aurorabd`.`Conductor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Conductor` (
-  `idConductor` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Conductor` (
+  `idConductor` INT NOT NULL auto_increment,
   `Name` VARCHAR(45) NULL,
   `Licencia` VARCHAR(45) NULL,
   `Disponibilidad` TINYINT NULL,
@@ -122,9 +123,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Conductor_has_Vehiculo`
+-- Table `aurorabd`.`Conductor_has_Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Conductor_has_Vehiculo` (
+CREATE TABLE IF NOT EXISTS `aurorabd`.`Conductor_has_Vehiculo` (
   `Conductor_idConductor` INT NOT NULL,
   `Vehiculo_idVehiculo` INT NOT NULL,
   `FechaAsignado` DATE NULL,
@@ -133,22 +134,22 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Conductor_has_Vehiculo` (
   INDEX `fk_Conductor_has_Vehiculo_Conductor1_idx` (`Conductor_idConductor` ASC) VISIBLE,
   CONSTRAINT `fk_Conductor_has_Vehiculo_Conductor1`
     FOREIGN KEY (`Conductor_idConductor`)
-    REFERENCES `mydb`.`Conductor` (`idConductor`)
+    REFERENCES `aurorabd`.`Conductor` (`idConductor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Conductor_has_Vehiculo_Vehiculo1`
     FOREIGN KEY (`Vehiculo_idVehiculo`)
-    REFERENCES `mydb`.`Vehiculo` (`idVehiculo`)
+    REFERENCES `aurorabd`.`Vehiculo` (`idVehiculo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`HistorialPedido`
+-- Table `aurorabd`.`HistorialPedido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`HistorialPedido` (
-  `idHistorialPedido` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `aurorabd`.`HistorialPedido` (
+  `idHistorialPedido` INT NOT NULL auto_increment,
   `EstadoAnterior` VARCHAR(45) NULL,
   `EstadoNuevo` VARCHAR(45) NULL,
   `FechaCambio` DATETIME NULL,
@@ -157,12 +158,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`HistorialPedido` (
   INDEX `fk_HistorialPedido_Pedido1_idx` (`Pedido_idPedido` ASC) VISIBLE,
   CONSTRAINT `fk_HistorialPedido_Pedido1`
     FOREIGN KEY (`Pedido_idPedido`)
-    REFERENCES `mydb`.`Pedido` (`idPedido`)
+    REFERENCES `aurorabd`.`Pedido` (`idPedido`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
+/*
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+*/

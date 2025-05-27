@@ -1,11 +1,12 @@
-use aurorabd;
+-- Active: 1748344015396@@127.0.0.1@3308
 
 -- =====================================================================
 -- TRIGGERS
 -- =====================================================================
 
 -- Trigger para insertar un registro en el historial cuando se crea un pedido
-DELIMITER //
+DELIMITER $$
+drop trigger if EXISTS InsertHistorialPedido $$
 CREATE TRIGGER InsertHistorialPedido AFTER INSERT ON Pedido
 FOR EACH ROW
 BEGIN
@@ -15,10 +16,11 @@ BEGIN
     -- Insertamos el registro en el historial
     INSERT INTO HistorialPedido (idHistorialPedido, EstadoAnterior, EstadoNuevo, FechaCambio, Pedido_idPedido)
     VALUES (new_id, NULL, NEW.EstadoPedido, NOW(), NEW.idPedido);
-END //
+END $$
 
 -- Trigger para insertar un registro en el historial cuando cambia el estado de un pedido
-DELIMITER //
+DELIMITER $$
+DROP TRIGGER IF EXISTS UpdateHistorialPedido $$
 CREATE TRIGGER UpdateHistorialPedido AFTER UPDATE ON Pedido
 FOR EACH ROW
 BEGIN
@@ -32,11 +34,12 @@ BEGIN
         INSERT INTO HistorialPedido (idHistorialPedido, EstadoAnterior, EstadoNuevo, FechaCambio, Pedido_idPedido)
         VALUES (new_id, OLD.EstadoPedido, NEW.EstadoPedido, NOW(), NEW.idPedido);
     END IF;
-END //
+END $$
 DELIMITER ;
 
 -- Trigger para verificar que un conductor tenga licencia válida antes de asignarle un vehículo
-DELIMITER //
+DELIMITER $$
+DROP TRIGGER IF EXISTS ValidarLicenciaAnteAsignacion $$
 CREATE TRIGGER ValidarLicenciaAnteAsignacion
 BEFORE INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
@@ -49,11 +52,12 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El conductor no tiene una licencia válida para este tipo de vehículo';
     END IF;
-END //
+END $$
 DELIMITER ;
 
 -- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
-DELIMITER //
+DELIMITER $$
+DROP TRIGGER IF EXISTS ActualizarDisponibilidadConductor $$
 CREATE TRIGGER ActualizarDisponibilidadConductor AFTER INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
@@ -61,11 +65,12 @@ BEGIN
     UPDATE Conductor
     SET Disponibilidad = 0
     WHERE idConductor = NEW.Conductor_idConductor;
-END //
+END $$
 DELIMITER ;
 
 -- Trigger para restaurar la disponibilidad del conductor al desasignarle un vehículo
-DELIMITER //
+DELIMITER $$
+DROP TRIGGER IF EXISTS RestaurarDisponibilidadConductor $$
 CREATE TRIGGER RestaurarDisponibilidadConductor AFTER DELETE ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
@@ -73,11 +78,11 @@ BEGIN
     UPDATE Conductor
     SET Disponibilidad = 1
     WHERE idConductor = OLD.Conductor_idConductor;
-END //
+END $$
 DELIMITER ;
 
 -- Trigger para verificar la capacidad del vehículo antes de asignarle un pedido
-DELIMITER //
+/*DELIMITER $$
 CREATE TRIGGER VerificarCapacidadVehiculo BEFORE INSERT ON Vehiculo_has_Pedido
 FOR EACH ROW
 BEGIN
@@ -95,9 +100,9 @@ BEGIN
     
     -- Calculamos el peso total de los pedidos ya asignados al vehículo
     SELECT SUM (p.Peso) INTO peso_pedidos_asignados
-    FROM Vehiculo_has_Pedido vp
-    JOIN Pedido p ON vp.Pedido_idPedido = p.idPedido
-    WHERE vp.Vehiculo_idVehiculo = NEW.Vehiculo_idVehiculo
+    FROM pedido vp
+    JOIN Vehiculo using (idvehiculo)
+    WHERE idvehiculo = NEW.idvehiculo
     AND p.EstadoPedido NOT IN ('Entregado', 'Cancelado');
     
     -- Verificamos si excede la capacidad
@@ -105,5 +110,5 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'La asignación excede la capacidad máxima del vehículo';
     END IF;
-END //
-DELIMITER ;
+END $$
+DELIMITER ;*/

@@ -1,10 +1,11 @@
-use aurorabd;
+-- Active: 1748344015396@@127.0.0.1@3306@aurorabd
 
 -- Datos de prueba
 Delimiter $$
-Call PSCrearEmpresa ('Empresa Norte src') $$
-Call PSCrearEmpresa ('Empresa Sur SA') $$
-Call PSCrearEmpresa ('Sancor Seguro') $$
+
+Call PSCrearEmpresa (@idEmpresaNorte,'Empresa Norte src') $$
+Call PSCrearEmpresa (@idEmpresaSur,'Empresa Sur SA') $$
+Call PSCrearEmpresa (@idEmpresaSancor, 'Sancor Seguro') $$
 
 /*se borrara ya que no tiene nada asignado*/
 Call SPDelEmpresa(3) $$
