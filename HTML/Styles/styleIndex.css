@@ -116,4 +116,122 @@ footer {
     color: #838383;
 }
 
+/*Modals*/
 
+.modal-signup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111bd;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.container-signup {
+    margin: auto;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90%;
+    border-radius: 16px;
+    padding: 3em 2.5rem;
+    background-color: #e6e6e6;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns: 100%;
+}
+
+.Modal-close {
+    text-decoration: none;
+    color:#081524;
+    padding: 1em 3em;
+    display: inline-block;
+}
+
+.modal-signup--show {
+    opacity: 1;
+    pointer-events: unset;
+}
+
+/*Modal de login*/
+
+.modal-login {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111bd;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.container-login {
+    margin: auto;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90%;
+    border-radius: 16px;
+    padding: 3em 2.5rem;
+    background-color: #e6e6e6;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns: 100%;
+}
+
+.Modal-close {
+    text-decoration: none;
+    color:#081524;
+    padding: 1em 3em;
+    display: inline-block;
+}
+
+.modal-login--show {
+    opacity: 1;
+    pointer-events: unset;
+}
+
+/*Modal de admin*/
+
+.modal-admin {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111bd;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.container-admin {
+    margin: auto;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90%;
+    border-radius: 16px;
+    padding: 3em 2.5rem;
+    background-color: #e6e6e6;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns: 100%;
+}
+
+.Modal-close {
+    text-decoration: none;
+    color:#081524;
+    padding: 1em 3em;
+    display: inline-block;
+}
+
+.modal-admin--show {
+    opacity: 1;
+    pointer-events: unset;
+}

@@ -23,39 +23,60 @@
     </header>
 
     <section class="form">
-        <div class="info-text">
-            <h2>Contact</h2>
-            <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus alias fugit accusamus nihil molestias similique excepturi veniam cumque animi perferendis mollitia, error explicabo iure distinctio culpa voluptatibus blanditiis ratione deleniti ipsa, nobis esse quas, facere nemo? Non, ad aperiam eaque quidem error rem nobis, magnam cupiditate quia facilis omnis tenetur quo. Iste temporibus culpa ullam quo iusto cum neque fuga! Doloribus quisquam placeat consequatur quo eligendi minus eos corporis magnam explicabo. Sunt autem in deserunt est maiores similique explicabo possimus inventore ex magni porro labore sint consequuntur veniam aliquam, exercitationem nihil quam eveniet cupiditate libero culpa temporibus at repellendus architecto?</span>
-        </div>
-        <div class="form-content">
-            <form action="POST" class="contact">
-                <div class="form-gruop">
-                    <label for="Email">Email</label>
-                    <input type="email" name="xemail" id="xidemail">
+        <div class="container">
+            <div class="form-section">
+                <h1 class="form-title">Contáctanos</h1>
+                <p class="form-subtitle">Estamos aquí para ayudarte con cualquier consulta</p>
+                
+                <form id="contactForm">
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
 
-                    <label for="Company">Comapany</label>
-                    <input type="text" name="xempresa" id="xidempresa">
+                    <div class="input-group">
+                        <label for="company">Empresa</label>
+                        <input type="text" id="company" name="company" required>
+                    </div>
 
-                    <label for="Subject">Subject</label>
-                    <input type="text" name="xidasunto" id="xidasunto">
-                    
-                    <label for="Mensaje">Menssaje</label>
-                    <textarea name="coment" id="xcoment" placeholder="MESSAGE" name="message" required></textarea>
+                    <div class="input-group">
+                        <label for="company">Asunto</label>
+                        <input type="Asunto" id="xidAsunto" name="Asunto" required>
+                    </div>
 
-                    <button class="btn btn-primary send-button" id="submit" type="submit" value="SEND">Send</button>
+                    <div class="input-group">
+                        <label for="problem">Describe tu problema</label>
+                        <textarea id="problem" name="problem" placeholder="Cuéntanos en qué podemos ayudarte..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+
+            <div class="contact-info">
+                <div class="floating-elements">
+                    <div class="floating-circle"></div>
+                    <div class="floating-circle"></div>
+                    <div class="floating-circle"></div>
                 </div>
-            </form>
-        </div>
-
-        <div class="rigth-content">
-            <div class="info">
-                <ol>
-                    <h5>Email : example@gmail.com</h5>
-                    <h5>Place : Buenos Aires, City</h5>
-                    <h5>Link Repositories: </h5>
-                    <h5>Hecho por Francisco Garcia 6º8º</h5>
-                    <h5>Aurora</h5>
-                </ol>
+                
+                <h2 class="contact-title">Contacto</h2>
+                
+                <div class="contact-detail">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">contacto@empresa.com</div>
+                </div>
+                
+                <div class="contact-detail">
+                    <div class="contact-label">Ubicación</div>
+                    <div class="contact-value">Buenos Aires, Argentina</div>
+                </div>
+                
+                <div class="contact-detail">
+                    <div class="contact-label">Thank you very much to everyone</div>
+                    <div class="contact-label" id="aurora">Aurora</div>
+                    <div class="contact-label" id="Autor">Francisco Agustin García 6°8°</div>
+                </div>
             </div>
         </div>
     </section>

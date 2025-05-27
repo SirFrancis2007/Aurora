@@ -89,24 +89,172 @@ ul a:hover {
 /*Contact Text*/
 
 .form {
-    border: 1px solid red;
+    font-family: Cabin;
     position: relative;
-    display: block;
+    display: flex;
     margin: 0;
     left: 0;
     right: 0;
-}
- 
-.info-text {
-    border: 1px solid khaki;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    padding: 50px;
-    padding-left: 150px;
-    padding-right: 150px;
+    justify-content: center;
 }
 
+/*Formulario*/
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 1400px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+}
+
+.form-section {
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contact-info {
+    background: #112d4e;
+    color: white;
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-title {
+    font-size: 2.5rem;
+    color: #1a202c;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 10px;
+    background-clip: text;
+}
+
+.form-subtitle {
+    color: #718096;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.input-group {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f7fafc;
+    font-family: inherit;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    background: #112d4e;
+    color: white;
+    padding: 18px 40px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(-1px);
+}
+
+.contact-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    background: linear-gradient(135deg, #ffffff, #e2e8f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.contact-detail {
+    margin-bottom: 30px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-detail:last-child {
+    border-bottom: none;
+}
+
+.contact-label {
+    font-size: 0.9rem;
+    color: #a0aec0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.contact-value {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 500;
+}
+
+#aurora {
+    font-family: Cabin;
+    font: bold;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
+
+#Autor {
+    font-family: "Great Vibes", cursive;
+}
 
 /*Footer*/
 
@@ -114,7 +262,7 @@ footer {
     position: relative;
     display: flex;
     flex-direction: row;
-    height: 20vh;
+    height: 4vh;
     justify-content: space-around;
     align-items: end;
     font-family: Cabin;

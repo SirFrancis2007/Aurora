@@ -10,6 +10,7 @@ body {
     background-color: rgb(255,250,250);
     width: 100%;
     height: 100vh;
+    flex: 1;
 }
 
 header {
@@ -86,13 +87,101 @@ ul a:hover {
     font-size: 1.4rem;
 }
 
+/*Acordeon*/
+
+.container {
+    font-family: Cabin;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2d3748;
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+.accordion-container {
+    margin-bottom: 60px;
+}
+
+.accordion-label {
+    font-size: 1.2rem;
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.accordion-1 {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-1 .item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.accordion-1 .item:last-child {
+    border-bottom: none;
+}
+
+.accordion-1 .header {
+    padding: 20px 25px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.accordion-1 .header:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.accordion-1 .title {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+
+.accordion-1 .content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-1 .content-inner {
+    padding: 25px;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+
+.accordion-1 .item.active .content {
+    max-height: 200px;
+}
+
+
 /*Footer*/
 
 footer {
     position: relative;
     display: flex;
     flex-direction: row;
-    height: 20vh;
+    height: 10vh;
     justify-content: space-around;
     align-items: end;
     font-family: Cabin;

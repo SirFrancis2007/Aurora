@@ -18,6 +18,7 @@
                 <a href="AboutAurora.html"><h3>AboutAurora</h3></a>
                 <a href="Contact.html"><h3>Contact</h3></a>
                 <a href="FAQ.html"><h3>FAQ</h3></a>
+                <a href="" class="btn-login-admin"><h3>↪</h3></a>
             </ul>
         </nav>
     </header>
@@ -27,8 +28,8 @@
             <div class="text">
                 <h1 id="t1">Logistic System</h1>
                 <span id="span-text">Prepare your package! Control your business and track every package. Easy, Free, secure. Aurora offers a unique service for your business to thrive. Register and get started. Welcome!</span>
-                <button id="btn-header">Registrer</button>
-                <button id="btn-header">Login in</button>
+                <button id="btn-header" class="btn-registro">Registrer</button>
+                <button id="btn-header" class="btn-login">Login in</button>
             </div>
             <img src="/HTML/Image/logistica2.jpg" alt="Logistica">
         </div>
@@ -40,5 +41,54 @@
     </footer>
 
     <!--Aca se encuentra la estrucutra de los modales de inicio sesion y registro-->
+    <section class="modal-login">
+        <div class="modal container-login">
+            <a href="#" class="Modal-close">Close</a>
+            <form action="" method="post">
+                <label for="name">Company</label>
+                <input type="text" name="company" id="">
+
+                <label for="Pass">Password</label>
+                <input type="password" name="pass" id="">
+
+                <button>Sumit</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="modal-admin">
+        <div class="modal container-admin">
+            <a href="#" class="Modal-close">Close</a>
+            <form action="" method="post">
+                <label for="name">Nombre</label>
+                <input type="text" name="company" id="">
+
+                <label for="Pass">Password</label>
+                <input type="password" name="pass" id="">
+
+                <button>Sumit</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="modal-signup">
+        <div class="modal container-signup">
+            <a href="#" class="Modal-close">Close</a>
+            <form action="" method="post">
+                <label for="name">Company</label>
+                <input type="text" name="company" id="">
+
+                <label for="Pass">Password</label>
+                <input type="password" name="pass" id="">
+
+                <label for="Pass">Confirm Password</label>
+                <input type="password" name="pass" id="">
+
+                <button>Sumit</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="/HTML/JavaScript/modals.js"></script>
 </body>
 </html>
