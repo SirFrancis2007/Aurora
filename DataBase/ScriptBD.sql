@@ -74,8 +74,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `aurorabd`.`Pedido` (
   `idPedido` INT NOT NULL auto_increment,
   `Name` VARCHAR(45) NULL,
-  `Volumen` VARCHAR(45) NULL,
-  `Peso` VARCHAR(45) NULL,
+  `Volumen` DOUBLE NULL,
+  `Peso` DOUBLE NULL,
   `EstadoPedido` VARCHAR(45) NULL,
   `FechaDespacho` DATE NULL,
   `Administrador_idAdministrador` INT NOT NULL,

@@ -1,4 +1,4 @@
--- use aurorabd;
+use aurorabd;
 
 -- Datos de prueba
 Delimiter $$
@@ -7,8 +7,8 @@ Call PSCrearEmpresa (@Idempresa2,'Empresa Sur SA') $$
 Call PSCrearEmpresa (@Idempresa3,'Sancor Seguro') $$
 
 /*se borrara ya que no tiene nada asignado*/
-Delimiter $$
-Call SPDelEmpresa(3) $$
+/*Delimiter $$
+Call SPDelEmpresa(3) $$*/
 
 Delimiter $$
 Call SPNuevoAdministrador(@id1,'Victor', 'victor1234', 1) $$
@@ -67,14 +67,13 @@ call SPDesasignarVehiculoAConductor (3,4) $$
 
 /*Registrar pedido*/
 /*Asignar pedido a vehiculo*/
-Delimiter $$
 -- ID + NAME + VOL + PESO + ESTADO + FECHA + IDADMIN + IDDESTINO + IDRUTA + IDVEHICULO
-CALL SPCrearPedido(@p1,'Caucho', 20, 50, 'Creado', curdate(), 1, 2, 4,1) $$
-CALL SPCrearPedido(@p2,'Troncos', 1500, 600, 'Creado', curdate(), 1, 2,2,3) $$
-CALL SPCrearPedido(@p3,'aceite 1lt', 200, 100, 'Creado', curdate(), 1, 2,6,1) $$
-CALL SPCrearPedido(@p4,'aceitunas 1lt', 200, 100, 'Creado', curdate(), 1, 2,6,1) $$
-CALL SPCrearPedido(@p5,'leche La Serenicima', 200, 100, 'Creado', curdate(), 1, 2,6,1) $$
-CALL SPCrearPedido(@p6,'Cafe molido', 123, 80, 'Creado', curdate(), 1, 2,6,1) $$
+CALL SPCrearPedido(@p1,'Caucho', 20, 50, 'Creado', curdate(), 1, 2, 4,1);
+CALL SPCrearPedido(@p2,'Troncos', 1500, 600, 'Creado', curdate(), 1, 2,2,3);
+CALL SPCrearPedido(@p3,'aceite 1lt', 200, 100, 'Creado', curdate(), 1, 2,6,1);
+CALL SPCrearPedido(@p4,'aceitunas 1lt', 200, 100, 'Creado', curdate(), 1, 2,6,1);
+CALL SPCrearPedido(@p5,'leche La Serenicima', 200, 100, 'Creado', curdate(), 1, 2,6,1);
+CALL SPCrearPedido(@p6,'Cafe molido', 123, 80, 'Creado', curdate(), 1, 2,6,1);
 
 /*Simular que el paquete ya fue recibido y confirmado su entrega por parte del receptor*/
 

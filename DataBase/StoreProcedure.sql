@@ -1,4 +1,5 @@
 -- Active: 1748344015396@@127.0.0.1@3308
+USE aurorabd;
 
 /*Store Procedures para EMPRESA*/
 DELIMITER $$
@@ -15,13 +16,12 @@ Drop PROCEDURE IF EXISTS  SPDelEmpresa $$
 CREATE PROCEDURE SPDelEmpresa (IN xidEmpresa INT)
 BEGIN
     START TRANSACTION;
+	
+    -- para eliminar empresa se debera eliminar todos historiales de pedido ligadoas a la empresa. 
+    delete from historialpedido
+    where idpedido = (SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa);
     
-    DELETE hp FROM HistorialPedido hp
-    INNER JOIN Pedido p ON hp.Pedido_idPedido = p.idPedido
-    WHERE p.EmpresaDestino = xidEmpresa OR p.Administrador_idAdministrador IN (
-        SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa
-    );
-    
+    -- se elimina todo pedido ligado a la empresa tanto como receptora como de todo administrador que haya despachado un paquete de la empresa.
     DELETE FROM Pedido 
     WHERE EmpresaDestino = xidEmpresa OR Administrador_idAdministrador IN (
         SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa
@@ -185,7 +185,7 @@ DELIMITER ;
 -- Procedimiento para actualizar datos de un vehículo
 DELIMITER $$
 Drop PROCEDURE IF EXISTS  UpdateVehiculo $$
-CREATE PROCEDURE UpdateVehiculo(xidVehiculo INT,xMatricula VARCHAR(45)
+CREATE PROCEDURE UpdateVehiculo(xidVehiculo INT, xMatricula VARCHAR(45)
 )
 BEGIN
     UPDATE Vehiculo
@@ -246,19 +246,15 @@ DELIMITER $$
 -- Procedimiento para desasignar un vehículo de un conductor
 DELIMITER $$
 Drop PROCEDURE IF EXISTS  SPDesasignarVehiculoAConductor $$
-
-CREATE PROCEDURE SPDesasignarVehiculoAConductor(
-    IN xidConductor INT,
-    IN xidVehiculo INT
-)
+CREATE PROCEDURE SPDesasignarVehiculoAConductor(xidConductor INT,xidVehiculo INT)
 BEGIN
     DECLARE pedidosEnVehiculo INT;
     
     SELECT COUNT(*) INTO pedidosEnVehiculo 
-    FROM vehiculo  
-    JOIN Pedido using (idvehiculo)
-    WHERE Vehiculo_idVehiculo = xidVehiculo;
-    
+	FROM Vehiculo  
+	JOIN Pedido ON Vehiculo.idVehiculo = Pedido.Vehiculo_idVehiculo
+	WHERE Vehiculo.idVehiculo = xidVehiculo;
+
     IF pedidosEnVehiculo > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede desasignar el vehículo porque tiene pedidos activos';
@@ -301,15 +297,15 @@ Drop PROCEDURE IF EXISTS  SPCrearPedido $$
 
 CREATE PROCEDURE SPCrearPedido(
     OUT xidPedido INT,
-    IN xName VARCHAR(45),
-    IN xVolumen VARCHAR(45),
-    IN xPeso VARCHAR(45),
-    IN xEstadoPedido VARCHAR(45),
-    IN xFechaDespacho DATE,
-    IN xAdministrador_idAdministrador INT,
-    IN xEmpresaDestino INT,
-    IN xRuta_idRuta INT,
-    IN xidVehiculo INT
+    xName VARCHAR(45),
+    xVolumen VARCHAR(45),
+    xPeso VARCHAR(45),
+    xEstadoPedido VARCHAR(45),
+    xFechaDespacho DATE,
+    xAdministrador_idAdministrador INT,
+    xEmpresaDestino INT,
+    xRuta_idRuta INT,
+    xidVehiculo INT
 )
 BEGIN
     -- Creamos el pedido con estado inicial

@@ -6,45 +6,40 @@
 
 -- Trigger para insertar un registro en el historial cuando se crea un pedido
 DELIMITER $$
-CREATE TRIGGER InsertHistorialPedido AFTER INSERT ON Pedido
+DROP TRIGGER IF EXISTS AftInsertPedido $$
+CREATE TRIGGER AftInsertPedido AFTER INSERT ON Pedido
 FOR EACH ROW
 BEGIN
-	DECLARE new_id INT;
-    SELECT IFNULL(MAX(idHistorialPedido), 0) + 1 INTO new_id FROM HistorialPedido;
-    
-    -- Insertamos el registro en el historial
-    INSERT INTO HistorialPedido (idHistorialPedido, EstadoAnterior, EstadoNuevo, FechaCambio, Pedido_idPedido)
-    VALUES (new_id, NULL, NEW.EstadoPedido, NOW(), NEW.idPedido);
+    INSERT INTO HistorialPedido (EstadoAnterior, EstadoNuevo, FechaCambio, Pedido_idPedido)
+    VALUES (NULL, NEW.EstadoPedido, NOW(), NEW.idPedido);
 END $$
+DELIMITER ;
+
 
 -- Trigger para insertar un registro en el historial cuando cambia el estado de un pedido
 DELIMITER $$
-CREATE TRIGGER UpdateHistorialPedido AFTER UPDATE ON Pedido
+DROP TRIGGER IF EXISTS AftUpdatePedido $$
+CREATE TRIGGER AftUpdatePedido AFTER UPDATE ON Pedido
 FOR EACH ROW
 BEGIN
-	DECLARE new_id INT;
-    -- Solo si cambia el estado
     IF NEW.EstadoPedido != OLD.EstadoPedido THEN
-        -- Generamos un ID para el historial (en producción, podría ser auto-incremento)
-        SELECT IFNULL(MAX(idHistorialPedido), 0) + 1 INTO new_id FROM HistorialPedido;
-        
-        -- Insertamos el registro en el historial
-        INSERT INTO HistorialPedido (idHistorialPedido, EstadoAnterior, EstadoNuevo, FechaCambio, Pedido_idPedido)
-        VALUES (new_id, OLD.EstadoPedido, NEW.EstadoPedido, NOW(), NEW.idPedido);
+        INSERT INTO HistorialPedido (EstadoAnterior, EstadoNuevo, FechaCambio, Pedido_idPedido)
+        VALUES (OLD.EstadoPedido, NEW.EstadoPedido, NOW(), NEW.idPedido);
     END IF;
 END $$
 DELIMITER ;
 
+
 -- Trigger para verificar que un conductor tenga licencia válida antes de asignarle un vehículo
 DELIMITER $$
-CREATE TRIGGER ValidarLicenciaAnteAsignacion
-BEFORE INSERT ON Conductor_has_Vehiculo
+DROP TRIGGER IF EXISTS BefInsertConductorVehiculo $$
+CREATE TRIGGER BefInsertConductorVehiculo BEFORE INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
     DECLARE licencia_valida BOOLEAN;
-    
+
     SET licencia_valida = VerificarLicenciaValidaParaVehiculo(NEW.Conductor_idConductor, NEW.Vehiculo_idVehiculo);
-    
+
     IF licencia_valida = FALSE THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El conductor no tiene una licencia válida para este tipo de vehículo';
@@ -54,7 +49,8 @@ DELIMITER ;
 
 -- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
 DELIMITER $$
-CREATE TRIGGER ActualizarDisponibilidadConductor AFTER INSERT ON Conductor_has_Vehiculo
+DROP TRIGGER IF EXISTS AftInsertConductorVehiculo $$
+CREATE TRIGGER AftInsertConductorVehiculo AFTER INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
     -- Al asignar un vehículo, el conductor ya no está disponible para otros vehículos
@@ -64,9 +60,22 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
+/*DELIMITER $$
+DROP TRIGGER IF EXISTS BefUpdateEstVehiculo $$
+CREATE TRIGGER BefUpdateEstVehiculo AFTER INSERT ON Conductor_has_Vehiculo
+FOR EACH ROW
+BEGIN
+    UPDATE Vehiculo
+    SET Estado = 0
+    WHERE idVehiculo = NEW.Vehiculo_idVehiculo;
+END $$
+DELIMITER ;
+
 -- Trigger para restaurar la disponibilidad del conductor al desasignarle un vehículo
 DELIMITER $$
-CREATE TRIGGER RestaurarDisponibilidadConductor AFTER DELETE ON Conductor_has_Vehiculo
+DROP TRIGGER IF EXISTS AftDelConductorVehiculo $$
+CREATE TRIGGER AftDelConductorVehiculo AFTER DELETE ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
     -- Al desasignar un vehículo, el conductor vuelve a estar disponible
@@ -74,33 +83,28 @@ BEGIN
     SET Disponibilidad = 1
     WHERE idConductor = OLD.Conductor_idConductor;
 END $$
-DELIMITER ;
+DELIMITER ;*/
 
 -- Trigger para verificar la capacidad del vehículo antes de asignarle un pedido
 DELIMITER $$
-CREATE TRIGGER VerificarCapacidadVehiculo BEFORE INSERT ON Pedido
+DROP TRIGGER IF EXISTS VefInsPedido $$
+CREATE TRIGGER VefInsPedido BEFORE INSERT ON Pedido
 FOR EACH ROW
 BEGIN
     DECLARE capacidad_vehiculo DOUBLE;
     DECLARE peso_pedido DOUBLE;
     DECLARE peso_pedidos_asignados DOUBLE;
-    
+
     SELECT CapacidadMaz INTO capacidad_vehiculo
     FROM Vehiculo
     WHERE idVehiculo = NEW.Vehiculo_idVehiculo;
-    
-    SELECT Peso INTO peso_pedido
+
+    SELECT SUM(Peso)
+    INTO peso_pedidos_asignados
     FROM Pedido
-    WHERE idPedido = NEW.Pedido_idPedido;
-    
-    -- Calculamos el peso total de los pedidos ya asignados al vehículo
-    SELECT SUM (p.Peso) INTO peso_pedidos_asignados
-    FROM pedido vp
-    JOIN Vehiculo using (idvehiculo)
-    WHERE idvehiculo = NEW.idvehiculo
-    AND p.EstadoPedido NOT IN ('Entregado', 'Cancelado');
-    
-    -- Verificamos si excede la capacidad
+    WHERE Vehiculo_idVehiculo = NEW.Vehiculo_idVehiculo
+    AND EstadoPedido NOT IN ('Entregado');
+
     IF (peso_pedidos_asignados + peso_pedido) > capacidad_vehiculo THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'La asignación excede la capacidad máxima del vehículo';
