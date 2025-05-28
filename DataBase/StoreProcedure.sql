@@ -308,7 +308,7 @@ CREATE PROCEDURE SPCrearPedido(
     IN xFechaDespacho DATE,
     IN xAdministrador_idAdministrador INT,
     IN xEmpresaDestino INT,
-    IN xRuta_idRuta INT
+    IN xRuta_idRuta INT,
     IN xidVehiculo INT
 )
 BEGIN
@@ -350,44 +350,5 @@ BEGIN
     WHERE idPedido = xidPedido;
     
     -- Aclaracion: El trigger UpdateHistorialPedido se encargará de crear el registro en el historial
-END $$
-DELIMITER ;
-
--- Procedimiento para asignar un pedido a un vehículo
-DELIMITER $$
-Drop PROCEDURE IF EXISTS  SPAsignarPedidoAVehiculo $$
-
-CREATE PROCEDURE SPAsignarPedidoAVehiculo(
-    IN xidPedido INT,
-    IN xidVehiculo INT
-)
-BEGIN
-    -- Verificamos si el vehículo está operativo
-    DECLARE estado_vehiculo TINYINT;
-    
-    -- Verificamos si el pedido ya está asignado
-    DECLARE pedido_asignado INT;
-    
-    SELECT Estado INTO estado_vehiculo 
-    FROM Vehiculo 
-    WHERE idVehiculo = xidVehiculo;
-    
-    SELECT COUNT(*) INTO pedido_asignado 
-    FROM Vehiculo_has_Pedido 
-    WHERE Pedido_idPedido = xidPedido;
-    
-    IF estado_vehiculo != 1 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El vehículo no está operativo';
-    ELSEIF pedido_asignado > 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El pedido ya está asignado a otro vehículo';
-    ELSE
-        -- Asignamos el pedido al vehículo
-        INSERT INTO Vehiculo_has_Pedido (Vehiculo_idVehiculo, Pedido_idPedido, FechaAsignacion)
-        VALUES (xidVehiculo, xidPedido, CURDATE());
-        
-        CALL UpdateEstadoPedido(xidPedido, 'En proceso');
-    END IF;
 END $$
 DELIMITER ;

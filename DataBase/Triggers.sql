@@ -1,4 +1,4 @@
--- Active: 1748344015396@@127.0.0.1@3308
+-- use aurorabd;
 
 -- =====================================================================
 -- TRIGGERS
@@ -6,7 +6,6 @@
 
 -- Trigger para insertar un registro en el historial cuando se crea un pedido
 DELIMITER $$
-drop trigger if EXISTS InsertHistorialPedido $$
 CREATE TRIGGER InsertHistorialPedido AFTER INSERT ON Pedido
 FOR EACH ROW
 BEGIN
@@ -20,7 +19,6 @@ END $$
 
 -- Trigger para insertar un registro en el historial cuando cambia el estado de un pedido
 DELIMITER $$
-DROP TRIGGER IF EXISTS UpdateHistorialPedido $$
 CREATE TRIGGER UpdateHistorialPedido AFTER UPDATE ON Pedido
 FOR EACH ROW
 BEGIN
@@ -39,7 +37,6 @@ DELIMITER ;
 
 -- Trigger para verificar que un conductor tenga licencia válida antes de asignarle un vehículo
 DELIMITER $$
-DROP TRIGGER IF EXISTS ValidarLicenciaAnteAsignacion $$
 CREATE TRIGGER ValidarLicenciaAnteAsignacion
 BEFORE INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
@@ -57,7 +54,6 @@ DELIMITER ;
 
 -- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
 DELIMITER $$
-DROP TRIGGER IF EXISTS ActualizarDisponibilidadConductor $$
 CREATE TRIGGER ActualizarDisponibilidadConductor AFTER INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
@@ -70,7 +66,6 @@ DELIMITER ;
 
 -- Trigger para restaurar la disponibilidad del conductor al desasignarle un vehículo
 DELIMITER $$
-DROP TRIGGER IF EXISTS RestaurarDisponibilidadConductor $$
 CREATE TRIGGER RestaurarDisponibilidadConductor AFTER DELETE ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
@@ -82,8 +77,8 @@ END $$
 DELIMITER ;
 
 -- Trigger para verificar la capacidad del vehículo antes de asignarle un pedido
-/*DELIMITER $$
-CREATE TRIGGER VerificarCapacidadVehiculo BEFORE INSERT ON Vehiculo_has_Pedido
+DELIMITER $$
+CREATE TRIGGER VerificarCapacidadVehiculo BEFORE INSERT ON Pedido
 FOR EACH ROW
 BEGIN
     DECLARE capacidad_vehiculo DOUBLE;
@@ -111,4 +106,4 @@ BEGIN
         SET MESSAGE_TEXT = 'La asignación excede la capacidad máxima del vehículo';
     END IF;
 END $$
-DELIMITER ;*/
+DELIMITER ;

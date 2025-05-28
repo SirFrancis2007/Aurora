@@ -1,22 +1,23 @@
-### Diagrama de Base de Datos
+### Diagrama de Base de datos
 
 ```mermaid
 erDiagram
-
+direction LR
     Pedido {
         uint      idPedido        PK
-        uint      xidCliente      FK
+        INT       idAdmin   FK
+        INT       idRuta    FK  
+        INT       idEmpresaDestino  FK
+        INT       idVehiculo    FK
+        string    Nombre
         float     Peso
         float     Volumen
         datetime  FechaDespacho
     }
 
-    Cliente {
-        uint     idCliente     PK
+    Empresa {
+        uint     idEmpresa     PK
         string   Nombre
-        string   Telefono
-        string   Email
-        string   Direccion
     }
 
     Vehiculo {
@@ -34,40 +35,30 @@ erDiagram
         bool     Disponibilidad
     }
 
-    PedidoVehiculo {
-        uint     idPedido       FK
-        uint     idVehiculo     FK
-        datetime FechaAsignacion
-        string   EstadoEntrega
-    }
-
     ConductorVehiculo {
         uint     idConductor    FK
         uint     idVehiculo     FK
         datetime FechaAsignacion
-        string   Turno
     }
 
     Rutas {
         uint     idRuta         PK
-        uint     xidPedido      FK
         string   Origen
         string   Destino
     }
 
-    Personal {
+    Administradores {
         uint     idPersonal     PK
+        int      idEmpresa      FK 
         string   Nombre
-        string   Jerarquia
         string   Contrasena
     }
 
     %% Relaciones
-    Cliente ||--o{ Pedido : realiza
-    Pedido ||--o{ PedidoVehiculo : contiene
-    Vehiculo ||--o{ PedidoVehiculo : transporta
+    Empresa ||--o{ Administradores : contrata
     Conductor ||--o{ ConductorVehiculo : maneja
     Vehiculo ||--o{ ConductorVehiculo : operado_por
     Pedido ||--o{ Rutas : sigue
-    Personal ||--o{ Pedido : asignar
+    Administradores ||--o{ Pedido : Realiza
+    Pedido ||--o{ Vehiculo : Contiene
 ```

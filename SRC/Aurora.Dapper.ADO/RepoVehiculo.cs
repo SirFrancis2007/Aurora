@@ -72,7 +72,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
             SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 
                    p.FechaDespacho, p.Administrador_idAdministrador, 
                    p.EmpresaDestino, p.Ruta_idRuta
-            FROM Vehiculo_has_Pedido vhp
+            FROM Vehiculo vhp
             INNER JOIN Pedido p ON vhp.Pedido_idPedido = p.idPedido
             WHERE vhp.Vehiculo_idVehiculo = @vehiculoId";
 
