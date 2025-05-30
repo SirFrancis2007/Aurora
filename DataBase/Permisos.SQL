@@ -1,4 +1,4 @@
--- Active: 1748344015396@@127.0.0.1@3308
+-- Active: 1748614287392@@127.0.0.1@3306@aurorabd
 -- Drop de usuarios
 DROP USER IF EXISTS 'Empresa'@'localhost';
 DROP USER IF EXISTS 'Administradores'@'%';

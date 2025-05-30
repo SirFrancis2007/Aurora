@@ -17,8 +17,8 @@ public class TestRuta : TestBase
         Ruta NuevaRuta = new Ruta()
         {
             IdRuta = 0,
-            Origen = "Cordoba",
-            Destino = "Buenos Aires"
+            Origen = "Madrid",
+            Destino = "Lisboa"
         };
 
         //Llamar a dar de alta la ruta.
