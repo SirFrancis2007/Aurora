@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Aurora.Dapper.ADO;
@@ -11,43 +12,43 @@ public class TestConductor : TestBase
     public TestConductor() : base() => _RepoConductor = new RepoConductor(Conexion);
 
     [Fact]
-    public void AltaConductor()
+    public async Task AltaConductor()
     {
-        _RepoConductor.Alta(FixtureAurora.NuevoConductor);
+        await _RepoConductor.Alta(FixtureAurora.NuevoConductor);
     }
 
     [Fact]
-    public void Obtener()
+    public async Task Obtener()
     {
-        var Resultados = _RepoConductor.Obtener();
+        var Resultados = await _RepoConductor.Obtener;
         Assert.NotNull(Resultados);
     }
 
     [Fact]
-    public void ObtenerXId ()
+    public async Task ObtenerXId ()
     {
-        var Resultado = _RepoConductor.Detalle(1);
+        var Resultado = await _RepoConductor.Detalle(1);
         Assert.NotNull(Resultado);
         Assert.Equal("pepe", Resultado.Nombre);
     }
 
     [Fact]
-    public void AsignarVehiculo()
-        => _RepoConductor.AsignarVehiculo(1,1);
+    public async Task AsignarVehiculo()
+        => await _RepoConductor.AsignarVehiculo(1,1);
 
     [Fact]
-    public void DesasignarVehiculo()
-        => _RepoConductor.DesasignarVehiculoDeConductor(1,1);
+    public async Task DesasignarVehiculo()
+        => await _RepoConductor.DesasignarVehiculoDeConductor(1,1);
 
     [Fact]
-    public void TestDisponibilidad()
+    public async Task TestDisponibilidad()
     {
-        _RepoConductor.VerDisponibilidad(1);
+         await _RepoConductor.VerDisponibilidad(1);
     }
 
     [Fact]
-    public void TestVefLicencia()
+    public async Task TestVefLicencia()
     {
-        _RepoConductor.VefLicencia(FixtureAurora.NuevoConductor.Licencia, FixtureAurora.NuevoConductor.IdConductor, 1);
+        await _RepoConductor.VefLicencia(FixtureAurora.NuevoConductor.Licencia, FixtureAurora.NuevoConductor.IdConductor, 1);
     }
 }

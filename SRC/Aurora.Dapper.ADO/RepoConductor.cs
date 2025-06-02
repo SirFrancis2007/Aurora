@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Dapper;
@@ -11,7 +12,9 @@ public class RepoConductor : RepoGenerico, IRepoConductor
     {
     }
 
-    public void Alta(Conductor elemento)
+    Task<IEnumerable<Conductor>> IRepoListado<Conductor>.Obtener => throw new NotImplementedException();
+
+    public async Task Alta(Conductor elemento)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xNombre", elemento.Nombre);
@@ -20,7 +23,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
 
         try
         {
-            Conexion.Execute("SPNewConductor", parametros);
+            await Conexion.ExecuteAsync("SPNewConductor", parametros);
         }
         catch (System.Exception)
         {
@@ -28,7 +31,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public void AsignarVehiculo(int conductorId, int vehiculoId)
+    public async Task AsignarVehiculo(int conductorId, int vehiculoId)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", conductorId);
@@ -36,7 +39,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
 
         try
         {
-            Conexion.Execute("AsignarVehiculoAConductor", parametros);
+            await Conexion.ExecuteAsync("AsignarVehiculoAConductor", parametros);
         }
         catch (System.Exception)
         {
@@ -44,7 +47,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public void DesasignarVehiculoDeConductor(int conductorId, int vehiculoId)
+    public async Task DesasignarVehiculoDeConductor(int conductorId, int vehiculoId)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", conductorId);
@@ -52,7 +55,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
 
         try
         {
-            Conexion.Execute("SPDesasignarVehiculoAConductor", parametros);
+            await Conexion.ExecuteAsync("SPDesasignarVehiculoAConductor", parametros);
         }
         catch (System.Exception)
         {
@@ -60,21 +63,21 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public Conductor? Detalle(int indiceABuscar)
+    public async Task<Conductor>? Detalle(int indiceABuscar)
     {
         var Query = @"Select * From Conductor Where idConductor = {indiceABuscar}";
-        var resultados = Conexion.QueryFirstOrDefault<Conductor>(Query);
+        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query);
         return resultados;
     }
 
-    public void EliminarConductor(int idConductor)
+    public async Task EliminarConductor(int idConductor)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", idConductor);
 
         try
         {
-            Conexion.Execute("SPDelConductor", parametros);
+            await Conexion.ExecuteAsync("SPDelConductor", parametros);
         }
         catch (System.Exception)
         {
@@ -82,26 +85,31 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public IEnumerable<Conductor> Obtener()
+    public async Task<IEnumerable<Conductor>> Obtener()
     {
         var Query = @"Select * From Conductor";
-        var resultados = Conexion.Query<Conductor>(Query);
+        var resultados = await Conexion.QueryAsync<Conductor>(Query);
         return resultados;
     }
 
-    public bool VefLicencia(string Licencia, int idConductor, int idVehiculo)
+    public async Task<bool> VefLicencia(string Licencia, int idConductor, int idVehiculo)
     {
-        var resultado = Conexion.ExecuteScalar<bool>
+        var resultado = await Conexion.ExecuteScalarAsync<bool>
         (
             "SELECT VerificarLicenciaValidaParaVehiculo(@idConductor, @idVehiculo)", new { idConductor, idVehiculo }
         );
         return resultado;
     }
 
-    public Conductor VerDisponibilidad(int conductorId)
+    public async Task<Conductor> VerDisponibilidad(int conductorId)
     {
         var Query = @"Select Nombre, Licencia, Disponibilidad from Conductor where idConductor = {conductorId}";
-        var resultados = Conexion.QueryFirstOrDefault<Conductor>(Query);
+        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query);
         return resultados;
+    }
+
+    Task IRepoConductor.VefLicencia(string Licencia, int idVehiculo, int idConductor)
+    {
+        return VefLicencia(Licencia, idVehiculo, idConductor);
     }
 }

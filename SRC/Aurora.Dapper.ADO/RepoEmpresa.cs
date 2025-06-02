@@ -11,21 +11,9 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
     {
     }
 
-    // Alta de empresa
-    public void Alta(Empresa NuevaEmpresa)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xNombre", NuevaEmpresa.Nombre);
-        try
-        {
-            Conexion.Execute("PSCrearEmpresa", parametros); // "PSCrearEmpresa" SP para crear empresa
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("Esta empresa ya se encuentra Registrada");
-        }
-    }
-    public async Task AltaAsync(Empresa NuevaEmpresa)
+    public Task<IEnumerable<Empresa>> Obtener => throw new NotImplementedException();
+
+    public async Task Alta(Empresa NuevaEmpresa)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xNombre", NuevaEmpresa.Nombre);
@@ -36,77 +24,58 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         catch (System.Exception)
         {
             throw new Exception("Esta empresa ya se encuentra Registrada");
-        }
-    }
-    public void AgregarAdministrador(Administrador xAdministrador)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidAdministrador", xAdministrador.IdAdministrador);
-        parametros.Add("xNombre", xAdministrador.Nombre);
-        parametros.Add("xpassword", xAdministrador.Password);
-        parametros.Add("xidEmpresa", xAdministrador.IdEmpresa);
-
-        try
-        {
-            Conexion.Execute("SPNuevoAdministrador", parametros); // "SPNuevoAdministrador" SP para añadir Administrador
-        }
-        catch (System.Exception)
-        {
-            throw new ConstraintException($"El admnistrado ya se encuentra registrado");
-        }
+        }   
     }
 
-    public Empresa? Detalle(uint indiceABuscar)
+    public async Task<Empresa>? Detalle(uint indiceABuscar)
     {
         var query = @"Select * From Empresa where idEmpresa = {indiceABuscar}";
-        var Resultado = Conexion.QueryFirstOrDefault<Empresa>(query);
+        var Resultado = await Conexion.QueryFirstOrDefaultAsync<Empresa>(query);
         return Resultado;
     }
 
-    public void EliminarAdministrador(int xidadministrador)
+    public async Task EliminarAdministrador(int xidadministrador)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidAdministrador", xidadministrador);
-
         try
         {
-            Conexion.Execute("SPDelAdministrador", parametros);
+            await Conexion.ExecuteAsync("SPDelAdministrador", parametros);
         }
         catch (System.Exception)
         {
             throw new Exception("¡Error al eliminar al administrador!");
-        }
+        }    
     }
 
-    public void EliminarEmpresa(int idempresa)
+    public async Task EliminarEmpresa(int idempresa)
     {
         var parametros = new DynamicParameters();
         parametros.Add("@xidEmpresa", idempresa);
-
         try
         {
-            Conexion.Execute("SPDelEmpresa", parametros);
+            await Conexion.ExecuteAsync("SPDelEmpresa", parametros);
         }
         catch (System.Exception)
         {
             throw new Exception("¡Error al eliminar al administrador!");
-        }
+        }    
     }
 
-    public IEnumerable<Empresa> Obtener()
+    public async Task<IEnumerable<Pedido>> ObtenerPedidos(int xidEmpresa)
+    {
+        var query = @"Select * 
+                        From Pedido 
+                        Where p.EmpresaDestino = {xidEmpresa} OR a.Empresa_idEmpresa = {xidEmpresa} 
+                        ORDER BY p.FechaDespacho DESC";
+        var resultados = await Conexion.QueryAsync<Pedido>(query);
+        return resultados;
+    }
+
+    public IEnumerable<Empresa> ObtenerDatos()
     {
         var query = @"Select * From Empresa";
         var Resultado = Conexion.Query<Empresa>(query);
         return Resultado;
-    }
-
-    public IEnumerable<Pedido> ObtenerPedidos(int xidEmpresa)
-    {
-        var query = @"Select * 
-                    From Pedido 
-                    Where p.EmpresaDestino = {xidEmpresa} OR a.Empresa_idEmpresa = {xidEmpresa} 
-                    ORDER BY p.FechaDespacho DESC";
-        var resultados = Conexion.Query<Pedido>(query);
-        return resultados;
     }
 }

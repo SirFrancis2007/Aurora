@@ -2,6 +2,7 @@ using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Aurora.Core;
 using Aurora.Dapper.ADO;
+using System.Threading.Tasks;
 
 namespace Aurora.Dapper.Test;
 
@@ -12,7 +13,7 @@ public class TestRuta : TestBase
         => repoRuta = new RepoRuta(Conexion);
 
     [Fact]
-    public void TestCreateRuta()
+    public async Task TestCreateRuta()
     {
         Ruta NuevaRuta = new Ruta()
         {
@@ -22,20 +23,20 @@ public class TestRuta : TestBase
         };
 
         //Llamar a dar de alta la ruta.
-        repoRuta.Alta(NuevaRuta);
+        await repoRuta.Alta(NuevaRuta);
     }
 
     [Fact]
-    public void TestObtenerOk()
+    public async Task TestObtenerOk()
     {
-        var Resultado = repoRuta.Obtener();
+        var Resultado = await repoRuta.Obtener;
         Assert.NotEmpty(Resultado);
     }
 
     [Fact]
-    public void TestObtenerxIdOk()
+    public async Task TestObtenerxIdOk()
     {
-        var Resultado = repoRuta.ObtenerRutaPorCondicion(1, "Cordoba", "Buenos Aires");
+        var Resultado = await repoRuta.ObtenerRutaPorCondicion(1, "Cordoba", "Buenos Aires");
         Assert.NotEmpty(Resultado.Origen);
     } 
 }

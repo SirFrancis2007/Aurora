@@ -1,5 +1,6 @@
 using System.Data;
 using System.Linq.Expressions;
+using System.Text;
 using System.Xml.Schema;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
@@ -13,7 +14,27 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     {
     }
 
-    public bool CambiarEstado(int vehiculoId, bool disponible)
+    public Task<IEnumerable<Vehiculo>> Obtener => throw new NotImplementedException();
+
+    public async Task Alta(Vehiculo elemento)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xTipo", elemento.Tipo);
+        parametros.Add("xEstado", elemento.Estado);
+        parametros.Add("xCapacidadMax", elemento.CapacidadMax);
+        parametros.Add("xMatricula", elemento.Matricula);
+
+        try
+        {
+            await Conexion.ExecuteAsync("SPCrearVehiculo", parametros);
+        }
+        catch (System.Exception)
+        {
+            throw new Exception(@"Error al agregar el vehiculo {Exception}");
+        }    
+    }
+
+    public async Task<Boolean> CambiarEstado(int vehiculoId, bool disponible)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", vehiculoId);
@@ -29,10 +50,20 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         catch (System.Exception)
         {
             throw new Exception("Error al actualizar el estado del vehiculo");
-        }
+        }    }
+
+    public async Task<Vehiculo>? Detalle(int indiceABuscar)
+    {
+        string query = @"
+            SELECT *
+            FROM Vehiculo 
+            WHERE idVehiculo = @vehiculoId";
+
+        var vehiculo = await Conexion.QueryFirstOrDefaultAsync<Vehiculo>(query, new { vehiculoId = indiceABuscar });
+        return vehiculo;    
     }
 
-    public bool EliminarVehiculo(int idVehiculo)
+    public async Task<Boolean> EliminarVehiculo(int idVehiculo)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", idVehiculo);
@@ -49,7 +80,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }
     }
 
-    public List<Pedido> ListarPedidosAsignados(int vehiculoId)
+    public async Task<Pedido> ListarPedidosAsignados(int vehiculoId)
     {
         string query = @"
             SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 
@@ -59,46 +90,14 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
             INNER JOIN Pedido p ON vhp.Pedido_idPedido = p.idPedido
             WHERE vhp.Vehiculo_idVehiculo = @vehiculoId";
 
-        var pedidos = Conexion.Query<Pedido>(query, new { vehiculoId }).ToList();
-        return pedidos;
+        var pedidos = await Conexion.QueryAsync<Pedido>(query, new { vehiculoId });
+        return (Pedido)pedidos;
     }
 
-    void IRepoAlta<Vehiculo>.Alta(Vehiculo elemento)
+    public async Task<IEnumerable<Vehiculo>> ObtenerData()
     {
-        var parametros = new DynamicParameters();
-        parametros.Add("xTipo", elemento.Tipo);
-        parametros.Add("xEstado", elemento.Estado);
-        parametros.Add("xCapacidadMax", elemento.CapacidadMax);
-        parametros.Add("xMatricula", elemento.Matricula);
-
-        try
-        {
-            Conexion.Execute("SPCrearVehiculo", parametros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception(@"Error al agregar el vehiculo {Exception}");
-        }
-    }
-
-    Vehiculo? IRepoDetalle<Vehiculo, int>.Detalle(int indiceABuscar)
-    {
-        string query = @"
-            SELECT *
-            FROM Vehiculo 
-            WHERE idVehiculo = @vehiculoId";
-
-        var vehiculo = Conexion.QueryFirstOrDefault<Vehiculo>(query, new { vehiculoId = indiceABuscar });
-        return vehiculo;    
-    }
-
-    IEnumerable<Vehiculo> IRepoListado<Vehiculo>.Obtener()
-    {
-        string query = @"
-            SELECT *
-            FROM Vehiculo";
-
-        var pedidos = Conexion.Query<Pedido>(query).ToList();
+        string query = @"SELECT * FROM Vehiculo";
+        var pedidos = await Conexion.QueryAsync<Pedido>(query);
         return (IEnumerable<Vehiculo>)pedidos;
     }
 }

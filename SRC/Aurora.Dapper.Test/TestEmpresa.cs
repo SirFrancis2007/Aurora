@@ -15,50 +15,36 @@ public class TestEmpresa : TestBase
 
     [Fact]
 
-    void TestCrearEmpresa()
+    public async Task TestCrearEmpresa()
     {
         var InstEmpresa = new Core.Empresa{
             IdEmpresa = 0,
             Nombre = "Test1 SRC"
         };
 
-        ConRepoEmpresa.Alta(InstEmpresa);
+        await ConRepoEmpresa.Alta(InstEmpresa);
     }
 
     [Fact]
-    void TestCrearAdmin()
+    public async Task TestDetalle()
     {
-        var InstAdmin = new Administrador
-        {
-            IdAdministrador = 0,
-            Nombre = "Pepe",
-            Password = "1234",
-            IdEmpresa = 1
-        };
-
-        ConRepoEmpresa.AgregarAdministrador(InstAdmin);
-    }
-
-    [Fact]
-    public void TestDetalle()
-    {
-        var resultado = ConRepoEmpresa.Detalle(1);
+        var resultado = await ConRepoEmpresa.Detalle(1);
         Assert.NotNull(resultado);
         Assert.Equal(1, (double)resultado.IdEmpresa);
     }
 
     [Fact]
-    public void TestListaEmpresa()
+    public async Task TestListaEmpresa()
     {
-        var empresas = ConRepoEmpresa.Obtener();
+        var empresas = await ConRepoEmpresa.Obtener;
         Assert.NotNull(empresas);
         Assert.NotEmpty(empresas);
     }
 
     [Fact]
-    public void TestListaPedidoEmpresa()
+    public async Task TestListaPedidoEmpresa()
     {
-        var pedidos = ConRepoEmpresa.ObtenerPedidos(1);
+        var pedidos = await ConRepoEmpresa.ObtenerPedidos(1);
         Assert.NotNull(pedidos);
     }
 }

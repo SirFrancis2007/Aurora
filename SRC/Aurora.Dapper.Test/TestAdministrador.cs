@@ -11,11 +11,11 @@ public class TestAdministrador :  TestBase
         => _repo = new RepoAdministrador(Conexion);
 
     [Fact]
-    public void ObtenerAdminOK()
-        => Assert.NotEmpty(_repo.Obtener());
+    public async Task ObtenerAdminOK()
+        => Assert.NotEmpty(await _repo.Obtener);
 
     [Fact]
-    public void TestAltaAdmin()
+    public async Task TestAltaAdmin()
     {
         Administrador NuevoAdmin = new (){
             IdAdministrador = 0,
@@ -24,13 +24,13 @@ public class TestAdministrador :  TestBase
             Password = "1234asd"
         };
 
-        _repo.Alta(NuevoAdmin);
+        await _repo.Alta(NuevoAdmin);
     }
 
     [Fact]
-    public void TestObtenerXAdmin ()
+    public async Task TestObtenerXAdmin ()
     {
-        var Admin = _repo.Detalle(1);
+        var Admin = await _repo.Detalle(1);
         Assert.Equal("pepe", Admin.Nombre);
     }
 }

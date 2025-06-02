@@ -11,7 +11,9 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
     {
     }
 
-    public void Alta(Administrador NewAdmin)
+    public Task<IEnumerable<Administrador>> Obtener => throw new NotImplementedException();
+
+    public async Task Alta(Administrador NewAdmin)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xName",NewAdmin.Nombre);
@@ -20,30 +22,29 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
 
         try
         {
-            Conexion.Execute("SPNuevoAdministrador", parametros);
+            await Conexion.ExecuteAsync("SPNuevoAdministrador", parametros, commandType: CommandType.StoredProcedure);
         }
         catch (System.Exception)
         {
             throw new Exception("Error al agregar un nuevo administrador");
-        }
+        }    
     }
 
-    public Administrador? Detalle(int xidAdmin)
+    public async Task<Administrador>? Detalle(int xidAdmin)
     {
         var Query = @"SELECT * FROM Administrador where idAdministrador = {xidAdmin}";
-        var repuesta = Conexion.QueryFirstOrDefault<Administrador>(Query);
-        return repuesta;
+        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Administrador>(Query, new { xidAdmin });
+        return repuesta;        
     }
 
-
-    public IEnumerable<Administrador> Obtener()
+    public async Task<Pedido> ObtenerPedidoXAdmin(int idadministrador)
     {
         var Query = @"SELECT * FROM Administrador";
-        var repuesta = Conexion.Query<Administrador>(Query);
-        return repuesta;
+        var repuesta = await Conexion.QueryAsync<Administrador>(Query);
+        return (Pedido)repuesta;    
     }
 
-    public void ObtenerPedidoXAdmin(int idadministrador)
+    /*public void ObtenerPedidoXAdmin(int idadministrador)
     {
         var Query = @"SELECT 
                         a.Name AS NombreAdministrador,
@@ -59,5 +60,5 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
                         JOIN Pedido p USING (idAdministrador)
                         WHERE a.idAdministrador = @idadministrador;";
         var repuesta = Conexion.QueryFirstOrDefault<Administrador>(Query);
-    }
+    }*/
 }

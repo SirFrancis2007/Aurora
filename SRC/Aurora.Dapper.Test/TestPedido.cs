@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Aurora.Core.Interfaces;
 using Aurora.Dapper.ADO;
 
@@ -9,46 +10,38 @@ public class TestPedido : TestBase
     public TestPedido() => _repoPedido = new RepoPedido(Conexion);
 
     [Fact]
-    public void AltaPedido()
-        =>_repoPedido.Alta(FixtureAurora.NuevoPedido);
+    public async Task AltaPedido()
+        =>await _repoPedido.Alta(FixtureAurora.NuevoPedido);
 
 
     [Fact]
-    public void ObtenerPedidoXCondicion()
+    public async Task ObtenerPedidoXCondicion()
     {
         var fecha = DateTime.Today;
-        var resultado = _repoPedido.ObtenerPedidoXCondicion(fecha);
+        var resultado = await _repoPedido.ObtenerPedidoXCondicion(fecha);
         Assert.NotNull(resultado);
         Assert.Equal(fecha, resultado.FechaDespacho);
     }
 
     [Fact]
-    public void ActualizarEstado()
+    public async Task AsignarVehiculo()
     {
-        // se utiliza indirectamente la exepcion suponiendo que si no tira la misma es porque funca, por eso debe ser nulo.
-        Exception ex = Record.Exception(() => _repoPedido.ActualizarEstado(1, "En viaje"));
-        Assert.Null(ex);
-    }
-
-    [Fact]
-    public void AsignarVehiculo()
-    {
-        Exception ex = Record.Exception(() => _repoPedido.AsignarVehiculo(1, 1));
-        Assert.Null(ex);
+        await _repoPedido.AsignarVehiculo(1, 1);
     }
 
     [Fact]
     // Este es por id
-    public void Detalle()
+    public async Task Detalle()
     {
-        Assert.NotNull(_repoPedido.Detalle(1));
-        Assert.Equal(1, _repoPedido.Detalle(1).IdPedido);
+        Assert.NotNull(await _repoPedido.Detalle(1));
+        var detalle = await _repoPedido.Detalle(1);
+        Assert.Equal(1, detalle.IdPedido);
     }
 
     [Fact]
-    public void Obtener()
+    public async Task Obtener()
     {
-        Assert.NotNull( _repoPedido.Obtener());
-        Assert.NotEmpty( _repoPedido.Obtener());
+        Assert.NotNull(await  _repoPedido.Obtener);
+        Assert.NotEmpty(await _repoPedido.Obtener);
     }
 }
