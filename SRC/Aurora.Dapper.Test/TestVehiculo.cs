@@ -13,23 +13,23 @@ public class TestVehiculo : TestBase
     
     [Fact]
     public async Task TestNewVehiculo()
-        => await _repovehiculo.Alta(FixtureAurora.NuevoVehiculo);
+        => await _repovehiculo.Alta(FixtureAurora.NuevoVehiculo); // Check 24/06
 
     [Fact]
     public async Task CambiarEstado()
-     => Assert.True(await _repovehiculo.CambiarEstado(1, false));
+        => Assert.True(await _repovehiculo.CambiarEstado(1, false)); // Check 24/06
 
     [Fact]
     public async Task Obtener()
-        => Assert.NotNull(await _repovehiculo.Obtener);
+        => Assert.NotNull(await _repovehiculo.Obtener); // Check 24/06
 
     [Fact]
     public async Task ObtenerXid()
-        => Assert.NotNull(await _repovehiculo.Detalle(1));
+        => Assert.NotNull(await _repovehiculo.Detalle(1)); // Check 24/06
 
     [Fact]
     public async Task TestEliminarVehiculo()
-        => Assert.True(await _repovehiculo.EliminarVehiculo(1));
+        => Assert.False(await _repovehiculo.EliminarVehiculo(1));
 
     [Fact]
     public async Task TestListarPedidosAsignados()

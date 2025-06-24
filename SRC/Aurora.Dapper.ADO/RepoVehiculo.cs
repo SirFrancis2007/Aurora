@@ -14,11 +14,19 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     {
     }
 
-    public Task<IEnumerable<Vehiculo>> Obtener => throw new NotImplementedException();
+    public Task<IEnumerable<Vehiculo>> Obtener => ObtenerData();
+
+    public async Task<IEnumerable<Vehiculo>> ObtenerData() 
+    {
+        string query = @"SELECT * FROM Vehiculo";
+        var repuesta = await Conexion.QueryAsync<Vehiculo>(query);
+        return repuesta;
+    }
 
     public async Task Alta(Vehiculo elemento)
     {
         var parametros = new DynamicParameters();
+        parametros.Add("xidVehiculo", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("xTipo", elemento.Tipo);
         parametros.Add("xEstado", elemento.Estado);
         parametros.Add("xCapacidadMax", elemento.CapacidadMax);
@@ -26,11 +34,11 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
 
         try
         {
-            await Conexion.ExecuteAsync("SPCrearVehiculo", parametros);
+            await Conexion.ExecuteAsync("SPCrearVehiculo", parametros,commandType: CommandType.StoredProcedure);
         }
         catch (System.Exception)
         {
-            throw new Exception(@"Error al agregar el vehiculo {Exception}");
+            throw new Exception(@"Error al agregar el vehiculo");
         }    
     }
 
@@ -86,18 +94,11 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
             SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 
                    p.FechaDespacho, p.Administrador_idAdministrador, 
                    p.EmpresaDestino, p.Ruta_idRuta
-            FROM Vehiculo_has_Pedido vhp
-            INNER JOIN Pedido p ON vhp.Pedido_idPedido = p.idPedido
+            FROM Vehiculo vhp
+            JOIN Pedido USING (idPedido)
             WHERE vhp.Vehiculo_idVehiculo = @vehiculoId";
 
         var pedidos = await Conexion.QueryAsync<Pedido>(query, new { vehiculoId });
         return (Pedido)pedidos;
-    }
-
-    public async Task<IEnumerable<Vehiculo>> ObtenerData()
-    {
-        string query = @"SELECT * FROM Vehiculo";
-        var pedidos = await Conexion.QueryAsync<Pedido>(query);
-        return (IEnumerable<Vehiculo>)pedidos;
     }
 }
