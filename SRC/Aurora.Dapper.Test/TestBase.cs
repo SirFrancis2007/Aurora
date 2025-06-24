@@ -16,6 +16,7 @@ public abstract class TestBase
             .AddJsonFile("AppSetting.json", optional: true, reloadOnChange: true)
             .Build();
         string cadena = config.GetConnectionString(nombreConexion)!;
+        Console.WriteLine($"Cadena de conexión cargada: {cadena}");
         Conexion = new MySqlConnection(cadena);
         fix = new();
     }

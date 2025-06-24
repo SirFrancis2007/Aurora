@@ -34,7 +34,7 @@ public class TestVehiculo : TestBase
     [Fact]
     public async Task TestListarPedidosAsignados()
     {
-        // Va a traer los distintos paquetes que posee en su tatalidad el vehiculo que lo trasporta.
+        // Va a traer los distintos paquetes que posee en su totalidad el vehiculo que lo trasporta.
         Assert.NotEmpty((IAsyncEnumerable<Pedido>)await _repovehiculo.ListarPedidosAsignados(1));
         Assert.NotNull(await _repovehiculo.ListarPedidosAsignados(1));
     }

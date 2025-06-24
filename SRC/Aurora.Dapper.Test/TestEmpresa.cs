@@ -17,13 +17,17 @@ public class TestEmpresa : TestBase
 
     public async Task TestCrearEmpresa()
     {
-        var InstEmpresa = new Core.Empresa{
-            IdEmpresa = 0,
-            Nombre = "Test1 SRC"
+        var nombreEsperado = "Porche SRC";
+        var InstEmpresa = new Empresa
+        {
+            Nombre = nombreEsperado
         };
 
         await ConRepoEmpresa.Alta(InstEmpresa);
-    }
+
+        var EmpresaNueva = await ConRepoEmpresa.ObtenerPorNombre(nombreEsperado);
+        Assert.Equal(nombreEsperado, EmpresaNueva.Nombre);
+    } //Check Funcionando 24/06
 
     [Fact]
     public async Task TestDetalle()
@@ -31,7 +35,7 @@ public class TestEmpresa : TestBase
         var resultado = await ConRepoEmpresa.Detalle(1);
         Assert.NotNull(resultado);
         Assert.Equal(1, (double)resultado.IdEmpresa);
-    }
+    } //Check Funcionando 24/06
 
     [Fact]
     public async Task TestListaEmpresa()
@@ -39,12 +43,12 @@ public class TestEmpresa : TestBase
         var empresas = await ConRepoEmpresa.Obtener;
         Assert.NotNull(empresas);
         Assert.NotEmpty(empresas);
-    }
+    } //Check Funcionando 24/06
 
     [Fact]
     public async Task TestListaPedidoEmpresa()
     {
         var pedidos = await ConRepoEmpresa.ObtenerPedidos(1);
         Assert.NotNull(pedidos);
-    }
+    } //Check Funcionando 24/06
 }
