@@ -12,18 +12,19 @@ public class RepoConductor : RepoGenerico, IRepoConductor
     {
     }
 
-    Task<IEnumerable<Conductor>> IRepoListado<Conductor>.Obtener => throw new NotImplementedException();
+    Task<IEnumerable<Conductor>> IRepoListado<Conductor>.Obtener => ObtenerData();
 
     public async Task Alta(Conductor elemento)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("xNombre", elemento.Nombre);
+        parametros.Add("xidConductor", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parametros.Add("xName", elemento.Name);
         parametros.Add("xLicencia", elemento.Licencia);
         parametros.Add("xDisponibilidad", elemento.Dispobilidad);
 
         try
         {
-            await Conexion.ExecuteAsync("SPNewConductor", parametros);
+            await Conexion.ExecuteAsync("SPNewConductor", parametros, commandType: CommandType.StoredProcedure);
         }
         catch (System.Exception)
         {
@@ -63,10 +64,10 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public async Task<Conductor>? Detalle(int indiceABuscar)
+    public async Task<Conductor>? Detalle(int xidConductor)
     {
-        var Query = @"Select * From Conductor Where idConductor = {indiceABuscar}";
-        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query);
+        var Query = @"Select idConductor, Name, Licencia, Disponibilidad From Conductor Where idConductor = @indice;";
+        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new {indice = xidConductor});
         return resultados;
     }
 
@@ -85,7 +86,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public async Task<IEnumerable<Conductor>> Obtener()
+    public async Task<IEnumerable<Conductor>> ObtenerData()
     {
         var Query = @"Select * From Conductor";
         var resultados = await Conexion.QueryAsync<Conductor>(Query);

@@ -40,7 +40,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         var query = @"Select * From Empresa where idEmpresa = @IndiceEmpresa;";
         var Resultado = await Conexion.QueryFirstOrDefaultAsync<Empresa>(query, new { IndiceEmpresa = indiceABuscar });
         return Resultado;
-    }
+    } //Check Funcionando 24/06
 
     public async Task EliminarAdministrador(int xidadministrador)
     {
@@ -54,7 +54,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         {
             throw new Exception("¡Error al eliminar al administrador!");
         }    
-    }
+    } //Check Funcionando 24/06
 
     public async Task EliminarEmpresa(int idempresa)
     {
@@ -68,7 +68,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         {
             throw new Exception("¡Error al eliminar al administrador!");
         }    
-    }
+    } //Check Funcionando 24/06
 
     public async Task<IEnumerable<Pedido>> ObtenerPedidos(int xidEmpresa)
     {
@@ -78,12 +78,12 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
                         ORDER BY FechaDespacho DESC";
         var resultados = await Conexion.QueryAsync<Pedido>(query, new {IdEmpresa = xidEmpresa});
         return resultados;
-    }
+    } //Check Funcionando 24/06
 
     public Task<Empresa?> ObtenerPorNombre(string Nombre)
     {
         var Query = "Select Nombre From Empresa where Nombre = @InNombreEmpresa;";
         var resultado = Conexion.QueryFirstOrDefaultAsync<Empresa>(Query, new {InNombreEmpresa = Nombre}); 
         return resultado;   
-    }
+    } //Check Funcionando 24/06
 }

@@ -15,22 +15,22 @@ public class TestConductor : TestBase
     public async Task AltaConductor()
     {
         await _RepoConductor.Alta(FixtureAurora.NuevoConductor);
-    }
+    } //Check funcionando 26/06
 
     [Fact]
     public async Task Obtener()
     {
         var Resultados = await _RepoConductor.Obtener;
         Assert.NotNull(Resultados);
-    }
+    } //Check funcionando 26/06
 
     [Fact]
-    public async Task ObtenerXId ()
+    public async Task TestDetallePorIdConductor ()
     {
-        var Resultado = await _RepoConductor.Detalle(1);
+        var Resultado = await _RepoConductor.Detalle(1); //IdConductor = 1
         Assert.NotNull(Resultado);
-        Assert.Equal("pepe", Resultado.Nombre);
-    }
+        Assert.Equal("Samuel", Resultado.Name);
+    } //Check Funcionando 26/06
 
     [Fact]
     public async Task AsignarVehiculo()
@@ -43,7 +43,7 @@ public class TestConductor : TestBase
     [Fact]
     public async Task TestDisponibilidad()
     {
-         await _RepoConductor.VerDisponibilidad(1);
+        await _RepoConductor.VerDisponibilidad(1);
     }
 
     [Fact]

@@ -43,22 +43,4 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         var repuesta = await Conexion.QueryAsync<Administrador>(Query);
         return (Pedido)repuesta;    
     }
-
-    /*public void ObtenerPedidoXAdmin(int idadministrador)
-    {
-        var Query = @"SELECT 
-                        a.Name AS NombreAdministrador,
-                        p.idPedido,
-                        p.Name AS NombrePedido,
-                        p.Volumen,
-                        p.Peso,
-                        p.EstadoPedido,
-                        p.FechaDespacho,
-                        p.EmpresaDestino,
-                        p.Ruta_idRuta
-                        FROM Administrador a
-                        JOIN Pedido p USING (idAdministrador)
-                        WHERE a.idAdministrador = @idadministrador;";
-        var repuesta = Conexion.QueryFirstOrDefault<Administrador>(Query);
-    }*/
 }
