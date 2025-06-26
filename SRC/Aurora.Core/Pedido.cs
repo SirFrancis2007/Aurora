@@ -6,6 +6,7 @@ public class Pedido
     public int XidAdministrador { get; set; }
     public int XidRuta { get; set; }
     public int XidEmpresa { get; set; }
+    public int xidVehiculo { get; set;}
     public required string NombrePedido { get; set; }
     public required double Peso { get; set; }
     public required double Volumen { get; set; }

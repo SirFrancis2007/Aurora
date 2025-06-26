@@ -16,7 +16,7 @@ public class FixtureAurora
     {
         _nuevoConductor =  new(){
         IdConductor = 0,
-        Nombre = "Leo",
+        Name = "Leo",
         Licencia = "123456789",
         Dispobilidad = true         
         };
@@ -46,7 +46,8 @@ public class FixtureAurora
             FechaDespacho = DateTime.Now,
             XidAdministrador = 1, //seria pepe
             XidRuta = 1, // seria de Cordoba a BSAS
-            XidEmpresa = 2 // Instanciar otra empresa.
+            XidEmpresa = 2, // Instanciar otra empresa.
+            xidVehiculo = 1
         };
     }
 }

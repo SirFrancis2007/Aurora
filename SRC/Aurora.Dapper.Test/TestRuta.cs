@@ -22,21 +22,20 @@ public class TestRuta : TestBase
             Destino = "Buenos Aires"
         };
 
-        //Llamar a dar de alta la ruta.
         await repoRuta.Alta(NuevaRuta);
-    }
+    } //Check Funcionando 26/06
 
     [Fact]
     public async Task TestObtenerOk()
     {
         var Resultado = await repoRuta.Obtener;
         Assert.NotEmpty(Resultado);
-    }
+    } //Check Funcionando 26/06
 
     [Fact]
     public async Task TestObtenerxIdOk()
     {
         var Resultado = await repoRuta.ObtenerRutaPorCondicion(1, "Cordoba", "Buenos Aires");
         Assert.NotEmpty(Resultado.Origen);
-    } 
+    } //Check Funcionando 26/06
 }

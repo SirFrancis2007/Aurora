@@ -40,7 +40,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
 
         try
         {
-            await Conexion.ExecuteAsync("AsignarVehiculoAConductor", parametros);
+            await Conexion.ExecuteAsync("AsignarVehiculoAConductor", parametros, commandType: CommandType.StoredProcedure);
         }
         catch (System.Exception)
         {

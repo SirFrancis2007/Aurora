@@ -10,23 +10,25 @@ public class RepoPedido : RepoGenerico, IRepoPedido
 {
     public RepoPedido(IDbConnection conexion) : base(conexion) {}
 
-    Task<IEnumerable<Pedido>> IRepoListado<Pedido>.Obtener => throw new NotImplementedException();
+    Task<IEnumerable<Pedido>> IRepoListado<Pedido>.Obtener => ObtenerData();
 
     public async Task Alta(Pedido NewPedido)
     {
-        var parametetros = new DynamicParameters();
-        parametetros.Add("xName",NewPedido.NombrePedido);
-        parametetros.Add("xVolumen",NewPedido.Volumen);
-        parametetros.Add("xPeso", NewPedido.Peso);
-        parametetros.Add("xEstadoPedido", NewPedido.Estado);
-        parametetros.Add("xFechaDespacho", NewPedido.FechaDespacho);
-        parametetros.Add("xAdministrador_idAdministrador", NewPedido.XidAdministrador);
-        parametetros.Add("xEmpresaDestino", NewPedido.XidEmpresa);
-        parametetros.Add("xRuta_idRuta", NewPedido.XidRuta);
+        var parametros = new DynamicParameters();
+        parametros.Add("xidPedido", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parametros.Add("xName",NewPedido.NombrePedido);
+        parametros.Add("xVolumen",NewPedido.Volumen);
+        parametros.Add("xPeso", NewPedido.Peso);
+        parametros.Add("xEstadoPedido", NewPedido.Estado);
+        parametros.Add("xFechaDespacho", NewPedido.FechaDespacho);
+        parametros.Add("xAdministrador_idAdministrador", NewPedido.XidAdministrador);
+        parametros.Add("xEmpresaDestino", NewPedido.XidEmpresa);
+        parametros.Add("xRuta_idRuta", NewPedido.XidRuta);
+        parametros.Add("xidVehiculo", NewPedido.xidVehiculo);
 
         try
         {
-            await Conexion.ExecuteAsync("SPCrearPedido", parametetros);
+            await Conexion.ExecuteAsync("SPCrearPedido", parametros, commandType: CommandType.StoredProcedure);
         }
         catch (System.Exception)
         {
@@ -48,7 +50,7 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         parametetros.Add("xNuevoEstado",nuevoEstado);
         try
         {
-            await Conexion.ExecuteAsync("SPUpdateEstadoPedido", parametetros);
+            await Conexion.ExecuteAsync("SPUpdateEstadoPedido", parametetros, commandType :CommandType.StoredProcedure);
         }
         catch (System.Exception)
         {
@@ -56,32 +58,17 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         }   
     }
 
-    public async Task AsignarVehiculo(int pedidoId, int vehiculoId)
-    {
-        var parametetros = new DynamicParameters();
-        parametetros.Add("xidPedido", pedidoId);
-        parametetros.Add("xidVehiculo", vehiculoId);
-        try
-        {
-            await Conexion.ExecuteAsync("SPAsignarPedidoAVehiculo", parametetros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("No se pudo asignar un vehiculo al pedido");
-        }    
-    }
-
     public async Task<Pedido>? Detalle(int indiceABuscar)
     {
-        var Query=@"Select * from Pedido where idPedido = {xidPedido}";
-        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query);
+        var Query=@"Select * from Pedido where idPedido = @xidPedido";
+        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xidPedido = indiceABuscar});
         return repuesta;    
     }
 
-    public async Task<Pedido>? ObtenerPedidoXCondicion(DateTime Xfecha)
+    public async Task<Pedido>? ObtenerPedidoXCondicion(DateTime xfecha)
     {
-        var Query=@"Select * from Pedido where FechaDespacho = {xtiempo}";
-        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query);
+        var Query=@"Select * from Pedido where FechaDespacho = @xtiempo";
+        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xtiempo = xfecha});
         return repuesta;
     }
 }

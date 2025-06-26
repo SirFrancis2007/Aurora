@@ -11,7 +11,7 @@ public class TestPedido : TestBase
 
     [Fact]
     public async Task AltaPedido()
-        =>await _repoPedido.Alta(FixtureAurora.NuevoPedido);
+        =>await _repoPedido.Alta(FixtureAurora.NuevoPedido); //Check Funcionando 26/06
 
 
     [Fact]
@@ -21,27 +21,21 @@ public class TestPedido : TestBase
         var resultado = await _repoPedido.ObtenerPedidoXCondicion(fecha);
         Assert.NotNull(resultado);
         Assert.Equal(fecha, resultado.FechaDespacho);
-    }
-
-    [Fact]
-    public async Task AsignarVehiculo()
-    {
-        await _repoPedido.AsignarVehiculo(1, 1);
-    }
+    } //Check Funcionando 26/06
 
     [Fact]
     // Este es por id
     public async Task Detalle()
     {
-        Assert.NotNull(await _repoPedido.Detalle(1));
-        var detalle = await _repoPedido.Detalle(1);
-        Assert.Equal(1, detalle.IdPedido);
-    }
+        var detalle = await _repoPedido.Detalle(3);
+        Assert.NotNull(detalle);
+        Assert.Equal(3, detalle.IdPedido);
+    } //Check Funcionando 26/06
 
     [Fact]
     public async Task Obtener()
     {
         Assert.NotNull(await  _repoPedido.Obtener);
         Assert.NotEmpty(await _repoPedido.Obtener);
-    }
+    } //Check Funcionando 26/06
 }

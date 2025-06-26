@@ -88,17 +88,17 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }
     }
 
-    public async Task<Pedido> ListarPedidosAsignados(int vehiculoId)
+    public async Task<IEnumerable<Pedido>> ListarPedidosAsignados(int vehiculoId)
     {
         string query = @"
-            SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 
-                   p.FechaDespacho, p.Administrador_idAdministrador, 
-                   p.EmpresaDestino, p.Ruta_idRuta
-            FROM Vehiculo vhp
-            JOIN Pedido USING (idPedido)
-            WHERE vhp.Vehiculo_idVehiculo = @vehiculoId";
+        SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 
+               p.FechaDespacho, p.Administrador_idAdministrador, 
+               p.EmpresaDestino, p.Ruta_idRuta
+        FROM Vehiculo vhp
+        JOIN Pedido p ON p.Vehiculo_idVehiculo = vhp.idVehiculo  
+        WHERE vhp.idVehiculo = @vehiculoId";  
 
         var pedidos = await Conexion.QueryAsync<Pedido>(query, new { vehiculoId });
-        return (Pedido)pedidos;
+        return pedidos;
     }
 }

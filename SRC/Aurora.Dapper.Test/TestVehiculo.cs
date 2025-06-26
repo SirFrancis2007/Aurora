@@ -29,13 +29,14 @@ public class TestVehiculo : TestBase
 
     [Fact]
     public async Task TestEliminarVehiculo()
-        => Assert.False(await _repovehiculo.EliminarVehiculo(1));
+        => Assert.False(await _repovehiculo.EliminarVehiculo(1)); // Agarrar uno que no tenga pedido asignados
 
     [Fact]
     public async Task TestListarPedidosAsignados()
     {
-        // Va a traer los distintos paquetes que posee en su totalidad el vehiculo que lo trasporta.
-        Assert.NotEmpty((IAsyncEnumerable<Pedido>)await _repovehiculo.ListarPedidosAsignados(1));
-        Assert.NotNull(await _repovehiculo.ListarPedidosAsignados(1));
-    }
+        var pedidos = await _repovehiculo.ListarPedidosAsignados(1);
+    
+        Assert.NotEmpty(pedidos); 
+        Assert.NotNull(pedidos);
+    } //Check Funcionando 26/06
 }
