@@ -104,8 +104,8 @@ public class RepoConductor : RepoGenerico, IRepoConductor
 
     public async Task<Conductor> VerDisponibilidad(int conductorId)
     {
-        var Query = @"Select Nombre, Licencia, Disponibilidad from Conductor where idConductor = {conductorId}";
-        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query);
+        var Query = @"Select Name, Licencia, Disponibilidad from Conductor where idConductor = @conductorId";
+        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new { conductorId });
         return resultados;
     }
 

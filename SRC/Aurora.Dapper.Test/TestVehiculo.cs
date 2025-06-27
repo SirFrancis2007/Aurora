@@ -29,7 +29,7 @@ public class TestVehiculo : TestBase
 
     [Fact]
     public async Task TestEliminarVehiculo()
-        => Assert.False(await _repovehiculo.EliminarVehiculo(1)); // Agarrar uno que no tenga pedido asignados
+        => Assert.True(await _repovehiculo.EliminarVehiculo(4)); // Agarrar uno que no tenga pedido asignados
 
     [Fact]
     public async Task TestListarPedidosAsignados()

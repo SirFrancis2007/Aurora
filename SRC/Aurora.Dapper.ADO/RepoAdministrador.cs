@@ -11,12 +11,13 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
     {
     }
 
-    public Task<IEnumerable<Administrador>> Obtener => throw new NotImplementedException();
+    public Task<IEnumerable<Administrador>> Obtener => ObtenerData();
 
     public async Task Alta(Administrador NewAdmin)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("xName",NewAdmin.Nombre);
+        parametros.Add("xidAdministrador", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parametros.Add("xName", NewAdmin.Nombre);
         parametros.Add("xPassword", NewAdmin.Password);
         parametros.Add("xEmpresa_idEmpresa", NewAdmin.IdEmpresa);
 
@@ -27,20 +28,20 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         catch (System.Exception)
         {
             throw new Exception("Error al agregar un nuevo administrador");
-        }    
+        }
     }
 
     public async Task<Administrador>? Detalle(int xidAdmin)
     {
-        var Query = @"SELECT * FROM Administrador where idAdministrador = {xidAdmin}";
+        var Query = @"SELECT * FROM Administrador where idAdministrador = @xidAdmin";
         var repuesta = await Conexion.QueryFirstOrDefaultAsync<Administrador>(Query, new { xidAdmin });
-        return repuesta;        
+        return repuesta;
     }
 
-    public async Task<Pedido> ObtenerPedidoXAdmin(int idadministrador)
+    public async Task<IEnumerable<Administrador>> ObtenerData()
     {
         var Query = @"SELECT * FROM Administrador";
         var repuesta = await Conexion.QueryAsync<Administrador>(Query);
-        return (Pedido)repuesta;    
+        return repuesta;
     }
 }

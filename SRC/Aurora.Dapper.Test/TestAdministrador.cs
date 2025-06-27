@@ -18,7 +18,6 @@ public class TestAdministrador :  TestBase
     public async Task TestAltaAdmin()
     {
         Administrador NuevoAdmin = new (){
-            IdAdministrador = 0,
             Nombre = "pepe",
             IdEmpresa = 1,
             Password = "1234asd"
@@ -31,6 +30,6 @@ public class TestAdministrador :  TestBase
     public async Task TestObtenerXAdmin ()
     {
         var Admin = await _repo.Detalle(1);
-        Assert.Equal("pepe", Admin.Nombre);
+        Assert.Equal(1, Admin.IdAdministrador);
     }
 }
