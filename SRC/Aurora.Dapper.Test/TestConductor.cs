@@ -34,11 +34,11 @@ public class TestConductor : TestBase
 
     [Fact]
     public async Task AsignarVehiculo()
-        => await _RepoConductor.AsignarVehiculo(5,3); //Probar con 5 id conductor + 5id vehiculo, ya que los dos estan libres. Check Funcionando 27/06
+        => await _RepoConductor.AsignarVehiculo(5,1); //Check Funcionando 27/06
 
     [Fact]
     public async Task DesasignarVehiculo()
-        => await _RepoConductor.DesasignarVehiculoDeConductor(5,5);  //Check Funcionando 27/06
+        => await _RepoConductor.DesasignarVehiculoDeConductor(1,5);  //Check Funcionando 27/06
 
     [Fact]
     public async Task TestDisponibilidad()

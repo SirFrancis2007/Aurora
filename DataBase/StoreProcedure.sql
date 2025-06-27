@@ -12,20 +12,30 @@ BEGIN
 END $$
 
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  SPDelEmpresa $$
+DROP PROCEDURE IF EXISTS SPDelEmpresa $$
 CREATE PROCEDURE SPDelEmpresa (IN xidEmpresa INT)
 BEGIN
     START TRANSACTION;
-	
-    -- para eliminar empresa se debera eliminar todos historiales de pedido ligadoas a la empresa. 
-    delete from historialpedido
-    where idpedido = (SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa);
     
-    -- se elimina todo pedido ligado a la empresa tanto como receptora como de todo administrador que haya despachado un paquete de la empresa.
-    DELETE FROM Pedido 
-    WHERE EmpresaDestino = xidEmpresa OR Administrador_idAdministrador IN (
-        SELECT idAdministrador FROM Administrador WHERE Empresa_idEmpresa = xidEmpresa
+    DELETE FROM HistorialPedido
+    WHERE Pedido_idPedido IN (
+        SELECT idPedido
+        FROM Pedido
+        WHERE EmpresaDestino = xidEmpresa
+           OR Administrador_idAdministrador IN (
+                SELECT idAdministrador
+                FROM Administrador
+                WHERE Empresa_idEmpresa = xidEmpresa
+           )
     );
+    
+    DELETE FROM Pedido 
+    WHERE EmpresaDestino = xidEmpresa
+       OR Administrador_idAdministrador IN (
+            SELECT idAdministrador
+            FROM Administrador
+            WHERE Empresa_idEmpresa = xidEmpresa
+       );
     
     DELETE FROM Administrador 
     WHERE Empresa_idEmpresa = xidEmpresa;
@@ -35,6 +45,8 @@ BEGIN
     
     COMMIT;
 END $$
+DELIMITER ;
+
 
 /*Stores procedures de ADMINISTRADORES*/
 DELIMITER $$
@@ -213,21 +225,23 @@ END $$
 
 -- Procedimiento para asignar un vehículo a un conductor
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  AsignarVehiculoAConductor $$
-CREATE PROCEDURE AsignarVehiculoAConductor(xidConductor INT,xidVehiculo INT)
+DROP PROCEDURE IF EXISTS AsignarVehiculoAConductor $$
+CREATE PROCEDURE AsignarVehiculoAConductor(
+    xidConductor INT,
+    xidVehiculo INT
+)
 BEGIN
-    -- Verificamos disponibilidad del conductor
     DECLARE conductor_disponible TINYINT;
-    
-    -- Verificamos estado del vehículo
     DECLARE vehiculo_disponible TINYINT;
     
-    SELECT Disponibilidad INTO conductor_disponible 
-    FROM Conductor 
+    -- Verificar disponibilidad del conductor
+    SELECT Disponibilidad INTO conductor_disponible
+    FROM Conductor
     WHERE idConductor = xidConductor;
     
-    SELECT Estado INTO vehiculo_disponible 
-    FROM Vehiculo 
+    -- Verificar estado del vehículo
+    SELECT Estado INTO vehiculo_disponible
+    FROM Vehiculo
     WHERE idVehiculo = xidVehiculo;
     
     IF conductor_disponible != 1 THEN
@@ -237,34 +251,57 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El vehículo no está disponible para asignaciones';
     ELSE
-        INSERT INTO Conductor_has_Vehiculo (Conductor_idConductor, Vehiculo_idVehiculo, FechaAsignado)
+        INSERT INTO Conductor_has_Vehiculo (
+            Conductor_idConductor,
+            Vehiculo_idVehiculo,
+            FechaAsignado
+        )
         VALUES (xidConductor, xidVehiculo, CURDATE());
+        
+        UPDATE Conductor
+        SET Disponibilidad = 0
+        WHERE idConductor = xidConductor;
+        
+        UPDATE Vehiculo
+        SET Estado = 0
+        WHERE idVehiculo = xidVehiculo;
     END IF;
 END $$
-DELIMITER $$
+DELIMITER ;
 
 -- Procedimiento para desasignar un vehículo de un conductor
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  SPDesasignarVehiculoAConductor $$
-CREATE PROCEDURE SPDesasignarVehiculoAConductor(xidConductor INT,xidVehiculo INT)
+DROP PROCEDURE IF EXISTS SPDesasignarVehiculoAConductor $$
+CREATE PROCEDURE SPDesasignarVehiculoAConductor(
+    xidConductor INT,
+    xidVehiculo INT
+)
 BEGIN
     DECLARE pedidosEnVehiculo INT;
-    
-    SELECT COUNT(*) INTO pedidosEnVehiculo 
-	FROM Vehiculo  
-	JOIN Pedido ON Vehiculo.idVehiculo = Pedido.Vehiculo_idVehiculo
-	WHERE Vehiculo.idVehiculo = xidVehiculo;
+
+    SELECT COUNT(*) INTO pedidosEnVehiculo
+    FROM Pedido
+    WHERE Vehiculo_idVehiculo = xidVehiculo;
 
     IF pedidosEnVehiculo > 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede desasignar el vehículo porque tiene pedidos activos';
     ELSE
-        DELETE FROM Conductor_has_Vehiculo 
-        WHERE Conductor_idConductor = xidConductor 
-        AND Vehiculo_idVehiculo = xidVehiculo;
+        DELETE FROM Conductor_has_Vehiculo
+        WHERE Conductor_idConductor = xidConductor
+          AND Vehiculo_idVehiculo = xidVehiculo;
+        
+        UPDATE Conductor
+        SET Disponibilidad = 1
+        WHERE idConductor = xidConductor;
+
+        UPDATE Vehiculo
+        SET Estado = 0
+        WHERE idVehiculo = xidVehiculo;
     END IF;
 END $$
 DELIMITER ;
+
 
 -- =====================================================================
 -- PROCEDIMIENTOS PARA GESTIÓN DE RUTAS
@@ -293,8 +330,7 @@ DELIMITER ;
 
 -- Procedimiento para crear un nuevo pedido
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  SPCrearPedido $$
-
+DROP PROCEDURE IF EXISTS SPCrearPedido $$
 CREATE PROCEDURE SPCrearPedido(
     OUT xidPedido INT,
     xName VARCHAR(45),
@@ -308,21 +344,26 @@ CREATE PROCEDURE SPCrearPedido(
     xidVehiculo INT
 )
 BEGIN
-    -- Creamos el pedido con estado inicial
     INSERT INTO Pedido (
         Name, Volumen, Peso, EstadoPedido, FechaDespacho,
-        Administrador_idAdministrador, EmpresaDestino, Ruta_idRuta, Vehiculo_idVehiculo
+        Administrador_idAdministrador, EmpresaDestino,
+        Ruta_idRuta, Vehiculo_idVehiculo
     )
     VALUES (
         xName, xVolumen, xPeso, xEstadoPedido, xFechaDespacho,
-        xAdministrador_idAdministrador, xEmpresaDestino, xRuta_idRuta, xidVehiculo
+        xAdministrador_idAdministrador, xEmpresaDestino,
+        xRuta_idRuta, xidVehiculo
     );
     
-    set xidPedido = last_insert_id();
+    SET xidPedido = LAST_INSERT_ID();
     
+    UPDATE Vehiculo
+    SET Estado = 1
+    WHERE idVehiculo = xidVehiculo;
     -- Aclaracion: El trigger InsertHistorialPedido se encargará de crear el registro en el historial
 END $$
 DELIMITER ;
+
 
 -- Procedimiento para actualizar el estado de un pedido
 DELIMITER $$

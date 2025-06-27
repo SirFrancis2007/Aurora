@@ -1,4 +1,3 @@
--- Active: 1750941111946@@127.0.0.1@3306@aurorabd
 use aurorabd;
 
 -- Datos de prueba
@@ -6,16 +5,25 @@ Delimiter $$
 Call PSCrearEmpresa (@Idempresa1,'Empresa Norte src') $$
 Call PSCrearEmpresa (@Idempresa2,'Empresa Sur SA') $$
 Call PSCrearEmpresa (@Idempresa3,'Sancor Seguro') $$
+CALL PSCrearEmpresa (@Idempresa4, 'Empresa Para Eliminar') $$
+
 
 /*se borrara ya que no tiene nada asignado*/
-/*Delimiter $$
-Call SPDelEmpresa(3) $$*/
+Delimiter $$
+Call SPDelEmpresa(3) $$
+
+/*Se testea que tenga todo parcialmente insertado, eliminacion parcial*/
+Delimiter $$
+CALL SPDelEmpresa(@Idempresa4) $$
+
 
 Delimiter $$
-Call SPNuevoAdministrador(@id1,'Victor', 'victor1234', 1) $$
-Call SPNuevoAdministrador(@id2,'Victoria', 'vic1234', 1) $$
-Call SPNuevoAdministrador(@id3,'pepe', 'pepe1234', 2) $$
-Call SPNuevoAdministrador(@id4,'messi', 'messi1234', 2) $$
+Call SPNuevoAdministrador(@id1,'Victor', 'victor1234', @Idempresa1) $$
+Call SPNuevoAdministrador(@id2,'Victoria', 'vic1234', @Idempresa1) $$
+Call SPNuevoAdministrador(@id3,'pepe', 'pepe1234', @Idempresa2) $$
+Call SPNuevoAdministrador(@id4,'messi', 'messi1234', @Idempresa2) $$
+CALL SPNuevoAdministrador(@idAdm4, 'Laura', 'laura1234', @Idempresa4) $$
+
 
 Delimiter $$
 Call SPDelAdministrador(4) $$
@@ -40,6 +48,8 @@ call SPCrearVehiculo(@Veh1,'camioncito', 'm34c123', 1000, TRUE) $$
 call SPCrearVehiculo(@Veh2,'Furgoneta', 'MAT002', 500, TRUE) $$
 call SPCrearVehiculo(@Veh3,'Camión Grande', 'MAT003', 2000, TRUE) $$
 call SPCrearVehiculo(@Veh4,'Furgoneta Pequeña', 'MAT004', 300, TRUE) $$
+CALL SPCrearVehiculo(@idVeh4, 'Test Truck', 'ZXC123', 1500, TRUE) $$
+
 
 Delimiter $$
 call SPDelVehiculo(2) $$
@@ -59,8 +69,8 @@ CALL SPCrearRuta(@r7,'Viedma', 'Bariloche') $$
 
 /*Asignar condcutor a un vehiculo*/
 Delimiter $$
-CALL AsignarVehiculoAConductor(2, 3);
-CALL AsignarVehiculoAConductor(3, 4);
+CALL AsignarVehiculoAConductor(2, 3) $$
+CALL AsignarVehiculoAConductor(3, 4) $$
 
 /*Desagsignar vehiculo a conductor*/
 Delimiter $$
@@ -76,7 +86,10 @@ CALL SPCrearPedido(@p4,'aceitunas 1lt', 200, 100, 'Creado', curdate(), 1, 2,6,1)
 CALL SPCrearPedido(@p5,'leche La Serenicima', 200, 100, 'Creado', curdate(), 1, 2,6,1) $$
 CALL SPCrearPedido(@p6,'Cafe molido', 123, 80, 'Creado', curdate(), 1, 2,6,1) $$
 
+CALL SPCrearPedido(@idPed4, 'Pedido Test', 200, 80, 'Creado', CURDATE(), 4, @Idempresa4, 1, @idVeh4) $$
+
+
 /*Simular que el paquete ya fue recibido y confirmado su entrega por parte del receptor*/
 
 Delimiter $$
-call SPUpdateEstadoPedido(1, 'Recibido') $$
+call SPUpdateEstadoPedido(@p2, 'Recibido') $$
