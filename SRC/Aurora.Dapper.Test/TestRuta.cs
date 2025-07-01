@@ -15,27 +15,24 @@ public class TestRuta : TestBase
     [Fact]
     public async Task TestCreateRuta()
     {
-        Ruta NuevaRuta = new Ruta()
-        {
-            IdRuta = 0,
-            Origen = "Cordoba",
-            Destino = "Buenos Aires"
-        };
+        var nuevo_objecto = FixtureAurora.NuevaRuta;
+        await repoRuta.AltaAsync(nuevo_objecto);
 
-        await repoRuta.Alta(NuevaRuta);
+        var vef_nuevo_objecto = await repoRuta.DetalleAsync(nuevo_objecto.IdRuta);
+        Assert.NotNull(vef_nuevo_objecto);
     } //Check Funcionando 26/06
 
     [Fact]
     public async Task TestObtenerOk()
     {
-        var Resultado = await repoRuta.Obtener;
+        var Resultado = await repoRuta.ObtenerAsync;
         Assert.NotEmpty(Resultado);
     } //Check Funcionando 26/06
 
     [Fact]
     public async Task TestObtenerxIdOk()
     {
-        var Resultado = await repoRuta.ObtenerRutaPorCondicion(1, "Cordoba", "Buenos Aires");
+        var Resultado = await repoRuta.ObtenerRutaPorCondicionAsync(1, "Cordoba", "Buenos Aires");
         Assert.NotEmpty(Resultado.Origen);
     } //Check Funcionando 26/06
 }

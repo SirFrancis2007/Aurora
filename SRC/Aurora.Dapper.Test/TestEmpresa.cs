@@ -23,16 +23,16 @@ public class TestEmpresa : TestBase
             Nombre = nombreEsperado
         };
 
-        await ConRepoEmpresa.Alta(InstEmpresa);
+        await ConRepoEmpresa.AltaAsync(InstEmpresa);
 
-        var EmpresaNueva = await ConRepoEmpresa.ObtenerPorNombre(nombreEsperado);
+        var EmpresaNueva = await ConRepoEmpresa.ObtenerPorNombreAsync(nombreEsperado);
         Assert.Equal(nombreEsperado, EmpresaNueva.Nombre);
     } //Check Funcionando 24/06
 
     [Fact]
     public async Task TestDetalle()
     {
-        var resultado = await ConRepoEmpresa.Detalle(1);
+        var resultado = await ConRepoEmpresa.DetalleAsync(1);
         Assert.NotNull(resultado);
         Assert.Equal(1, (double)resultado.IdEmpresa);
     } //Check Funcionando 24/06
@@ -40,7 +40,7 @@ public class TestEmpresa : TestBase
     [Fact]
     public async Task TestListaEmpresa()
     {
-        var empresas = await ConRepoEmpresa.Obtener;
+        var empresas = await ConRepoEmpresa.ObtenerAsync;
         Assert.NotNull(empresas);
         Assert.NotEmpty(empresas);
     } //Check Funcionando 24/06
@@ -48,7 +48,7 @@ public class TestEmpresa : TestBase
     [Fact]
     public async Task TestListaPedidoEmpresa()
     {
-        var pedidos = await ConRepoEmpresa.ObtenerPedidos(1);
+        var pedidos = await ConRepoEmpresa.ObtenerPedidosAsync(1);
         Assert.NotNull(pedidos);
     } //Check Funcionando 24/06
 }

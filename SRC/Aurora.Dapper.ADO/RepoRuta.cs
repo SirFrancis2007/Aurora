@@ -11,7 +11,7 @@ public class RepoRuta : RepoGenerico, IRepoRuta
     {
     }
 
-    public Task<IEnumerable<Ruta>> Obtener => ObtenerData();
+    public Task<IEnumerable<Ruta>> ObtenerAsync => ObtenerData();
 
     public async Task<IEnumerable<Ruta>> ObtenerData()
     {
@@ -20,7 +20,7 @@ public class RepoRuta : RepoGenerico, IRepoRuta
         return Resultados;
     }
 
-    public async Task Alta(Ruta elemento)
+    public async Task AltaAsync(Ruta elemento)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidRuta", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -30,21 +30,22 @@ public class RepoRuta : RepoGenerico, IRepoRuta
         try
         {
             await Conexion.ExecuteAsync("SPCrearRuta", parametros, commandType: CommandType.StoredProcedure);
+            elemento.IdRuta = parametros.Get<int>("xidRuta");
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             throw new Exception("¡Error al generar la ruta!");
         }
     }
 
-    public async Task<Ruta>? Detalle(int indiceABuscar)
+    public async Task<Ruta>? DetalleAsync(int indiceABuscar)
     {
-        var query = @"Select * from Ruta where idRuta = {indiceABuscar}";
-        var Resultado = await Conexion.QueryFirstOrDefaultAsync<Ruta>(query);
+        var query = @"Select * from Ruta where idRuta = @indiceABuscar";
+        var Resultado = await Conexion.QueryFirstOrDefaultAsync<Ruta>(query, new {indiceABuscar});
         return Resultado;
     }
 
-    public async Task<Ruta> ObtenerRutaPorCondicion(int? idRuta, string Origen, string Destino)
+    public async Task<Ruta> ObtenerRutaPorCondicionAsync(int? idRuta, string Origen, string Destino)
     {
         var query = @"Select * from Ruta where idRuta = @Indice or Origen = @xOrigen or Destino = @xDestino";
         var Resultado = await Conexion.QueryFirstOrDefaultAsync<Ruta>(query, new {Indice = idRuta, xOrigen = Origen, xDestino = Destino});

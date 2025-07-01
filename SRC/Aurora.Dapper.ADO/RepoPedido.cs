@@ -10,9 +10,9 @@ public class RepoPedido : RepoGenerico, IRepoPedido
 {
     public RepoPedido(IDbConnection conexion) : base(conexion) {}
 
-    Task<IEnumerable<Pedido>> IRepoListado<Pedido>.Obtener => ObtenerData();
+    Task<IEnumerable<Pedido>> IRepoListado<Pedido>.ObtenerAsync => ObtenerDataAsync();
 
-    public async Task Alta(Pedido NewPedido)
+    public async Task AltaAsync(Pedido NewPedido)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidPedido", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -29,6 +29,8 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         try
         {
             await Conexion.ExecuteAsync("SPCrearPedido", parametros, commandType: CommandType.StoredProcedure);
+
+            NewPedido.IdPedido = parametros.Get<int>("xidPedido");
         }
         catch (System.Exception)
         {
@@ -36,14 +38,14 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         }    
     }
     
-    public async Task<IEnumerable<Pedido>> ObtenerData()
+    public async Task<IEnumerable<Pedido>> ObtenerDataAsync()
     {
         var Query=@"Select * from Pedido";
         var repuesta = await Conexion.QueryAsync<Pedido>(Query);
         return repuesta;
     }
 
-    public async Task ActualizarEstado(int pedidoId, string nuevoEstado)
+    public async Task ActualizarEstadoAsync(int pedidoId, string nuevoEstado)
     {
         var parametetros = new DynamicParameters();
         parametetros.Add("xidPedido",pedidoId);
@@ -58,14 +60,14 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         }   
     }
 
-    public async Task<Pedido>? Detalle(int indiceABuscar)
+    public async Task<Pedido>? DetalleAsync(int indiceABuscar)
     {
         var Query=@"Select * from Pedido where idPedido = @xidPedido";
         var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xidPedido = indiceABuscar});
         return repuesta;    
     }
 
-    public async Task<Pedido>? ObtenerPedidoXCondicion(DateTime xfecha)
+    public async Task<Pedido>? ObtenerPedidoXCondicionAsync(DateTime xfecha)
     {
         var Query=@"Select * from Pedido where FechaDespacho = @xtiempo";
         var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xtiempo = xfecha});

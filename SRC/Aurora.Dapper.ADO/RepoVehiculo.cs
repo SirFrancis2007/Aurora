@@ -14,7 +14,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     {
     }
 
-    public Task<IEnumerable<Vehiculo>> Obtener => ObtenerData();
+    public Task<IEnumerable<Vehiculo>> ObtenerAsync => ObtenerData();
 
     public async Task<IEnumerable<Vehiculo>> ObtenerData() 
     {
@@ -23,7 +23,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         return repuesta;
     }
 
-    public async Task Alta(Vehiculo elemento)
+    public async Task AltaAsync(Vehiculo elemento)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -35,6 +35,9 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         try
         {
             await Conexion.ExecuteAsync("SPCrearVehiculo", parametros,commandType: CommandType.StoredProcedure);
+
+            var nuevo_idvehiculo = parametros.Get<int>("xidVehiculo");
+            elemento.IdVehiculo = nuevo_idvehiculo;
         }
         catch (System.Exception)
         {
@@ -42,7 +45,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }    
     }
 
-    public async Task<Boolean> CambiarEstado(int vehiculoId, bool disponible)
+    public async Task<Boolean> CambiarEstadoAsync(int vehiculoId, bool disponible)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", vehiculoId);
@@ -60,7 +63,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
             throw new Exception("Error al actualizar el estado del vehiculo");
         }    }
 
-    public async Task<Vehiculo>? Detalle(int indiceABuscar)
+    public async Task<Vehiculo>? DetalleAsync(int indiceABuscar)
     {
         string query = @"
             SELECT *
@@ -71,7 +74,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         return vehiculo;    
     }
 
-    public async Task<Boolean> EliminarVehiculo(int idVehiculo)
+    public async Task<Boolean> EliminarVehiculoAsync(int idVehiculo)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", idVehiculo);
@@ -88,7 +91,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }
     }
 
-    public async Task<IEnumerable<Pedido>> ListarPedidosAsignados(int vehiculoId)
+    public async Task<IEnumerable<Pedido>> ListarPedidosAsignadosAsync(int vehiculoId)
     {
         string query = @"
         SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 

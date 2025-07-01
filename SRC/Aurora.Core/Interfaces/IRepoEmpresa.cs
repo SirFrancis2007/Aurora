@@ -2,8 +2,8 @@ namespace Aurora.Core.Interfaces;
 
 public interface IRepoEmpresa : IRepoAlta<Empresa>, IRepoListado<Empresa>, IRepoDetalle<Empresa, uint>
 {
-    public Task EliminarEmpresa(int idempresa);
-    public Task EliminarAdministrador(int xidadministrador);
-    public Task<IEnumerable<Pedido>> ObtenerPedidos(int xidEmpresa); 
-    public Task<Empresa?> ObtenerPorNombre(string Nombre);
+    public Task EliminarEmpresaAsync(int idempresa);
+    public Task EliminarAdministradorAsync(int xidadministrador);
+    public Task<IEnumerable<Pedido>> ObtenerPedidosAsync(int xidEmpresa); 
+    public Task<Empresa?> ObtenerPorNombreAsync(string Nombre);
 }

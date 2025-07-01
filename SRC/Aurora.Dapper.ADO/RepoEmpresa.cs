@@ -7,7 +7,7 @@ namespace Aurora.Dapper.ADO;
 
 public class RepoEmpresa : RepoGenerico, IRepoEmpresa
 {
-    Task<IEnumerable<Empresa>> IRepoListado<Empresa>.Obtener => Obtener();
+    Task<IEnumerable<Empresa>> IRepoListado<Empresa>.ObtenerAsync => Obtener();
 
     public RepoEmpresa(IDbConnection conexion) : base(conexion)
     {
@@ -20,7 +20,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         return Resultado;
     }
 
-    public async Task Alta(Empresa NuevaEmpresa)
+    public async Task AltaAsync(Empresa NuevaEmpresa)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidEmpresa", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -28,6 +28,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         try
         {
             await Conexion.ExecuteAsync("PSCrearEmpresa", parametros, commandType: CommandType.StoredProcedure); // "PSCrearEmpresa" SP para crear empresa
+            NuevaEmpresa.IdEmpresa = (uint)parametros.Get<int>("xidEmpresa");
         }
         catch (System.Exception)
         {
@@ -35,14 +36,14 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         }   
     } //Check Funcionando 24/06
 
-    public async Task<Empresa>? Detalle(uint indiceABuscar)
+    public async Task<Empresa>? DetalleAsync(uint indiceABuscar)
     {
         var query = @"Select * From Empresa where idEmpresa = @IndiceEmpresa;";
         var Resultado = await Conexion.QueryFirstOrDefaultAsync<Empresa>(query, new { IndiceEmpresa = indiceABuscar });
         return Resultado;
     } //Check Funcionando 24/06
 
-    public async Task EliminarAdministrador(int xidadministrador)
+    public async Task EliminarAdministradorAsync(int xidadministrador)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidAdministrador", xidadministrador);
@@ -56,7 +57,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         }    
     } //Check Funcionando 24/06
 
-    public async Task EliminarEmpresa(int idempresa)
+    public async Task EliminarEmpresaAsync(int idempresa)
     {
         var parametros = new DynamicParameters();
         parametros.Add("@xidEmpresa", idempresa);
@@ -70,7 +71,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         }    
     } //Check Funcionando 24/06
 
-    public async Task<IEnumerable<Pedido>> ObtenerPedidos(int xidEmpresa)
+    public async Task<IEnumerable<Pedido>> ObtenerPedidosAsync(int xidEmpresa)
     {
         var query = @"Select * 
                         From Pedido 
@@ -80,7 +81,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         return resultados;
     } //Check Funcionando 24/06
 
-    public Task<Empresa?> ObtenerPorNombre(string Nombre)
+    public Task<Empresa?> ObtenerPorNombreAsync(string Nombre)
     {
         var Query = "Select Nombre From Empresa where Nombre = @InNombreEmpresa;";
         var resultado = Conexion.QueryFirstOrDefaultAsync<Empresa>(Query, new {InNombreEmpresa = Nombre}); 

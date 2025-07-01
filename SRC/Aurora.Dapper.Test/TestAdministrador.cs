@@ -12,24 +12,22 @@ public class TestAdministrador :  TestBase
 
     [Fact]
     public async Task ObtenerAdminOK()
-        => Assert.NotEmpty(await _repo.Obtener);
+        => Assert.NotEmpty(await _repo.ObtenerAsync);
 
     [Fact]
     public async Task TestAltaAdmin()
     {
-        Administrador NuevoAdmin = new (){
-            Nombre = "pepe",
-            IdEmpresa = 1,
-            Password = "1234asd"
-        };
+        var NuevoObjecto = FixtureAurora.NuevoAdministrador;
+        await _repo.AltaAsync(NuevoObjecto);
 
-        await _repo.Alta(NuevoAdmin);
+        var obtenerNuevoObjecto = _repo.ObtenerDataXidAsync(NuevoObjecto.IdAdministrador);
+        Assert.NotNull(obtenerNuevoObjecto);
     }
 
     [Fact]
     public async Task TestObtenerXAdmin ()
     {
-        var Admin = await _repo.Detalle(1);
-        Assert.Equal(1, Admin.IdAdministrador);
+        var admin = await _repo.DetalleAsync(1);
+        Assert.Equal(1, admin.IdAdministrador);
     }
 }

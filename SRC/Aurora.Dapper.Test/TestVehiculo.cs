@@ -13,28 +13,34 @@ public class TestVehiculo : TestBase
     
     [Fact]
     public async Task TestNewVehiculo()
-        => await _repovehiculo.Alta(FixtureAurora.NuevoVehiculo); // Check 24/06
+    {
+        var objecto_nuevo = FixtureAurora.NuevoVehiculo;
+        await _repovehiculo.AltaAsync(objecto_nuevo);
+
+        var vef_nuevo_objecto = await _repovehiculo.DetalleAsync(objecto_nuevo.IdVehiculo);
+        Assert.NotNull(vef_nuevo_objecto);
+    } // Check 1/7
 
     [Fact]
     public async Task CambiarEstado()
-        => Assert.True(await _repovehiculo.CambiarEstado(1, false)); // Check 24/06
+        => Assert.True(await _repovehiculo.CambiarEstadoAsync(1, false)); // Check 24/06
 
     [Fact]
     public async Task Obtener()
-        => Assert.NotNull(await _repovehiculo.Obtener); // Check 24/06
+        => Assert.NotNull(await _repovehiculo.ObtenerAsync); // Check 24/06
 
     [Fact]
     public async Task ObtenerXid()
-        => Assert.NotNull(await _repovehiculo.Detalle(1)); // Check 24/06
+        => Assert.NotNull(await _repovehiculo.DetalleAsync(1)); // Check 24/06
 
     [Fact]
     public async Task TestEliminarVehiculo()
-        => Assert.True(await _repovehiculo.EliminarVehiculo(4)); // Agarrar uno que no tenga pedido asignados
+        => Assert.True(await _repovehiculo.EliminarVehiculoAsync(4)); // Agarrar uno que no tenga pedido asignados
 
     [Fact]
     public async Task TestListarPedidosAsignados()
     {
-        var pedidos = await _repovehiculo.ListarPedidosAsignados(1);
+        var pedidos = await _repovehiculo.ListarPedidosAsignadosAsync(1);
     
         Assert.NotEmpty(pedidos); 
         Assert.NotNull(pedidos);

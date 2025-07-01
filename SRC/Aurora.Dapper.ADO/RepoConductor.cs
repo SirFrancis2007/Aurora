@@ -12,9 +12,9 @@ public class RepoConductor : RepoGenerico, IRepoConductor
     {
     }
 
-    Task<IEnumerable<Conductor>> IRepoListado<Conductor>.Obtener => ObtenerData();
+    Task<IEnumerable<Conductor>> IRepoListado<Conductor>.ObtenerAsync => ObtenerDataAsync();
 
-    public async Task Alta(Conductor elemento)
+    public async Task AltaAsync(Conductor elemento)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -25,6 +25,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         try
         {
             await Conexion.ExecuteAsync("SPNewConductor", parametros, commandType: CommandType.StoredProcedure);
+            elemento.IdConductor = parametros.Get<int>("xidConductor");
         }
         catch (System.Exception)
         {
@@ -32,7 +33,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public async Task AsignarVehiculo(int conductorId, int vehiculoId)
+    public async Task AsignarVehiculoAsync(int conductorId, int vehiculoId)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", conductorId);
@@ -48,7 +49,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public async Task DesasignarVehiculoDeConductor(int conductorId, int vehiculoId)
+    public async Task DesasignarVehiculoDeConductorAsync(int conductorId, int vehiculoId)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", conductorId);
@@ -64,14 +65,14 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public async Task<Conductor>? Detalle(int xidConductor)
+    public async Task<Conductor>? DetalleAsync(int xidConductor)
     {
         var Query = @"Select idConductor, Name, Licencia, Disponibilidad From Conductor Where idConductor = @indice;";
         var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new {indice = xidConductor});
         return resultados;
     }
 
-    public async Task EliminarConductor(int idConductor)
+    public async Task EliminarConductorAsync(int idConductor)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", idConductor);
@@ -86,14 +87,14 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }    
     }
 
-    public async Task<IEnumerable<Conductor>> ObtenerData()
+    public async Task<IEnumerable<Conductor>> ObtenerDataAsync()
     {
         var Query = @"Select * From Conductor";
         var resultados = await Conexion.QueryAsync<Conductor>(Query);
         return resultados;
     }
 
-    public async Task<bool> VefLicencia(string Licencia, int idConductor, int idVehiculo)
+    public async Task<bool> VefLicenciaAsync(string Licencia, int idConductor, int idVehiculo)
     {
         var resultado = await Conexion.ExecuteScalarAsync<bool>
         (
@@ -102,15 +103,10 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         return resultado;
     }
 
-    public async Task<Conductor> VerDisponibilidad(int conductorId)
+    public async Task<Conductor> VerDisponibilidadAsync(int conductorId)
     {
         var Query = @"Select Name, Licencia, Disponibilidad from Conductor where idConductor = @conductorId";
         var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new { conductorId });
         return resultados;
-    }
-
-    Task IRepoConductor.VefLicencia(string Licencia, int idVehiculo, int idConductor)
-    {
-        return VefLicencia(Licencia, idVehiculo, idConductor);
     }
 }

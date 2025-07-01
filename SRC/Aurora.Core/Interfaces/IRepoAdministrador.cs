@@ -1,3 +1,5 @@
 namespace Aurora.Core.Interfaces;
 
-public interface IRepoAdministrador : IRepoAlta<Administrador>, IRepoDetalle<Administrador, int>, IRepoListado<Administrador> {}
+public interface IRepoAdministrador : IRepoAlta<Administrador>, IRepoDetalle<Administrador, int>, IRepoListado<Administrador> {
+    Task<IEnumerable<Administrador>> ObtenerDataXidAsync(int ID);
+}

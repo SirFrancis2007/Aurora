@@ -2,5 +2,5 @@ namespace Aurora.Core.Interfaces;
 
 public interface IRepoAlta<T>
 {
-    Task Alta(T elemento);
+    Task AltaAsync(T elemento);
 }

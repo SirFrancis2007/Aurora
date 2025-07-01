@@ -11,9 +11,9 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
     {
     }
 
-    public Task<IEnumerable<Administrador>> Obtener => ObtenerData();
+    public Task<IEnumerable<Administrador>> ObtenerAsync => ObtenerData();
 
-    public async Task Alta(Administrador NewAdmin)
+    public async Task AltaAsync(Administrador NewAdmin)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidAdministrador", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -31,7 +31,7 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         }
     }
 
-    public async Task<Administrador>? Detalle(int xidAdmin)
+    public async Task<Administrador>? DetalleAsync(int xidAdmin)
     {
         var Query = @"SELECT * FROM Administrador where idAdministrador = @xidAdmin";
         var repuesta = await Conexion.QueryFirstOrDefaultAsync<Administrador>(Query, new { xidAdmin });
@@ -42,6 +42,13 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
     {
         var Query = @"SELECT * FROM Administrador";
         var repuesta = await Conexion.QueryAsync<Administrador>(Query);
+        return repuesta;
+    }
+
+    public async Task<IEnumerable<Administrador>> ObtenerDataXidAsync(int ID)
+    {
+        var Query = @"SELECT * FROM Administrador where idAdministrador = @xidAdmin;";
+        var repuesta = await Conexion.QueryAsync<Administrador>(Query, new {xidAdmin = ID});
         return repuesta;
     }
 }
