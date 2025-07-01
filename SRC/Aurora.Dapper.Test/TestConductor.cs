@@ -44,7 +44,8 @@ public class TestConductor : TestBase
     [Fact]
     public async Task TestDisponibilidad()
     {
-        await _RepoConductor.VerDisponibilidadAsync(1);
+        var resultado = await _RepoConductor.VerDisponibilidadAsync(1); //Check Funcionando 27/06
+        Assert.NotNull(resultado);
     }
 
     [Fact]
