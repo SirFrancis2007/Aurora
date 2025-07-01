@@ -35,12 +35,26 @@ public class TestConductor : TestBase
 
     [Fact]
     public async Task AsignarVehiculo()
-        => await _RepoConductor.AsignarVehiculoAsync(5,1); //Check Funcionando 27/06
+    {
+        await _RepoConductor.AsignarVehiculoAsync(5,1);
+
+        /*Para verificar ver su disponbilidad*/
+        var vef_disponibilidad = await _RepoConductor.VerDisponibilidadAsync(1);
+        Assert.NotNull(vef_disponibilidad);
+        Assert.Equal(false, vef_disponibilidad.Dispobilidad);
+    }  //Check Funcionando 27/06
 
     [Fact]
     public async Task DesasignarVehiculo()
-        => await _RepoConductor.DesasignarVehiculoDeConductorAsync(1,5);  //Check Funcionando 27/06
-
+    {        
+        await _RepoConductor.DesasignarVehiculoDeConductorAsync(1,5);
+        
+        var vef_disponibilidad = await _RepoConductor.VerDisponibilidadAsync(1);
+        Assert.NotNull(vef_disponibilidad);
+        Assert.Equal(false, vef_disponibilidad.Dispobilidad);
+        //Check Funcionando 27/06
+    }
+    
     [Fact]
     public async Task TestDisponibilidad()
     {
