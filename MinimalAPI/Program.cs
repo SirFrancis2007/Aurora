@@ -35,11 +35,14 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/Ruta", async (IRepoRuta _repo) => await _repo.ObtenerAsync);
 
-app.MapGet("/Ruta/{id}", (int id, IRepoRuta _repo) =>
-    _repo.DetalleAsync(id)
-        is IRepoRuta todo
-            ? Results.Ok(todo)
-            : Results.NotFound());
+app.MapGet("/Ruta/{id}", async (int id, IRepoRuta _repo) =>
+{
+    var resultado = await _repo.DetalleAsync(id);
+    return resultado is not null
+        ? Results.Ok(resultado)
+        : Results.NotFound();
+});
+
 
 // METODO POST DE RUTAS
 
@@ -53,19 +56,25 @@ app.MapPost("/Ruta", async (Ruta todo, IRepoRuta _repo) =>
 // ------------------- ENTIDAD EMPRESA ---------------------------------- //
 
 //METODO GET PARA ENTIDAD EMPRESA
-app.MapGet("/Empresa", async (IRepoEmpresa _repoempresa) 
-    => _repoempresa.ObtenerAsync);
+app.MapGet("/Empresa", async (IRepoEmpresa _repoempresa) =>
+{
+    var empresas = await _repoempresa.ObtenerAsync;
+    return Results.Ok(empresas);
+});
 
 app.MapGet("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
-    await _repoempresa.DetalleAsync(id)
-        is IRepoEmpresa empresa
-            ? Results.Ok(empresa)
-            : Results.NotFound());
+{
+    var resultado = await _repoempresa.DetalleAsync(id);
+    return resultado is not null
+        ? Results.Ok(resultado)
+        : Results.NotFound();
+});
 
 //METODO PARA ELIMINAR ENTIDAD EMPRESA
 app.MapDelete("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
 {
-    if (await _repoempresa.DetalleAsync(id) is IRepoEmpresa todo)
+    var empresa = await _repoempresa.DetalleAsync(id);
+    if (empresa is not null)
     {
         await _repoempresa.EliminarAdministradorAsync((int)id);
         await _repoempresa.EliminarEmpresaAsync((int)id);
@@ -74,6 +83,7 @@ app.MapDelete("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
 
     return Results.NotFound();
 });
+
 
 // METODO PARA CREAR EMPRESA
 app.MapPost("/Empresa",  async (Empresa empresa, IRepoEmpresa _repoempresa) =>

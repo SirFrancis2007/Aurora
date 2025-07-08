@@ -6,6 +6,7 @@ Call PSCrearEmpresa (@Idempresa1,'Empresa Norte src') $$
 Call PSCrearEmpresa (@Idempresa2,'Empresa Sur SA') $$
 Call PSCrearEmpresa (@Idempresa3,'Sancor Seguro') $$
 CALL PSCrearEmpresa (@Idempresa4, 'Empresa Para Eliminar') $$
+Call PSCrearEmpresa (@Idempresa5,'Arcor Chocolateria') $$
 
 
 /*se borrara ya que no tiene nada asignado*/
