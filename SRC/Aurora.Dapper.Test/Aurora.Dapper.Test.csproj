@@ -20,11 +20,9 @@
     <ProjectReference Include="..\Aurora.Core\Aurora.Core.csproj" />
     <ProjectReference Include="..\Aurora.Dapper.ADO\Aurora.Dapper.ADO.csproj" />
   </ItemGroup>
-  
   <ItemGroup>
     <None Update="AppSetting.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
