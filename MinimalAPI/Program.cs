@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
@@ -62,9 +63,10 @@ app.MapGet("/Empresa", async (IRepoEmpresa _repoempresa) =>
     return Results.Ok(empresas);
 });
 
+
 app.MapGet("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
 {
-    var resultado = await _repoempresa.DetalleAsync(id);
+    var resultado = await _repoempresa.ObtenerPedidosAsync((int)id);
     return resultado is not null
         ? Results.Ok(resultado)
         : Results.NotFound();
@@ -86,12 +88,53 @@ app.MapDelete("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
 
 
 // METODO PARA CREAR EMPRESA
-app.MapPost("/Empresa",  async (Empresa empresa, IRepoEmpresa _repoempresa) =>
+app.MapPost("/Empresa", async (EmpresaDTO dto, IRepoEmpresa _repoempresa) =>
 {
-    await _repoempresa.AltaAsync(empresa);
-    return Results.Created($"/Empresa/{empresa.IdEmpresa}", empresa);
-});
+    var empresa = new Empresa
+    {
+        Nombre = dto.Nombre
+    };
 
+    await _repoempresa.AltaAsync(empresa);
+
+    var empresaDto = new EmpresaDTO
+    {
+        Nombre = empresa.Nombre
+    };
+
+    return Results.Created($"/Empresa/{empresa.IdEmpresa}", empresaDto);
+});
 
 //Esto va ultimo, es la llave de arraque del ASP.NET.
 await app.RunAsync();
+
+public struct EmpresaDTO
+{
+    [Required]
+    public string Nombre {get; set;}
+}
+
+public struct EmpresaPedidoDTO
+{
+    public EmpresaPedidoDTO()
+    {
+    }
+
+    public uint IdEmpresa {get; set;}
+    [Required]
+    public string Nombre {get; set;}
+    public List<PedidoDTO> Pedidos { get; set; } = new();
+}
+
+public struct PedidoDTO {
+    public int IdPedido { get; set; }
+    public int XidAdministrador { get; set; }
+    public int XidRuta { get; set; }
+    public int XidEmpresa { get; set; }
+    public int xidVehiculo { get; set;}
+    public required string NombrePedido { get; set; }
+    public required double Peso { get; set; }
+    public required double Volumen { get; set; }
+    public required string Estado { get; set; }
+    public required DateTime FechaDespacho { get; set; }
+}

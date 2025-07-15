@@ -48,7 +48,7 @@ public class TestEmpresa : TestBase
     [Fact]
     public async Task TestListaPedidoEmpresa()
     {
-        var pedidos = await ConRepoEmpresa.ObtenerPedidosAsync(1);
+        var pedidos = await ConRepoEmpresa.ObtenerPedidosAsync(2);
         Assert.NotNull(pedidos);
     } //Check Funcionando 24/06
 }

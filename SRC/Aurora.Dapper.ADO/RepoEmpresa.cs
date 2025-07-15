@@ -73,10 +73,17 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
 
     public async Task<IEnumerable<Pedido>> ObtenerPedidosAsync(int xidEmpresa)
     {
-        var query = @"Select * 
-                        From Pedido 
-                        Where EmpresaDestino = @IdEmpresa
-                        ORDER BY FechaDespacho DESC";
+        var query = @"SELECT e.Nombre AS EmpresaDestino,
+    p.Name AS NombrePedido, 
+    p.Peso, 
+    p.EstadoPedido, 
+    p.FechaDespacho,
+    e_origen.Nombre AS EmpresaOrigen
+    FROM Pedido p
+    JOIN Empresa e ON p.EmpresaDestino = e.idEmpresa
+    JOIN Administrador a ON p.Administrador_idAdministrador = a.idAdministrador
+    JOIN Empresa e_origen ON a.Empresa_idEmpresa = e_origen.idEmpresa
+    WHERE p.EmpresaDestino = @idempresa;";
         var resultados = await Conexion.QueryAsync<Pedido>(query, new {IdEmpresa = xidEmpresa});
         return resultados;
     } //Check Funcionando 24/06
