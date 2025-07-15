@@ -71,21 +71,27 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         }    
     } //Check Funcionando 24/06
 
-    public async Task<IEnumerable<Pedido>> ObtenerPedidosAsync(int xidEmpresa)
+    public async Task<IEnumerable<(Pedido, Empresa)>> ObtenerPedidosAsync(int xidEmpresa)
     {
-        var query = @"SELECT e.Nombre AS EmpresaDestino,
-    p.Name AS NombrePedido, 
-    p.Peso, 
-    p.EstadoPedido, 
-    p.FechaDespacho,
-    e_origen.Nombre AS EmpresaOrigen
-    FROM Pedido p
-    JOIN Empresa e ON p.EmpresaDestino = e.idEmpresa
-    JOIN Administrador a ON p.Administrador_idAdministrador = a.idAdministrador
-    JOIN Empresa e_origen ON a.Empresa_idEmpresa = e_origen.idEmpresa
-    WHERE p.EmpresaDestino = @idempresa;";
-        var resultados = await Conexion.QueryAsync<Pedido>(query, new {IdEmpresa = xidEmpresa});
-        return resultados;
+        var query = @"
+        SELECT 
+            p.*, 
+            e.* 
+        FROM Pedido p
+        JOIN Empresa e ON p.EmpresaDestino = e.idEmpresa
+        JOIN Administrador a ON p.Administrador_idAdministrador = a.idAdministrador
+        JOIN Empresa e_origen ON a.Empresa_idEmpresa = e_origen.idEmpresa
+        WHERE p.EmpresaDestino = @IdEmpresa;
+    ";
+
+    var resultados = await Conexion.QueryAsync<Pedido, Empresa, (Pedido, Empresa)>(
+        query,
+        (pedido, empresa) => (pedido, empresa),
+        new { IdEmpresa = xidEmpresa },
+        splitOn: "idEmpresa" // Indica dónde empieza el mapeo para Empresa
+    );
+
+    return resultados;
     } //Check Funcionando 24/06
 
     public Task<Empresa?> ObtenerPorNombreAsync(string Nombre)
