@@ -3,6 +3,7 @@ using System.Data;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Aurora.Dapper.ADO;
+using MinimalAPI.DTO;
 using MySqlConnector;
 using Scalar.AspNetCore;
 
@@ -47,11 +48,17 @@ app.MapGet("/Ruta/{id}", async (int id, IRepoRuta _repo) =>
 
 // METODO POST DE RUTAS
 
-app.MapPost("/Ruta", async (Ruta todo, IRepoRuta _repo) =>
+app.MapPost("/Ruta", async (RutaDTO todo, IRepoRuta _repo) =>
 {
-    await _repo.AltaAsync(todo);
+    var Nueva_Ruta = new Ruta
+    {
+        IdRuta = 0,
+        Origen = todo.Origen,
+        Destino = todo.Destino
+    };
+    await _repo.AltaAsync(Nueva_Ruta);
 
-    return Results.Created($"/Ruta/{todo.IdRuta}", todo);
+    return Results.Created($"/Ruta/{todo}", todo);
 });
 
 // ------------------- ENTIDAD EMPRESA ---------------------------------- //
@@ -108,33 +115,3 @@ app.MapPost("/Empresa", async (EmpresaDTO dto, IRepoEmpresa _repoempresa) =>
 //Esto va ultimo, es la llave de arraque del ASP.NET.
 await app.RunAsync();
 
-public struct EmpresaDTO
-{
-    [Required]
-    public string Nombre {get; set;}
-}
-
-public struct EmpresaPedidoDTO
-{
-    public EmpresaPedidoDTO()
-    {
-    }
-
-    public uint IdEmpresa {get; set;}
-    [Required]
-    public string Nombre {get; set;}
-    public List<PedidoDTO> Pedidos { get; set; } = new();
-}
-
-public struct PedidoDTO {
-    public int IdPedido { get; set; }
-    public int XidAdministrador { get; set; }
-    public int XidRuta { get; set; }
-    public int XidEmpresa { get; set; }
-    public int xidVehiculo { get; set;}
-    public required string NombrePedido { get; set; }
-    public required double Peso { get; set; }
-    public required double Volumen { get; set; }
-    public required string Estado { get; set; }
-    public required DateTime FechaDespacho { get; set; }
-}
