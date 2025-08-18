@@ -2,14 +2,15 @@
 
 -- STORE PROCEDURE PARA CREAR ENTIDAD EMPRESA.
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  PSCrearEmpresa $$
+
+Drop PROCEDURE IF EXISTS PSCrearEmpresa $$
+
 CREATE PROCEDURE PSCrearEmpresa(OUT xidEmpresa INT, xNombre VARCHAR(45))
 BEGIN
     INSERT INTO Empresa (Nombre)
     VALUES (xNombre);
     set xidEmpresa = last_insert_id();
 END $$
-
 
 -- STORE PROCEDURE PARA ELIMINAR PARCIALMENTE UNA EMPRESA.
 -- PRIMERO SE ELIMINA EL HISTORIAL DE PEDIDOS LIGADOS A LA EMPRESA.
@@ -18,17 +19,19 @@ END $$
 -- CUARTO  SE ELIMINA LA EMPRESA.
 
 DELIMITER $$
+
 DROP PROCEDURE IF EXISTS SPDelEmpresa $$
+
 CREATE PROCEDURE SPDelEmpresa (IN xidEmpresa INT)
 BEGIN
     START TRANSACTION;
     
     DELETE FROM HistorialPedido
-    WHERE Pedido_idPedido IN (
+    WHERE idPedido IN (
         SELECT idPedido
-        FROM Pedido
+        FROM Pedido p
         WHERE EmpresaDestino = xidEmpresa
-           OR Administrador_idAdministrador IN (
+           OR p.idAdministrador IN (
                 SELECT idAdministrador
                 FROM Administrador
                 WHERE Empresa_idEmpresa = xidEmpresa
@@ -37,14 +40,14 @@ BEGIN
     
     DELETE FROM Pedido 
     WHERE EmpresaDestino = xidEmpresa
-       OR Administrador_idAdministrador IN (
-                                            SELECT idAdministrador
-                                            FROM Administrador
-                                            WHERE Empresa_idEmpresa = xidEmpresa
-                                        );
+       OR idAdministrador IN (
+                            SELECT idAdministrador
+                            FROM Administrador
+                            WHERE idEmpresa = xidEmpresa
+                        );
     
     DELETE FROM Administrador 
-    WHERE Empresa_idEmpresa = xidEmpresa;
+    WHERE idEmpresa = xidEmpresa;
     
     DELETE FROM Empresa 
     WHERE idEmpresa = xidEmpresa;

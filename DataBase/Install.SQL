@@ -8,5 +8,4 @@ SOURCE StoreProcedure/SP_Ruta/SP_Ruta.sql
 SOURCE StoreProcedure/SP_Vehiculo/SP_Vehiculo.sql
 SOURCE Funtions.sql
 SOURCE Triggers.sql
-SOURCE Test.SQL
 SOURCE Permisos.sql

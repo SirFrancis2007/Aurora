@@ -1,22 +1,24 @@
 -- STORE PROCEDURES PARA ENTIDAD ADMINISTRADOR
 
 -- STORE PROCEDURE PARA CREAR ENTIDAD ADMINISTTADOR
--- TODO AMINISTRADOR DEBERA ESTAR LIGADO A UNA EMPRESA. 
+-- TODO AMINISTRADOR DEBERA ESTAR LIGADO A UNA EMPRESA.
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS  SPNuevoAdministrador $$
-CREATE PROCEDURE SPNuevoAdministrador(out xidAdministrador INT, xName VARCHAR(45), xPassword VARCHAR(45), xEmpresa_idEmpresa INT)
+
+DROP PROCEDURE IF EXISTS SPNuevoAdministrador $$
+
+CREATE PROCEDURE SPNuevoAdministrador(out xidAdministrador INT, xName VARCHAR(45), xPassword VARCHAR(45), xidEmpresa INT)
 BEGIN
-    INSERT INTO Administrador (Name, Passworld, Empresa_idEmpresa)
-    VALUES (xName, xPassword, xEmpresa_idEmpresa);
+    INSERT INTO Administrador (Name, Passworld, idEmpresa)
+    VALUES (xName, xPassword, xidEmpresa);
     set xidAdministrador = last_insert_id();
 END $$
-
 
 -- STORE PROCEDURE PARA ELIMINAR PARCIALMENTE UN ADMINISTRADOR.
 
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  SPDelAdministrador $$
+
+Drop PROCEDURE IF EXISTS SPDelAdministrador $$
 
 CREATE PROCEDURE SPDelAdministrador(xidAdministrador INT)
 BEGIN
@@ -36,11 +38,11 @@ BEGIN
     END IF;
 END $$
 
-
 -- STORE PROCEDURE PARA ACTUALIZAR TODAS LAS TUPLAS DE LA ENTIDAD ADMINISTRADOR
 
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  SPActAdmi $$
+
+Drop PROCEDURE IF EXISTS SPActAdmi $$
 
 CREATE PROCEDURE SPActAdmi(
     xidAdministrador INT,
