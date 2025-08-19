@@ -2,72 +2,65 @@
 
 ```mermaid
 erDiagram
+    Empresa ||--o{ Administrador : "tiene"
+    Empresa ||--o{ Pedido : "destino"
+    Administrador ||--o{ Pedido : "crea"
+    Ruta ||--o{ Pedido : "asignada"
+    Vehiculo ||--o{ Pedido : "asignado"
+    Pedido ||--o{ HistorialPedido : "registra"
+    Conductor }|--|| Conductor_has_Vehiculo : "asignado"
+    Vehiculo }|--|| Conductor_has_Vehiculo : "asignado"
 
-    Pedido {
-        uint      idPedido        PK
-        uint      xidCliente      FK
-        float     Peso
-        float     Volumen
-        datetime  FechaDespacho
+    Empresa {
+        int idEmpresa PK
+        varchar(45) Nombre
     }
-
-    Cliente {
-        uint     idCliente     PK
-        string   Nombre
-        string   Telefono
-        string   Email
-        string   Direccion
+    Administrador {
+        int idAdministrador PK
+        varchar(45) Nombre
+        varchar(45) Contrasena
+        int idEmpresa FK
     }
-
+    Ruta {
+        int idRuta PK
+        varchar(45) Origen
+        varchar(45) Destino
+    }
     Vehiculo {
-        uint     idVehiculo     PK
-        string   Matricula
-        string   Tipo
-        bool     Estado
-        float    CapacidadMax
+        int idVehiculo PK
+        varchar(45) Tipo
+        varchar(45) Matricula
+        double CapacidadMax
+        tinyint Estado
     }
-
+    Pedido {
+        int idPedido PK
+        varchar(45) Name
+        varchar(45) Volumen
+        varchar(45) Peso
+        varchar(45) EstadoPedido
+        date FechaDespacho
+        int idAdministrador FK
+        int idEmpresa FK
+        int idRuta FK
+        int idVehiculo FK
+    }
     Conductor {
-        uint     idConductor    PK
-        string   Nombre
-        string   Licencia
-        bool     Disponibilidad
+        int idConductor PK
+        varchar(45) Name
+        varchar(45) Licencia
+        tinyint Disponibilidad
     }
-
-    PedidoVehiculo {
-        uint     idPedido       FK
-        uint     idVehiculo     FK
-        datetime FechaAsignacion
-        string   EstadoEntrega
+    Conductor_has_Vehiculo {
+        int idConductor PK,FK
+        int idVehiculo PK,FK
+        date FechaAsignado
     }
-
-    ConductorVehiculo {
-        uint     idConductor    FK
-        uint     idVehiculo     FK
-        datetime FechaAsignacion
-        string   Turno
+    HistorialPedido {
+        int idHistorialPedido PK
+        varchar(45) EstadoAnterior
+        varchar(45) EstadoNuevo
+        datetime FechaCambio
+        int idPedido FK
     }
-
-    Rutas {
-        uint     idRuta         PK
-        uint     xidPedido      FK
-        string   Origen
-        string   Destino
-    }
-
-    Personal {
-        uint     idPersonal     PK
-        string   Nombre
-        string   Jerarquia
-        string   Contrasena
-    }
-
-    %% Relaciones
-    Cliente ||--o{ Pedido : realiza
-    Pedido ||--o{ PedidoVehiculo : contiene
-    Vehiculo ||--o{ PedidoVehiculo : transporta
-    Conductor ||--o{ ConductorVehiculo : maneja
-    Vehiculo ||--o{ ConductorVehiculo : operado_por
-    Pedido ||--o{ Rutas : sigue
-    Personal ||--o{ Pedido : asignar
 ```
