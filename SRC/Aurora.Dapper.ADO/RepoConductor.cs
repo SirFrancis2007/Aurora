@@ -24,12 +24,12 @@ public class RepoConductor : RepoGenerico, IRepoConductor
 
         try
         {
-            await Conexion.ExecuteAsync("SPNewConductor", parametros, commandType: CommandType.StoredProcedure);
+            await Conexion.ExecuteAsync("SPNuevoConductor", parametros, commandType: CommandType.StoredProcedure);
             elemento.IdConductor = parametros.Get<int>("xidConductor");
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            throw new Exception("Conductor ya registrado");
+            throw new Exception("Conductor ya registrado",  e);
         }    
     }
 
@@ -108,5 +108,24 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         var Query = @"Select Name, Licencia, Disponibilidad from Conductor where idConductor = @conductorId";
         var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new { conductorId });
         return resultados;
+    }
+
+    async Task<bool> IRepoConductor.UpdateConductorAsync(Conductor conductor)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidConductor", conductor.IdConductor);
+        parametros.Add("xName", conductor.Name);
+        parametros.Add("xLicencia", conductor.Licencia);
+        parametros.Add("xDisponibilidad", conductor.Dispobilidad);
+
+        try
+        {
+            await Conexion.ExecuteAsync("UpdateConductor", parametros, commandType: CommandType.StoredProcedure);
+        }
+        catch (System.Exception e)
+        {
+            throw new Exception("Conductor ya registrado", e);
+        }
+        return true;    
     }
 }

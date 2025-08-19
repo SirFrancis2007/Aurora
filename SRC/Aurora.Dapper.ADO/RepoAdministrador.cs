@@ -19,7 +19,7 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         parametros.Add("xidAdministrador", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("xName", NewAdmin.Nombre);
         parametros.Add("xPassword", NewAdmin.Password);
-        parametros.Add("xEmpresa_idEmpresa", NewAdmin.IdEmpresa);
+        parametros.Add("xidEmpresa", NewAdmin.IdEmpresa);
 
         try
         {
@@ -50,5 +50,25 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         var Query = @"SELECT * FROM Administrador where idAdministrador = @xidAdmin;";
         var repuesta = await Conexion.QueryAsync<Administrador>(Query, new {xidAdmin = ID});
         return repuesta;
+    }
+
+
+    async Task<bool> IRepoAdministrador.UpdateAdministrador(Administrador administrador)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidAdministrador", administrador.IdAdministrador);
+        parametros.Add("xName", administrador.Nombre);
+        parametros.Add("xPassword", administrador.Password);
+        parametros.Add("xidEmpresa", administrador.IdEmpresa);
+
+        try
+        {
+            await Conexion.ExecuteAsync("SPUpdateAdmi", parametros, commandType: CommandType.StoredProcedure);
+        }
+        catch (System.Exception e)
+        {
+            throw new Exception("¡Error al actualizar el administrador!", e);
+        }
+        return true;
     }
 }

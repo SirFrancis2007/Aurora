@@ -73,23 +73,32 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
 
     public async Task<IEnumerable<(Pedido, Empresa)>> ObtenerPedidosAsync(int xidEmpresa)
     {
-        var query = @"
-        SELECT 
-            p.*, 
-            e.* 
-        FROM Pedido p
-        JOIN Empresa e ON p.EmpresaDestino = e.idEmpresa
-        JOIN Administrador a ON p.Administrador_idAdministrador = a.idAdministrador
-        JOIN Empresa e_origen ON a.Empresa_idEmpresa = e_origen.idEmpresa
-        WHERE p.EmpresaDestino = @IdEmpresa;
-    ";
+        var query = @"SELECT 
+            pe.idPedido,
+            pe.Name AS Nombre_Pedido,
+            pe.Volumen, 
+            pe.Peso, 
+            pe.EstadoPedido, 
+            pe.FechaDespacho, 
+            em.idEmpresa AS idEmpresaOrigen,
+            em.Nombre AS Nombre_Empresa_Origen, 
+            emd.idEmpresa AS idEmpresa,
+            emd.Nombre AS Nombre_Empresa_Destino,
+            admi.idAdministrador,
+            admi.Nombre AS Nombre_Administrador
+            FROM Empresa em
+            JOIN Administrador admi USING (idEmpresa)
+            JOIN Pedido pe ON pe.idAdministrador = admi.idAdministrador
+            JOIN Empresa emd ON emd.idEmpresa = pe.idEmpresa
+            WHERE em.idEmpresa = @IdEmpresa OR pe.idEmpresa = @IdEmpresa;
+            ";
 
-    var resultados = await Conexion.QueryAsync<Pedido, Empresa, (Pedido, Empresa)>(
-        query,
-        (pedido, empresa) => (pedido, empresa),
-        new { IdEmpresa = xidEmpresa },
-        splitOn: "idEmpresa" // Indica dónde empieza el mapeo para Empresa
-    );
+        var resultados = await Conexion.QueryAsync<Pedido, Empresa, (Pedido, Empresa)>(
+            query,
+            (pedido, empresa) => (pedido, empresa),
+            new { IdEmpresa = xidEmpresa },
+            splitOn: "idEmpresa" // Indica dónde empieza el mapeo para Empresa
+        );
 
     return resultados;
     } //Check Funcionando 24/06

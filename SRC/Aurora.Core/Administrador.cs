@@ -6,5 +6,4 @@ public class Administrador
     public uint IdEmpresa {get; set;}
     public required string Nombre { get; set; }
     public required string Password { get; set; }
-    public List<Pedido>? PedidoXAdmnistrador {get; set;}
 }

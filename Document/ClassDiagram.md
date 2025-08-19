@@ -74,12 +74,6 @@ classDiagram
         +DateTime FechaAsignado
     }
 
-    class Vehiculo_has_Pedido {
-        +int VehiculoId
-        +int PedidoId
-        +DateTime FechaAsignacion
-    }
-
     %% Relaciones
 
     Empresa "1" --> "0..*" Administrador : pertenece a
@@ -89,6 +83,5 @@ classDiagram
     Pedido "1" --> "0..*" HistorialPedido : registra
     Conductor "1" --> "0..*" Conductor_has_Vehiculo : asignación
     Vehiculo "1" --> "0..*" Conductor_has_Vehiculo : asignación
-    Vehiculo "1" --> "0..*" Vehiculo_has_Pedido : transporta
-    Pedido "1" --> "0..*" Vehiculo_has_Pedido : es transportado
+    Pedido "1" --> "0..*" Vehiculo : asignación
 ```

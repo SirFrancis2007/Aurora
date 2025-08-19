@@ -17,17 +17,11 @@ public class TestEmpresa : TestBase
 
     public async Task TestCrearEmpresa()
     {
-        var nombreEsperado = "Porche SRC";
-        var InstEmpresa = new Empresa
-        {
-            Nombre = nombreEsperado
-        };
+        await ConRepoEmpresa.AltaAsync(FixtureAurora.NuevaEmpreas);
 
-        await ConRepoEmpresa.AltaAsync(InstEmpresa);
-
-        var EmpresaNueva = await ConRepoEmpresa.ObtenerPorNombreAsync(nombreEsperado);
-        Assert.Equal(nombreEsperado, EmpresaNueva.Nombre);
-    } //Check Funcionando 24/06
+        var EmpresaNueva = await ConRepoEmpresa.ObtenerPorNombreAsync(FixtureAurora.NuevaEmpreas.Nombre);
+        Assert.Equal(FixtureAurora.NuevaEmpreas.Nombre, EmpresaNueva.Nombre);
+    } //Check Funcionando 19/8 Y Forkeado
 
     [Fact]
     public async Task TestDetalle()

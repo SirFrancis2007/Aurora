@@ -87,7 +87,7 @@ CALL SPCrearPedido(@p4,'aceitunas 1lt', 200, 100, 'Creado', curdate(), 1, 2,6,1)
 CALL SPCrearPedido(@p5,'leche La Serenicima', 200, 100, 'Creado', curdate(), 1, 2,6,1) ;
 CALL SPCrearPedido(@p6,'Cafe molido', 123, 80, 'Creado', curdate(), 1, 2,6,1) ;
 
-CALL SPCrearPedido(@idPed4, 'Pedido Test', 200, 80, 'Creado', CURDATE(), 4, @Idempresa4, 1, @idVeh4) ;
+-- CALL SPCrearPedido(@idPed4, 'Pedido Test', 200, 80, 'Creado', CURDATE(), 4, @Idempresa4, 1, @idVeh4) ;
 
 
 /*Simular que el paquete ya fue recibido y confirmado su entrega por parte del receptor*/

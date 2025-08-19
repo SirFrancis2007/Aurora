@@ -16,6 +16,8 @@ builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(connectionSt
 
 builder.Services.AddScoped<IRepoRuta, RepoRuta>();
 builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
+builder.Services.AddScoped<IRepoAdministrador, RepoAdministrador>();
+builder.Services.AddScoped<IRepoConductor, RepoConductor>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,7 +37,7 @@ if (app.Environment.IsDevelopment())
 
 // METODO GET DE RUTAS
 
-app.MapGet("/Ruta", async (IRepoRuta _repo) => await _repo.ObtenerAsync);
+app.MapGet("/Ruta", async (IRepoRuta _repo) => await _repo.ObtenerAsync).WithTags("Ruta");
 
 app.MapGet("/Ruta/{id}", async (int id, IRepoRuta _repo) =>
 {
@@ -43,7 +45,7 @@ app.MapGet("/Ruta/{id}", async (int id, IRepoRuta _repo) =>
     return resultado is not null
         ? Results.Ok(resultado)
         : Results.NotFound();
-});
+}).WithTags("Ruta");
 
 
 // METODO POST DE RUTAS
@@ -59,7 +61,7 @@ app.MapPost("/Ruta", async (RutaDTO todo, IRepoRuta _repo) =>
     await _repo.AltaAsync(Nueva_Ruta);
 
     return Results.Created($"/Ruta/{todo}", todo);
-});
+}).WithTags("Ruta");
 
 // ------------------- ENTIDAD EMPRESA ---------------------------------- //
 
@@ -68,7 +70,7 @@ app.MapGet("/Empresa", async (IRepoEmpresa _repoempresa) =>
 {
     var empresas = await _repoempresa.ObtenerAsync;
     return Results.Ok(empresas);
-});
+}).WithTags("Empresa");
 
 
 app.MapGet("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
@@ -77,7 +79,7 @@ app.MapGet("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
     return resultado is not null
         ? Results.Ok(resultado)
         : Results.NotFound();
-});
+}).WithTags("Empresa");
 
 //METODO PARA ELIMINAR ENTIDAD EMPRESA
 app.MapDelete("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
@@ -91,7 +93,7 @@ app.MapDelete("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
     }
 
     return Results.NotFound();
-});
+}).WithTags("Empresa");
 
 
 // METODO PARA CREAR EMPRESA
@@ -110,8 +112,87 @@ app.MapPost("/Empresa", async (EmpresaDTO dto, IRepoEmpresa _repoempresa) =>
     };
 
     return Results.Created($"/Empresa/{empresa.IdEmpresa}", empresaDto);
-});
+}).WithTags("Empresa");
+
+//SECCION DE ADMINISTRADORES
+
+app.MapGet("/ListadoDeAdministrador", async (IRepoAdministrador _repo) => await _repo.ObtenerAsync).WithTags("Administradores");
+
+app.MapGet("/Administrador/{id}", async (int id, IRepoAdministrador _repo) =>
+{
+    var resultado = await _repo.DetalleAsync(id);
+    return resultado is not null
+        ? Results.Ok(resultado)
+        : Results.NotFound();
+}).WithTags("Administradores");
+
+app.MapPost("/NuevoAdministrador", async (AdministradoresDTO nuevoadmin, IRepoAdministrador _repo) =>
+{
+    var fixture = new Administrador
+    {
+        IdAdministrador = 0,
+        IdEmpresa = nuevoadmin.IdEmpresa,
+        Nombre = nuevoadmin.Nombre,
+        Password = nuevoadmin.Password
+    };
+    await _repo.AltaAsync(fixture);
+
+    return Results.Created($"/Ruta/{fixture}", fixture);
+}).WithTags("Administradores");
+
+app.MapPut("/ActualizarAdministrador", async (AdministradoresDTO nuevoadmin, IRepoAdministrador _repo) =>
+{ 
+    var fixture = new Administrador
+    {
+        IdAdministrador = 0,
+        Nombre = nuevoadmin.Nombre,
+        Password = nuevoadmin.Password
+    };
+    await _repo.UpdateAdministrador(fixture);
+
+    return Results.Created($"/ActualizarAdministrador/{fixture}", fixture);
+}).WithTags("Administradores");
+
+//CONDUCTORES
+
+app.MapGet("/ListadoDeConductores", async (IRepoConductor _repo) => await _repo.ObtenerAsync).WithTags("Conductores");
+
+app.MapGet("/Conductores/{id}", async (int id, IRepoConductor _repo) =>
+{
+    var resultado = await _repo.DetalleAsync(id);
+    return resultado is not null
+        ? Results.Ok(resultado)
+        : Results.NotFound();
+}).WithTags("Conductores");
+
+
+app.MapPost("/NuevoConductor", async (ConductoresDTO nuevoconductor, IRepoConductor _repo) =>
+{
+    var fixture = new Conductor
+    {
+        IdConductor = 0,
+        Name = nuevoconductor.Name,
+        Licencia = nuevoconductor.Licencia,
+        Dispobilidad = true
+    };
+    await _repo.AltaAsync(fixture);
+
+    return Results.Created($"/NuevoConductor/{fixture}", fixture);
+}).WithTags("Conductores");
+
+app.MapPatch("/ActualizarConductor", async (ConductorLicenciaDTO updateConductor, IRepoConductor repo) =>
+{
+    // Buscar el conductor actual
+    var conductor = await repo.DetalleAsync(updateConductor.IdConductor);
+    if (conductor == null)
+        return Results.NotFound($"No se encontró el conductor con id {updateConductor.IdConductor}");
+
+    conductor.Licencia = updateConductor.Licencia;
+
+    await repo.UpdateConductorAsync(conductor);
+
+    return Results.Ok(conductor);
+}).WithTags("Conductores");
 
 //Esto va ultimo, es la llave de arraque del ASP.NET.
 await app.RunAsync();
-
