@@ -73,12 +73,10 @@ app.MapGet("/Empresa", async (IRepoEmpresa _repoempresa) =>
 }).WithTags("Empresa");
 
 
-app.MapGet("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
+app.MapGet("/PedidosDeEmpresa/{id}", async (uint id, IRepoEmpresa repo) =>
 {
-    var resultado = await _repoempresa.ObtenerPedidosAsync((int)id);
-    return resultado is not null
-        ? Results.Ok(resultado)
-        : Results.NotFound();
+    var resultado = await repo.ObtenerPedidosAsync((int)id);
+    return resultado.Any() ? Results.Ok(resultado) : Results.NotFound();
 }).WithTags("Empresa");
 
 //METODO PARA ELIMINAR ENTIDAD EMPRESA

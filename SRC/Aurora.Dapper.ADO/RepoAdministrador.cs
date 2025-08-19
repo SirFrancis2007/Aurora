@@ -33,14 +33,14 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
 
     public async Task<Administrador>? DetalleAsync(int xidAdmin)
     {
-        var Query = @"SELECT * FROM Administrador where idAdministrador = @xidAdmin";
+        var Query = @"SELECT Nombre, idEmpresa, Contrasena FROM Administrador where idAdministrador = @xidAdmin";
         var repuesta = await Conexion.QueryFirstOrDefaultAsync<Administrador>(Query, new { xidAdmin });
         return repuesta;
     }
 
     public async Task<IEnumerable<Administrador>> ObtenerData()
     {
-        var Query = @"SELECT * FROM Administrador";
+        var Query = @"SELECT Nombre, idEmpresa, Contrasena FROM Administrador";
         var repuesta = await Conexion.QueryAsync<Administrador>(Query);
         return repuesta;
     }

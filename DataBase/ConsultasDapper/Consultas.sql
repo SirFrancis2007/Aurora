@@ -12,3 +12,5 @@ JOIN Administrador admi USING (idEmpresa)
 JOIN Pedido pe ON pe.idAdministrador = admi.idAdministrador
 JOIN Empresa emd ON emd.idEmpresa = pe.idEmpresa
 WHERE em.idEmpresa = 1 OR pe.idEmpresa = 1;
+
+SELECT Nombre, idEmpresa, Contrasena FROM Administrador where idAdministrador = 1;

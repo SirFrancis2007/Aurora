@@ -71,42 +71,32 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         }    
     } //Check Funcionando 24/06
 
-    public async Task<IEnumerable<(Pedido, Empresa)>> ObtenerPedidosAsync(int xidEmpresa)
-    {
-        var query = @"SELECT 
-            pe.idPedido,
-            pe.Name AS Nombre_Pedido,
-            pe.Volumen, 
-            pe.Peso, 
-            pe.EstadoPedido, 
-            pe.FechaDespacho, 
-            em.idEmpresa AS idEmpresaOrigen,
-            em.Nombre AS Nombre_Empresa_Origen, 
-            emd.idEmpresa AS idEmpresa,
-            emd.Nombre AS Nombre_Empresa_Destino,
-            admi.idAdministrador,
-            admi.Nombre AS Nombre_Administrador
-            FROM Empresa em
-            JOIN Administrador admi USING (idEmpresa)
-            JOIN Pedido pe ON pe.idAdministrador = admi.idAdministrador
-            JOIN Empresa emd ON emd.idEmpresa = pe.idEmpresa
-            WHERE em.idEmpresa = @IdEmpresa OR pe.idEmpresa = @IdEmpresa;
-            ";
-
-        var resultados = await Conexion.QueryAsync<Pedido, Empresa, (Pedido, Empresa)>(
-            query,
-            (pedido, empresa) => (pedido, empresa),
-            new { IdEmpresa = xidEmpresa },
-            splitOn: "idEmpresa" // Indica dónde empieza el mapeo para Empresa
-        );
-
-    return resultados;
-    } //Check Funcionando 24/06
-
     public Task<Empresa?> ObtenerPorNombreAsync(string Nombre)
     {
         var Query = "Select Nombre From Empresa where Nombre = @InNombreEmpresa;";
         var resultado = Conexion.QueryFirstOrDefaultAsync<Empresa>(Query, new {InNombreEmpresa = Nombre}); 
         return resultado;   
     } //Check Funcionando 24/06
+
+    async Task<IEnumerable<PedidoEmpresaDTO>> IRepoEmpresa.ObtenerPedidosAsync(int xidEmpresa)
+    {
+        var query = @"
+        SELECT 
+            pe.idPedido AS IdPedido,
+            pe.Name AS NombrePedido,
+            pe.Volumen, 
+            pe.Peso, 
+            pe.EstadoPedido AS Estado,
+            pe.FechaDespacho,
+            emd.idEmpresa AS IdEmpresa,
+            emd.Nombre AS NombreEmpresa
+        FROM Empresa em
+        JOIN Administrador admi USING (idEmpresa)
+        JOIN Pedido pe ON pe.idAdministrador = admi.idAdministrador
+        JOIN Empresa emd ON emd.idEmpresa = pe.idEmpresa
+        WHERE em.idEmpresa = @IdEmpresa OR pe.idEmpresa = @IdEmpresa;
+        ";
+
+        return await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = xidEmpresa });
+    }
 }
