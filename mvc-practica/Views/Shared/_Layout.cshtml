@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/styles_shared.css" asp-append-version="true" />
     <title>@ViewData["Title"] Aurora</title>
     <script type="importmap"></script>
 </head>
 <body>
     <header>
         <figure>
-            <img src="" alt="Logotipo">
+            <img src="~/icon/Logotipo.png" alt="Logotipo">
         </figure>
         <nav>
             <ul>
                 <a asp-controller="Home" asp-action="Index"><h3>Aurora</h3></a>
                 <a asp-controller="Home" asp-action="About"><h3>AboutAurora</h3></a>
-                <a asp-controller="Home" asp-action="Contact"><h3>Contact</h3></a>
                 <a asp-controller="Home" asp-action="FAQ"><h3>FAQ</h3></a>
                 <a asp-controller="Account" asp-action="Login" class="btn-login-admin"><h3>↪</h3></a>
             </ul>
