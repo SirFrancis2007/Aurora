@@ -2,7 +2,78 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+    <title>Aurora</title>
+</head>
+<body>
+    <section>
+        <div class="main-text">
+            <div class="text">
+                <h1 id="t1">Logistic System</h1>
+                <span id="span-text">Prepare your package! Control your business and track every package. Easy, Free, secure. Aurora offers a unique service for your business to thrive. Register and get started. Welcome!</span>
+                <button id="btn-header" class="btn-registro">Registrer</button>
+                <button id="btn-header" class="btn-login">Login in</button>
+            </div>
+            <img src="/HTML/Image/logistica2.jpg" alt="Logistica">
+        </div>
+    </section>
+
+    <!--Aca se encuentra la estrucutra de los modales de inicio sesion y registro-->
+    <section class="modal-login">
+        <div class="modal container-login">
+            <a href="#" class="Modal-close">Close</a>
+            <form action="" method="post">
+                <label for="name">Company</label>
+                <input type="text" name="company" id="">
+
+                <label for="Pass">Password</label>
+                <input type="password" name="pass" id="">
+
+                <button class="btn-summit">Summit</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="modal-admin">
+        <div class="modal container-admin">
+            <a href="#" class="Modal-close">Close</a>
+            <form action="" method="post">
+                <label for="name">Nombre</label>
+                <input type="text" name="company" id="">
+
+                <label for="Pass">Password</label>
+                <input type="password" name="pass" id="">
+
+                <button class="btn-summit"> Summit</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="modal-signup">
+        <div class="modal container-signup">
+            <a href="#" class="Modal-close">Close</a>
+            <form action="" method="post">
+                <label for="name">Company</label>
+                <input type="text" name="company" id="">
+
+                <label for="Pass">Password</label>
+                <input type="password" name="pass" id="">
+
+                <label for="Pass">Confirm Password</label>
+                <input type="password" name="pass" id="">
+
+                <button class="btn-summit">Summit</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="~/JavaScript/modals.js"></script>
+</body>
+</html>
