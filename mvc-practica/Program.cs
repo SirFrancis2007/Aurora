@@ -2,6 +2,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton(new Conexion(builder.Configuration.GetConnectionString("conexion")));
+//builder.Services.AddScoped<(aca va la interface), (Aca va la capa de datos que hereda la interface)>();
 
 var app = builder.Build();
 
