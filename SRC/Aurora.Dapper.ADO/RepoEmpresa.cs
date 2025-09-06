@@ -99,4 +99,10 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
 
         return await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = xidEmpresa });
     }
+
+    public Task LoginAsync(string Nombre)
+    {
+        var funtionLogin = "SELECT FLoginEmpresa(@xNombre);";
+        return Conexion.ExecuteAsync(funtionLogin, new { xNombre = Nombre });
+    }   
 }

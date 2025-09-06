@@ -1,9 +1,12 @@
+using Aurora.Core.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton(new Conexion(builder.Configuration.GetConnectionString("conexion")));
+//builder.Services.AddSingleton(new Conexion(builder.Configuration.GetConnectionString("conexion")));
 //builder.Services.AddScoped<(aca va la interface), (Aca va la capa de datos que hereda la interface)>();
+builder.Services.AddScoped<IRepoEmpresa>();
 
 var app = builder.Build();
 

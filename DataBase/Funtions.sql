@@ -41,3 +41,25 @@ BEGIN
     
     RETURN es_valida;
 END $$
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FLoginEmpresa $$
+CREATE FUNCTION FLoginEmpresa(xNombre VARCHAR(100))
+RETURNS BOOLEAN READS SQL DATA
+BEGIN
+    DECLARE existe BOOLEAN;
+
+    Select empresa.Nombre INTO existe
+    FROM Empresa empresa
+    WHERE empresa.Nombre = xNombre;
+
+    IF existe is not null then
+        set existe = true;
+    else
+        set existe = false;
+    END IF;
+    
+    RETURN existe;
+END $$
+
+DELIMITER ;
