@@ -6,5 +6,8 @@ namespace EmpresaController;
 
 public class EmpresaController : Controller
 {
-    
+    public IActionResult IndexEmpresa()
+    {
+        return View();
+    }
 }

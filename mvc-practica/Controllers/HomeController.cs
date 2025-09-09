@@ -4,6 +4,8 @@ using mvc_practica.Models;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using System.Xml.Schema;
+using Aurora.Dapper.ADO;
+using AspNetCoreGeneratedDocument;
 
 namespace mvc_practica.Controllers;
 
@@ -14,10 +16,13 @@ public class HomeController : Controller
     public IActionResult Contact() => View();
     public IActionResult FAQ() => View();
     private readonly ILogger<HomeController> _logger;
+    private readonly IRepoEmpresa _repoEmpresa;
+    private Empresa _empresa;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa)
     {
         _logger = logger;
+        _repoEmpresa = repoEmpresa;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -41,14 +46,21 @@ public class HomeController : Controller
 
     //Mth para registrarse y crear empresa
     [HttpPost]
-    public IActionResult Registro(Empresa empresa)
+    public async Task<IActionResult> Post_Empresa(Empresa empresa)
     {
         if (ModelState.IsValid)
         {
-            //Contactar con ADO para crear la empresa
-            return RedirectToAction("Index");
-        }
+            var _nuevaempresa = new Empresa
+            {
+                IdEmpresa = 0,
+                Nombre = empresa.Nombre
+            };
 
+            await _repoEmpresa.AltaAsync(_nuevaempresa);
+
+            TempData["Mensaje"] = "Empresa creada con éxito";
+            return RedirectToAction("IndexEmpresa", "Empresa");
+        }
         return View(empresa);
     }
 }

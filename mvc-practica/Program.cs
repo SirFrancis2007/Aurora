@@ -1,12 +1,21 @@
+using System.Data;
 using Aurora.Core.Interfaces;
+using Aurora.Dapper.ADO;
+using Aurora.Dapper.Test;
+using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-//builder.Services.AddSingleton(new Conexion(builder.Configuration.GetConnectionString("conexion")));
+
+var connectionString = builder.Configuration.GetConnectionString("MySQL");
+
+//builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnector(connectionString));
+builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(builder.Configuration.GetConnectionString("connectionString")));
 //builder.Services.AddScoped<(aca va la interface), (Aca va la capa de datos que hereda la interface)>();
-builder.Services.AddScoped<IRepoEmpresa>();
+builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
 
 var app = builder.Build();
 

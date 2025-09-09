@@ -1,10 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
+  <ItemGroup>
+    <ProjectReference Include="..\src\Aurora.Core\Aurora.Core.csproj" />
+    <ProjectReference Include="..\src\Aurora.Dapper.ADO\Aurora.Dapper.ADO.csproj" />
+    <ProjectReference Include="..\src\Aurora.Dapper.Test\Aurora.Dapper.Test.csproj" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>mvc_practica</RootNamespace>
   </PropertyGroup>
-
 </Project>
