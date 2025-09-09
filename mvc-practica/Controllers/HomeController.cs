@@ -17,7 +17,9 @@ public class HomeController : Controller
     public IActionResult FAQ() => View();
     private readonly ILogger<HomeController> _logger;
     private readonly IRepoEmpresa _repoEmpresa;
-    private Empresa _empresa;
+    private readonly IRepoAdministrador _repoAdministrador;
+    public Empresa _empresa;
+    public Administrador _administrador;
 
     public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa)
     {
@@ -33,15 +35,15 @@ public class HomeController : Controller
 
     //Mth para loguearse y validar empresa
     [HttpPost]
-    public IActionResult Index(Empresa empresa)
+    public async Task<IActionResult> Login_Empresa(IndexViewModel _empresa)
     {
-        if (ModelState.IsValid)
+        if (_empresa.Administrador == null)
         {
-            //Contactar con ADO para validar la empresa
-            return RedirectToAction("About");
+            await _repoEmpresa.LoginAsync(_empresa.Empresa.Nombre);
+            return RedirectToAction("IndexEmpresa", "Empresa");
         }
 
-        return View(empresa);
+        return View(_empresa);
     }
 
     //Mth para registrarse y crear empresa
@@ -62,6 +64,24 @@ public class HomeController : Controller
             return RedirectToAction("IndexEmpresa", "Empresa");
         }
         return View(empresa);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login_Administrador(Administrador administrador)
+    {
+        if (ModelState.IsValid)
+        {
+            var _nuevoAdmin = new Administrador
+            {
+                Nombre = administrador.Nombre,
+                Password = administrador.Password
+            };
+            return RedirectToAction("IndexAdmin", "Admin");
+        }
+
+        // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
+        ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
+        return View(administrador);
     }
 }
 

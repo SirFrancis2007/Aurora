@@ -23,16 +23,16 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
     public async Task AltaAsync(Empresa NuevaEmpresa)
     {
         var parametros = new DynamicParameters();
-        parametros.Add("xidEmpresa", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parametros.Add("xidEmpresa", direction: ParameterDirection.Output);
         parametros.Add("xNombre", NuevaEmpresa.Nombre);
         try
         {
             await Conexion.ExecuteAsync("PSCrearEmpresa", parametros, commandType: CommandType.StoredProcedure); // "PSCrearEmpresa" SP para crear empresa
             NuevaEmpresa.IdEmpresa = (uint)parametros.Get<int>("xidEmpresa");
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
-            throw new Exception("Esta empresa ya se encuentra Registrada");
+            throw new Exception($"Error al crear empresa: {ex.Message}", ex);
         }   
     } //Check Funcionando 24/06
 
@@ -100,9 +100,10 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         return await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = xidEmpresa });
     }
 
-    public Task LoginAsync(string Nombre)
+    public async Task<bool> LoginAsync(string Nombre)
     {
         var funtionLogin = "SELECT FLoginEmpresa(@xNombre);";
-        return Conexion.ExecuteAsync(funtionLogin, new { xNombre = Nombre });
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = Nombre });
+        return result;
     }   
 }

@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("MySQL");
 
 //builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnector(connectionString));
-builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(builder.Configuration.GetConnectionString("connectionString")));
+builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(connectionString));
 //builder.Services.AddScoped<(aca va la interface), (Aca va la capa de datos que hereda la interface)>();
 builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
 

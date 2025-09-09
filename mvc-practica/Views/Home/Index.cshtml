@@ -1,5 +1,5 @@
 ﻿@using Aurora.Core
-@model Aurora.Core.Empresa
+@model mvc_practica.Models.IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -32,9 +32,9 @@
     <section class="modal-login">
         <div class="modal container-login">
             <a href="#" class="Modal-close">Close</a>
-            <form action="" method="post">
-                <label asp-for="Nombre" for="name">Company</label>
-                <input asp-for="Nombre" type="text" name="company" id="">
+            <form asp-action="Login_Empresa" asp-controller="Home" method="post">
+                <label asp-for="Empresa.Nombre" for="name">Company</label>
+                <input asp-for="Empresa.Nombre" type="text">
 
                 <button class="btn-summit">Summit</button>
             </form>
@@ -46,8 +46,8 @@
         <div class="modal container-signup">
             <a href="#" class="Modal-close">Close</a>
             <form asp-action="Post_Empresa" asp-controller="Home" method="post">
-                <label asp-for="Nombre">Company</label>
-                <input asp-for="Nombre" type="text" />
+                <label asp-for="Empresa.Nombre">Company</label>
+                <input asp-for="Empresa.Nombre" type="text" />
                 <button type="submit" class="btn-summit">Submit</button>
             </form>
         </div>
@@ -57,14 +57,14 @@
     <section class="modal-admin">
         <div class="modal container-admin">
             <a href="#" class="Modal-close">Close</a>
-            <form action="" method="post">
-                <label for="name">Nombre</label>
-                <input type="text" name="company" id="">
+            <form asp-action="Login_Administrador" method="post">
+                <label asp-for="Administrador.Nombre" for="name">Nombre</label>
+                <input asp-for="Administrador.Nombre" type="text" name="company" id="">
 
-                <label for="Pass">Password</label>
-                <input type="password" name="pass" id="">
+                <label asp-for="Administrador.Password" for="Pass">Password</label>
+                <input asp-for="Administrador.Password" type="password" name="pass" id="">
 
-                <button class="btn-summit"> Summit</button>
+                <button class="btn-summit">Summit</button>
             </form>
         </div>
     </section>
