@@ -52,6 +52,12 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         return repuesta;
     }
 
+    public async Task<bool> LoginAsync(string nombre, string password)
+    {
+        var funtionLogin = "SELECT FLoginAdministrador(@xNombre, @xPassword);";
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = nombre, xPassword = password });
+        return result;
+    }
 
     async Task<bool> IRepoAdministrador.UpdateAdministrador(Administrador administrador)
     {

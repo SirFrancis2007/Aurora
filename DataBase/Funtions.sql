@@ -61,3 +61,23 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FLoginAdministrador $$
+
+CREATE FUNCTION FLoginAdministrador(xNombre VARCHAR(100), xPassword VARCHAR(100))
+RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    DECLARE existe BOOLEAN DEFAULT FALSE;
+
+    IF EXISTS (SELECT 1 FROM Administrador  WHERE Nombre = xNombre AND Contrasena = xPassword) THEN
+        SET existe = TRUE;
+    ELSE
+        SET existe = FALSE;
+    END IF;
+
+    RETURN existe;
+END $$
+
+DELIMITER ;

@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using mvc_practica.Models;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
-using System.Xml.Schema;
-using Aurora.Dapper.ADO;
-using AspNetCoreGeneratedDocument;
 
 namespace mvc_practica.Controllers;
 
@@ -21,10 +18,11 @@ public class HomeController : Controller
     public Empresa _empresa;
     public Administrador _administrador;
 
-    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa)
+    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdministrador)
     {
         _logger = logger;
         _repoEmpresa = repoEmpresa;
+        _repoAdministrador = repoAdministrador;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -67,21 +65,17 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login_Administrador(Administrador administrador)
+    public async Task<IActionResult> Login_Administrador(IndexViewModel _administrador)
     {
-        if (ModelState.IsValid)
+        if (_administrador.Empresa == null)
         {
-            var _nuevoAdmin = new Administrador
-            {
-                Nombre = administrador.Nombre,
-                Password = administrador.Password
-            };
-            return RedirectToAction("IndexAdmin", "Admin");
+            await _repoAdministrador.LoginAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
+            return RedirectToAction("IndexAdmin", "Administradores");
         }
 
         // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
         ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
-        return View(administrador);
+        return View(_administrador);
     }
 }
 
