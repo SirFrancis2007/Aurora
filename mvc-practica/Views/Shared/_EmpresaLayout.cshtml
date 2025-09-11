@@ -6,37 +6,45 @@
     <link rel="stylesheet" href="~/css/Sidebar_shared.css" asp-append-version="true" />
     <title>@ViewData["Title"] Aurora</title>
     <script type="importmap"></script>
+
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <section class="sidebar">
         <div class="container-sidebar">
-            <div class="icon">
-                <figure>
-                    <img src="~/icon/UserIcon.png" alt="">
-                </figure>   
-            </div>
             <div class="links">
                 <ul>
                     <li>
-                        <a src="~/icon/UserIcon.png">
+                        <a>
+                            <img src="~/icon/Administradores.png" alt="">
                             <i class="fas fa-shopping-cart"></i>
-                            <span>Realizar Pedido</span>
+                            <span>Administrador</span>
                         </a>
                     </li>
                     <li>
-                        <a src="~/icon/HistorialIcon.png">
+                        <a>
+                            <img src="~/icon/Vehiculos.png" alt="">
                             <i class="fas fa-history"></i>
-                            <span>Historial de Paquetes</span>
+                            <span>Vehiculo</span>
                         </a>
                     </li>
                     <li>
-                        <a src="~/icon/AgregarRutaIcon.png">
+                        <a>
+                            <img src="~/icon/Pedidos.png" alt="">
                             <i class="fas fa-history"></i>
-                            <span>Agregar Ruta</span>
+                            <span>Pedidos</span>
                         </a>
                     </li>
                     <li>
-                        <a src="~/icon/LogOutIcon.png">
+                        <a>
+                            <img src="~/icon/Conductores.png" alt="">
+                            <i class="fas fa-history"></i>
+                            <span>Conductores</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <img src="~/icon/LogOut.png" alt="">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>LogOut</span>
                         </a>
@@ -46,7 +54,7 @@
         </div>
     </section>
 
-    <div class="container">
+    <div class="main-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

@@ -7,6 +7,7 @@ namespace Aurora.Dapper.ADO;
 
 public class RepoEmpresa : RepoGenerico, IRepoEmpresa
 {
+    private uint _idempresanueva;
     Task<IEnumerable<Empresa>> IRepoListado<Empresa>.ObtenerAsync => Obtener();
 
     public RepoEmpresa(IDbConnection conexion) : base(conexion)
@@ -28,7 +29,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         try
         {
             await Conexion.ExecuteAsync("PSCrearEmpresa", parametros, commandType: CommandType.StoredProcedure); // "PSCrearEmpresa" SP para crear empresa
-            NuevaEmpresa.IdEmpresa = (uint)parametros.Get<int>("xidEmpresa");
+            _idempresanueva = (uint)parametros.Get<int>("xidEmpresa");
         }
         catch (System.Exception ex)
         {
@@ -78,7 +79,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         return resultado;   
     } //Check Funcionando 24/06
 
-    async Task<IEnumerable<PedidoEmpresaDTO>> IRepoEmpresa.ObtenerPedidosAsync(int xidEmpresa)
+    public async Task<IEnumerable<PedidoEmpresaDTO>> ObtenerPedidosAsync(int _idempresanueva)
     {
         var query = @"
         SELECT 
@@ -97,7 +98,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         WHERE em.idEmpresa = @IdEmpresa OR pe.idEmpresa = @IdEmpresa;
         ";
 
-        return await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = xidEmpresa });
+        return await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = _idempresanueva });
     }
 
     public async Task<bool> LoginAsync(string Nombre)

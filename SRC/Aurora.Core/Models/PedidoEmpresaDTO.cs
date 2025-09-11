@@ -1,3 +1,5 @@
+namespace Aurora.Core;
+
 public class PedidoEmpresaDTO
 {
     public int IdPedido { get; set; }

@@ -70,7 +70,7 @@ public class HomeController : Controller
         if (_administrador.Empresa == null)
         {
             await _repoAdministrador.LoginAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
-            return RedirectToAction("IndexAdmin", "Administradores");
+            return RedirectToAction("indexAdmin", "Administrador");
         }
 
         // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión

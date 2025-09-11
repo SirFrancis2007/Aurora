@@ -1,18 +1,48 @@
-@using Aurora.Core
+@model IEnumerable<Aurora.Core.PedidoEmpresaDTO>
 @{
     ViewData["Title"] = "Empresa";
+    Layout = "_EmpresaLayout";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
-</head>
-<body>
-    
-</body>
-</html>
+@section Styles {
+    <link rel="stylesheet" href="~/css/indexEmpresa.css" />
+}
+
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Welcome #nombre de la empresa</h2>
+    </div>
+
+    <div class="container">
+        <h1>Gestión de Pedidos</h1>
+        <div class="table-container">
+            <table class="Content-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Empresa Origen</th>
+                        <th>Empresa Destino</th>
+                        <th>Pedido</th>
+                        <th>Volumen</th>
+                        <th>Peso</th>
+                        <th>Estado del pedido</th>
+                        <th>Fecha Despacho</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body">
+                    @foreach (var _pedido in Model)
+                    {
+                        <tr>
+                            <td>@_pedido.NombreEmpresa</td>
+                            <td>@_pedido.NombreEmpresa</td>
+                            <td>@_pedido.NombrePedido</td>
+                            <td>@_pedido.Volumen</td>
+                            <td>@_pedido.Peso</td>
+                            <td>@_pedido.Estado</td>
+                            <td>@_pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

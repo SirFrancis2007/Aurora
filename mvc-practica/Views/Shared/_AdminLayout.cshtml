@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/Sidebar_shared.css" asp-append-version="true" />
+    <title>@ViewData["Title"] Aurora</title>
+    <script type="importmap"></script>
+</head>
+<body>
+    <section class="sidebar">
+        <div class="container-sidebar">
+            <div class="links">
+                <ul>
+                    <li>
+                        <a>
+                            <img src="~/icon/UserIcon.png" alt="">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Realizar Pedido</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <img src="~/icon/HistorialIcon.png" alt="">
+                            <i class="fas fa-history"></i>
+                            <span>Historial de Paquetes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <img src="~/icon/RutaIcon.png" alt="">
+                            <i class="fas fa-history"></i>
+                            <span>Agregar Ruta</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <img src="~/icon/LogOut.png" alt="">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>LogOut</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <h6>Aurora ® 2025</h6>
+        <h6>Built with love and dedication ─ Graduates 2025</h6>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
