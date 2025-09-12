@@ -5,7 +5,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/HistorialPedido" />
+    <link rel="stylesheet" href="~/css/VehiculoEmpresa.css" />
 }
 
 <div class="main-content">
@@ -13,17 +13,22 @@
         <h2>Welcome #nombre de la empresa</h2>
     </div>
 
+    <div class="menu">
+        <a asp-action="AgregarVehiculo" asp-controller="Empresa">Agregar Vehiculo</a>
+        <a asp-action="AsignarVehiculoAConductor" asp-controller="Empresa">Asignar Vehiculo</a>
+    </div>
+
     <div class="container">
-        <h1>Historial de Pedidos</h1>
+        <h1>Gestión de Flota</h1>
         <div class="table-container">
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>idHistorial</th>
-                        <th>idPedido</th>
-                        <th>Estado Anterior</th>
-                        <th>Estado Actual</th>
-                        <th>Fecha Registro</th>
+                        <th>id</th>
+                        <th>Tipo</th>
+                        <th>Matricula</th>
+                        <th>Capacidad Maxima</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
             </table>

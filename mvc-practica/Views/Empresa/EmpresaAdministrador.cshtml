@@ -1,11 +1,10 @@
-@model IEnumerable<Aurora.Core.PedidoEmpresaDTO>
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/" />
+    <link rel="stylesheet" href="~/css/EmpresaAdministrador.css" />
 }
 
 <div class="main-content">
@@ -13,23 +12,20 @@
         <h2>Welcome #nombre de la empresa</h2>
     </div>
 
-    <div class="menu"></div>
-        <button>Agregar Vehiculo</button>
+    <div class="menu">
+        <a asp-controller="Empresa" asp-action="AgregarAdministrador" class="btn btn-primary">Agregar Administrador</a>
     </div>
 
     <div class="container">
-        <h1>Gestión de Flota</h1>
+        <h1>Gestión de Administradores</h1>
         <div class="table-container">
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>id</th>
-                        <th>Tipo</th>
-                        <th>Matricula</th>
-                        <th>Capacidad Maxima</th>
-                        <th>Estado</th>
+                        <th>Nombre del Administrador</th>
                     </tr>
                 </thead>
+                <!-- Por cada administrtador cargado se le agrega dos botones, actualizar y eliminar-->
             </table>
         </div>
     </div>

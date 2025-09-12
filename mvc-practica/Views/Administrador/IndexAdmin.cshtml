@@ -2,23 +2,44 @@
     ViewData["Title"] = "Administradores";
     Layout = "_AdminLayout";
 }
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UI Admin</title>
-</head>
-<body>
-    <!-- Admin podra hacer 
-        _ Hacer Pedidos
-        _ Recibir pedidos
-        _ Log Out
-        _ Ver el Historial de los paquetes-->
-
-    
+<!-- Admin podra hacer 
+    _ Hacer Pedidos
+    _ Recibir pedidos
+    _ Log Out
+    _ Ver el Historial de los paquetes-->
+@section Styles {
+    <link rel="stylesheet" href="~/css/IndexAdmin.css" />
+}
 
 
-</body>
-</html>
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Bienvenido #Nombre Admin</h2>
+    </div>
+
+    <div class="menu">
+        <a asp-action="AgregarVehiculo" asp-controller="Empresa">Nuevo Pedido</a>
+    </div>
+
+    <div class="container">
+        <h1>Bandeja de Entrada</h1>
+        <div class="table-container">
+            <table class="Content-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>id</th>
+                        <th>Paquete</th>
+                        <th>Volumen</th>
+                        <th>Peso</th>
+                        <th>Estado</th>
+                        <th>Fecha Despacho</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Matricula</th>
+                        <th>Conductor</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

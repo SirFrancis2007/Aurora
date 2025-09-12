@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Administradores";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/IndexAdmin.css" />
+}
+
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Bienvenido #Nombre Admin</h2>
+    </div>
+
+    <div class="container">
+        <h1>Bandeja de Entrada</h1>
+        <div class="table-container">
+            <table class="Content-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>id</th>
+                        <th>Paquete</th>
+                        <th>Fecha Despacho</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

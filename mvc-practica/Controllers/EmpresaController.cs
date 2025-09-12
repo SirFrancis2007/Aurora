@@ -10,6 +10,16 @@ namespace EmpresaController;
 
 public class EmpresaController : Controller
 {
+    public IActionResult EmpresaAdministrador() => View();
+    public IActionResult HistorialPedido() => View();
+    public IActionResult VehiculoEmpresa() => View();
+    public IActionResult ConductorEmpresa() => View();
+    public IActionResult AgregarAdministrador() => View("UIAdministrador/AgregarAdministrador"); 
+    public IActionResult NuevoConductor() => View("UIConductor/NuevoConductor");
+    public IActionResult AgregarVehiculo() => View("UIVehiculo/AgregarVehiculo");
+    public IActionResult AsignarVehiculoAConductor() => View("UIVehiculo/AsignarVehiculoAConductor");
+    //Cuando una vista se encuentra en una carpeta dentro de Views, se debe especificar la ruta completa
+    //Ejemplo: return View("UIAdministrador/AgregarAdministrador");
     private readonly ILogger<HomeController> _logger;
     public Empresa _empresa;
     private IRepoEmpresa _repoEmpresa;

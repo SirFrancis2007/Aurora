@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Empresa";
+    Layout = "_EmpresaLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/NuevoPedido.css" />
+}
+
+<!-- Formulario para agregar un nuevo Pedido -->
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Agregar Nuevo Pedido</h2>
+    </div>
+
+    <div class="container">
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="Name">Titulo:</label>
+                <input type="text" name="Tipo" required />
+
+                <label for="Volumen">Volumen:</label>
+                <input type="text" name="Tipo" required />
+
+                <label for="Peso">Peso:</label>
+                <input type="text" name="Tipo" required />
+
+                <label for="Estado">Estado:</label>
+                <select name="" id="">
+                    <option value="Despachado">Despachado</option>   
+                </select>
+
+                <label for="">Fecha Despacho</label>
+
+                <label for="Name">Ruta:</label>
+                <select name="" id=""></select>
+
+                <label for="Name">Empresa Destino:</label>
+                <select name="" id=""></select>
+            </div>
+        </form>
+        <button type="submit" class="btn-submit">Elegir Vehiculo</button>
+    </div>
+</div>

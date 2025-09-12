@@ -5,7 +5,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/" />
+    <link rel="stylesheet" href="~/css/ConductorEmpresa.css" />
 }
 
 <div class="main-content">
@@ -13,8 +13,8 @@
         <h2>Welcome #nombre de la empresa</h2>
     </div>
 
-    <div class="menu"></div>
-        <button>Agregar Conductor</button>
+    <div class="menu">
+        <a asp-action="NuevoConductor" asp-controller="Empresa">Agregar Conductor</a>
     </div>
 
     <div class="container">
@@ -23,13 +23,9 @@
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>Empresa Origen</th>
-                        <th>Empresa Destino</th>
-                        <th>Pedido</th>
-                        <th>Volumen</th>
-                        <th>Peso</th>
-                        <th>Estado del pedido</th>
-                        <th>Fecha Despacho</th>
+                        <th>Nombre</th>
+                        <th>Licencia</th>
+                        <th>Disponibilidad</th>
                     </tr>
                 </thead>
                 
