@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Empresa";
+    Layout = "_EmpresaLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/AgregarAdministrador.css" />
+}
+
+<!-- Formulario para agregar un nuevo administrador -->
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Agregar Nuevo Administrador</h2>
+    </div>
+
+    <div class="container">
+        <form method="post" action="/Empresa/AgregarAdministrador">
+            <div class="form-group">
+                <label for="nombre">Nombre del Administrador:</label>
+                <input type="text" id="nombre" name="nombre" required />
+            </div>
+        </form>
+        <button type="submit" class="btn-submit">Agregar Administrador</button>
+    </div>
+</div>

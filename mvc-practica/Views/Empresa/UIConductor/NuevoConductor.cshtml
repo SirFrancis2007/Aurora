@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Empresa";
+    Layout = "_EmpresaLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/NuevoConductor.css" />
+}
+
+<!-- Formulario para agregar un nuevo administrador -->
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Agregar Nuevo Conductor</h2>
+    </div>
+
+    <div class="container">
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="nombre">Nombre del Conductor:</label>
+                <input type="text" name="nombre" required />
+
+                <label for="nombre">Nombre del Conductor:</label>
+                <input type="text" name="nombre" required />
+
+                <!--La disponibilidad se asume y se instancia como true (osea disponible)-->
+            </div>
+        </form>
+        <button type="submit" class="btn-submit">Agregar Administrador</button>
+    </div>
+</div>

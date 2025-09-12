@@ -1,11 +1,10 @@
-@model IEnumerable<Aurora.Core.PedidoEmpresaDTO>
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/indexEmpresa.css" />
+    <link rel="stylesheet" href="~/css/EmpresaAdministrador.css" />
 }
 
 <div class="main-content">
@@ -13,22 +12,20 @@
         <h2>Welcome #nombre de la empresa</h2>
     </div>
 
+    <div class="menu">
+        <button>Agregar Administrador</button>
+    </div>
+
     <div class="container">
-        <h1>Gestión de Pedidos</h1>
+        <h1>Gestión de Administradores</h1>
         <div class="table-container">
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>Empresa Origen</th>
-                        <th>Empresa Destino</th>
-                        <th>Pedido</th>
-                        <th>Volumen</th>
-                        <th>Peso</th>
-                        <th>Estado del pedido</th>
-                        <th>Fecha Despacho</th>
+                        <th>Nombre del Administrador</th>
                     </tr>
                 </thead>
-                
+                <!-- Por cada administrtador cargado se le agrega dos botones, actualizar y eliminar-->
             </table>
         </div>
     </div>
