@@ -1,4 +1,5 @@
-@model IEnumerable<Aurora.Core.PedidoEmpresaDTO>
+@using Aurora.Core
+@model IEnumerable<HistorialPedido>
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
@@ -9,10 +10,6 @@
 }
 
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Welcome #nombre de la empresa</h2>
-    </div>
-
     <div class="container">
         <h1>Historial de Pedidos</h1>
         <div class="table-container">
@@ -26,6 +23,18 @@
                         <th>Fecha Registro</th>
                     </tr>
                 </thead>
+
+                <tbody>
+                    @foreach (var historial in Model)
+                    {
+                        <tr>
+                            <td>@historial.IdHistorial</td>
+                            <td>@historial.XidPedido</td>
+                            <td>@historial.EstadoAnterior</td>
+                            <td>@historial.EstadoActual</td>
+                            <td>@historial.FechaCambio</td>
+                        </tr>
+                    }
             </table>
         </div>
     </div>

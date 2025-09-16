@@ -1,4 +1,6 @@
-@model IEnumerable<Aurora.Core.PedidoEmpresaDTO>
+@using Aurora.Core
+@model IEnumerable<Conductor>
+
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
@@ -9,10 +11,6 @@
 }
 
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Welcome #nombre de la empresa</h2>
-    </div>
-
     <div class="menu">
         <a asp-action="NuevoConductor" asp-controller="Empresa">Agregar Conductor</a>
     </div>
@@ -28,7 +26,15 @@
                         <th>Disponibilidad</th>
                     </tr>
                 </thead>
-                
+                <tbody>
+                    @foreach (var conductor in Model)
+                    {
+                        <tr>
+                            <td>@conductor.Name</td>
+                            <td>@conductor.Licencia</td>
+                            <td>@(conductor.Dispobilidad ? "Sí" : "No")</td>
+                        </tr>
+                    }
             </table>
         </div>
     </div>

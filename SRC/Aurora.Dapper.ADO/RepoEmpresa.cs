@@ -114,4 +114,18 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         var Resultado = await Conexion.QueryAsync<Administrador>(query, new { IdEmpresa = xidEmpresa });
         return Resultado;
     }
+
+    public async Task<IEnumerable<Conductor>> ObtenerConductoresXempresaAsync(int xidEmpresa)
+    {
+        var query = @"Select * From Conductor where idEmpresa = @IdEmpresa;";
+        var Resultado = await Conexion.QueryAsync<Conductor>(query, new { IdEmpresa = xidEmpresa });
+        return Resultado;
+    }
+
+    public async Task<IEnumerable<Vehiculo>> ObtenerVehiculosXempresaAsync(int xidEmpresa)
+    {
+        var query = @"Select * From Vehiculo where idEmpresa = @IdEmpresa;";
+        var Resultado = await Conexion.QueryAsync<Vehiculo>(query, new { IdEmpresa = xidEmpresa });
+        return Resultado;
+    }
 }

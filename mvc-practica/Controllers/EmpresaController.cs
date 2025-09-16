@@ -1,6 +1,8 @@
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using Xunit.Sdk;
 
 namespace mvc_practica.Controllers;
 
@@ -8,8 +10,6 @@ public class EmpresaController : Controller
 {
     private string _nombreempresa;
     public IActionResult HistorialPedido() => View();
-    public IActionResult VehiculoEmpresa() => View();
-    public IActionResult ConductorEmpresa() => View();
     public IActionResult AgregarAdministrador() => View("UIAdministrador/AgregarAdministrador");
     public IActionResult NuevoConductor() => View("UIConductor/NuevoConductor");
     public IActionResult AgregarVehiculo() => View("UIVehiculo/AgregarVehiculo");
@@ -19,10 +19,15 @@ public class EmpresaController : Controller
     private readonly ILogger<HomeController> _logger;
     private IRepoEmpresa _repoEmpresa;
     private IRepoAdministrador _repoAdmin;
-    public EmpresaController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa)
+    private IRepoVehiculo _repoVehiculo;
+    private IRepoConductor _repoConductor;
+    public EmpresaController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdmin, IRepoVehiculo repoVehiculo, IRepoConductor repoConductor) // <-- agrega este parámetro
     {
         _logger = logger;
         _repoEmpresa = repoEmpresa;
+        _repoAdmin = repoAdmin;
+        _repoVehiculo = repoVehiculo;
+        _repoConductor = repoConductor;
     }
 
     [HttpGet]
@@ -45,6 +50,20 @@ public class EmpresaController : Controller
         var administradores = await _repoEmpresa.ObtenerAdministradoresXempresaAsync((int)empresa.IdEmpresa);
 
         return View(administradores);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> VehiculoEmpresa()
+    {
+        var vehiculos = await _repoVehiculo.ObtenerAsync;
+        return View(vehiculos);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ConductorEmpresa()
+    {
+        var conductores = await _repoConductor.ObtenerAsync;
+        return View(conductores);
     }
 
     [HttpPost]
@@ -70,5 +89,48 @@ public class EmpresaController : Controller
             return RedirectToAction(nameof(EmpresaController.EmpresaAdministrador));
         }
         return View(empresa);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AltaVehiculo(Vehiculo _vehiculo)
+    {
+        if (ModelState.IsValid)
+        {
+            var _nuevovehiculo = new Vehiculo
+            {
+                IdVehiculo = 0,
+                Tipo = _vehiculo.Tipo,
+                Matricula = _vehiculo.Matricula,
+                CapacidadMax = _vehiculo.CapacidadMax,
+                Estado = true //Disponible por defecto
+            };
+
+            await _repoVehiculo.AltaAsync(_nuevovehiculo);
+
+            TempData["Mensaje"] = "Administrador creada con éxito";
+            return RedirectToAction(nameof(EmpresaController.EmpresaAdministrador));
+        }
+        return View(_vehiculo);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AltaConductor(Conductor _conductor)
+    {
+        if (ModelState.IsValid)
+        {
+            var _nuevoconductor = new Conductor
+            {
+                IdConductor = 0,
+                Name = _conductor.Name,
+                Licencia = _conductor.Licencia,
+                Dispobilidad = true //Disponible por defecto
+            };
+
+            await _repoConductor.AltaAsync(_nuevoconductor);
+
+            TempData["Mensaje"] = "Conductor creado con éxito";
+            return RedirectToAction(nameof(EmpresaController.ConductorEmpresa));
+        }
+        return View(_conductor);
     }
 }

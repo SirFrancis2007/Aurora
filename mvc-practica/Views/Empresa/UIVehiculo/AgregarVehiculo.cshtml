@@ -1,3 +1,6 @@
+@using Aurora.Core
+@model Vehiculo
+
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
@@ -14,20 +17,20 @@
     </div>
 
     <div class="container">
-        <form method="post" action="">
+        <form method="post" asp-action="AltaVehiculo" asp-controller="Empresa">
             <div class="form-group">
-                <label for="nombre">Tipo:</label>
-                <input type="text" name="Tipo" required />
+                <label asp-for="Tipo" for="nombre">Tipo:</label>
+                <input asp-for="Tipo" type="text" required />
 
-                <label for="nombre">Matricula:</label>
-                <input type="text" name="Matricula" required />
+                <label asp-for="Matricula" for="nombre">Matricula:</label>
+                <input type="text" asp-for="Matricula" required />
 
-                <label for="nombre">Capacidad Maxima:</label>
-                <input type="text" name="Capacidad Maxima" required />
+                <label asp-for="CapacidadMax" for="nombre">Capacidad Maxima:</label>
+                <input type="text" asp-for="CapacidadMax" required />
 
                 <!-- El estado se define como true, osea disponible-->
+                <button type="submit" class="btn-submit">Agregar Vehiculo</button>
             </div>
         </form>
-        <button type="submit" class="btn-submit">Agregar Vehiculo</button>
     </div>
 </div>

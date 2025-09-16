@@ -15,6 +15,8 @@ builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(connectionSt
 //builder.Services.AddScoped<(aca va la interface), (Aca va la capa de datos que hereda la interface)>();
 builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
 builder.Services.AddScoped<IRepoAdministrador, RepoAdministrador>();
+builder.Services.AddScoped<IRepoConductor, RepoConductor>();
+builder.Services.AddScoped<IRepoVehiculo, RepoVehiculo>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
