@@ -8,6 +8,7 @@ namespace mvc_practica.Controllers;
 
 public class AdministradorController : Controller
 {
+    public IActionResult AgregarPedido() => View();
     private readonly ILogger<HomeController> _logger;
     public AdministradorController(ILogger<HomeController> logger)
     {

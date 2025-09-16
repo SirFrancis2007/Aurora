@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/Sidebar_shared.css" asp-append-version="true" />
-    @RenderSection("Styles", required: false)
+    @await RenderSectionAsync("Styles", required: false)
     <title>@ViewData["Title"] Aurora</title>
     <script type="importmap"></script>
 </head>
@@ -14,28 +14,28 @@
             <div class="links">
                 <ul>
                     <li>
-                        <a>
+                        <a asp-controller="Administrador" asp-action="AgregarPedido">
                             <img src="~/icon/UserIcon.png" alt="">
                             <i class="fas fa-shopping-cart"></i>
                             <span>Realizar Pedido</span>
                         </a>
                     </li>
                     <li>
-                        <a>
+                        <a asp-controller="Administrador" asp-action="EmpresaAdministrador">
                             <img src="~/icon/HistorialIcon.png" alt="">
                             <i class="fas fa-history"></i>
                             <span>Historial de Paquetes</span>
                         </a>
                     </li>
                     <li>
-                        <a>
+                        <a asp-controller="Administrador" asp-action="EmpresaAdministrador">
                             <img src="~/icon/RutaIcon.png" alt="">
                             <i class="fas fa-history"></i>
                             <span>Agregar Ruta</span>
                         </a>
                     </li>
                     <li>
-                        <a>
+                        <a asp-controller="Home" asp-action="index">
                             <img src="~/icon/LogOut.png" alt="">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>LogOut</span>

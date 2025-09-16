@@ -1,8 +1,6 @@
 using System.Data;
 using Aurora.Core.Interfaces;
 using Aurora.Dapper.ADO;
-using Aurora.Dapper.Test;
-using Microsoft.Data.SqlClient;
 using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +16,12 @@ builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(connectionSt
 builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
 builder.Services.AddScoped<IRepoAdministrador, RepoAdministrador>();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(61);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,7 +34,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapStaticAssets();

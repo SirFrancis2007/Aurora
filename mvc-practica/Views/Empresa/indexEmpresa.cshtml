@@ -1,6 +1,7 @@
 @model IEnumerable<Aurora.Core.PedidoEmpresaDTO>
+
 @{
-    ViewData["Title"] = "Empresa";
+    ViewData["Title"] = "Pedidos de la Empresa";
     Layout = "_EmpresaLayout";
 }
 
@@ -9,26 +10,42 @@
 }
 
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Welcome #nombre de la empresa</h2>
-    </div>
-
     <div class="container">
         <h1>Gestión de Pedidos</h1>
         <div class="table-container">
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>Empresa Origen</th>
-                        <th>Empresa Destino</th>
+                        <th>Empresa</th>
                         <th>Pedido</th>
                         <th>Volumen</th>
                         <th>Peso</th>
-                        <th>Estado del pedido</th>
+                        <th>Estado</th>
                         <th>Fecha Despacho</th>
                     </tr>
                 </thead>
-                
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No hay pedidos registrados.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var pedido in Model)
+                        {
+                            <tr>
+                                <td>@pedido.NombreEmpresa</td>
+                                <td>@pedido.NombrePedido</td>
+                                <td>@pedido.Volumen</td>
+                                <td>@pedido.Peso</td>
+                                <td>@pedido.Estado</td>
+                                <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
             </table>
         </div>
     </div>

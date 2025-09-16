@@ -1,3 +1,6 @@
+@using Aurora.Core
+@model IEnumerable<Administrador>
+
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
@@ -8,10 +11,6 @@
 }
 
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Welcome #nombre de la empresa</h2>
-    </div>
-
     <div class="menu">
         <a asp-controller="Empresa" asp-action="AgregarAdministrador" class="btn btn-primary">Agregar Administrador</a>
     </div>
@@ -25,7 +24,23 @@
                         <th>Nombre del Administrador</th>
                     </tr>
                 </thead>
-                <!-- Por cada administrtador cargado se le agrega dos botones, actualizar y eliminar-->
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No hay Administradores Asociados.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var admins in Model)
+                        {
+                            <tr>
+                                <td>@admins.Nombre</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
             </table>
         </div>
     </div>

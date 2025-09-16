@@ -39,7 +39,7 @@ public class HomeController : Controller
         if (_empresa.Administrador == null)
         {
             await _repoEmpresa.LoginAsync(_empresa.Empresa.Nombre);
-            return RedirectToAction("IndexEmpresa", "Empresa");
+            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _empresa.Empresa.Nombre });
         }
 
         return View(_empresa);
@@ -57,10 +57,11 @@ public class HomeController : Controller
                 Nombre = empresa.Nombre
             };
 
+
             await _repoEmpresa.AltaAsync(_nuevaempresa);
 
             TempData["Mensaje"] = "Empresa creada con éxito";
-            return RedirectToAction("IndexEmpresa", "Empresa");
+            return RedirectToAction(nameof(EmpresaController.IndexEmpresa), nameof(EmpresaController), empresa) ;
         }
         return View(empresa);
     }
@@ -71,7 +72,7 @@ public class HomeController : Controller
         if (_administrador.Empresa == null)
         {
             await _repoAdministrador.LoginAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
-            return RedirectToAction("indexAdmin", "Administrador");
+            return RedirectToAction("indexAdmin", "Administrador", new { nombre = _administrador.Administrador.Nombre, password = _administrador.Administrador.Password });
         }
 
         // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión

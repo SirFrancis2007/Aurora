@@ -34,7 +34,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         catch (System.Exception ex)
         {
             throw new Exception($"Error al crear empresa: {ex.Message}", ex);
-        }   
+        }
     } //Check Funcionando 24/06
 
     public async Task<Empresa>? DetalleAsync(uint indiceABuscar)
@@ -55,7 +55,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         catch (System.Exception)
         {
             throw new Exception("¡Error al eliminar al administrador!");
-        }    
+        }
     } //Check Funcionando 24/06
 
     public async Task EliminarEmpresaAsync(int idempresa)
@@ -69,14 +69,14 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         catch (System.Exception)
         {
             throw new Exception("¡Error al eliminar al administrador!");
-        }    
+        }
     } //Check Funcionando 24/06
 
     public Task<Empresa?> ObtenerPorNombreAsync(string Nombre)
     {
-        var Query = "Select Nombre From Empresa where Nombre = @InNombreEmpresa;";
-        var resultado = Conexion.QueryFirstOrDefaultAsync<Empresa>(Query, new {InNombreEmpresa = Nombre}); 
-        return resultado;   
+        var Query = "Select idEmpresa From Empresa where Nombre = @InNombreEmpresa;";
+        var resultado = Conexion.QueryFirstOrDefaultAsync<Empresa>(Query, new { InNombreEmpresa = Nombre });
+        return resultado;
     } //Check Funcionando 24/06
 
     public async Task<IEnumerable<PedidoEmpresaDTO>> ObtenerPedidosAsync(int _idempresanueva)
@@ -106,5 +106,12 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         var funtionLogin = "SELECT FLoginEmpresa(@xNombre);";
         var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = Nombre });
         return result;
-    }   
+    }
+
+    public async Task<IEnumerable<Administrador>> ObtenerAdministradoresXempresaAsync(int xidEmpresa)
+    {
+        var query = @"Select * From Administrador where idEmpresa = @IdEmpresa;";
+        var Resultado = await Conexion.QueryAsync<Administrador>(query, new { IdEmpresa = xidEmpresa });
+        return Resultado;
+    }
 }
