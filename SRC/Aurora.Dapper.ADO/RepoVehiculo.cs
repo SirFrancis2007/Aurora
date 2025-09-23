@@ -104,4 +104,10 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         var pedidos = await Conexion.QueryAsync<Pedido>(query, new { vehiculoId });
         return pedidos;
     }
+
+    public Task<List<Vehiculo>> ListarVehiculosSinConductorAsync()
+    {
+        var query = @"SELECT * FROM vehiculo WHERE Estado = 1;"; 
+        return Conexion.QueryAsync<Vehiculo>(query).ContinueWith(task => task.Result.AsList());
+    }
 }

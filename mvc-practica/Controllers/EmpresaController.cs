@@ -9,11 +9,9 @@ namespace mvc_practica.Controllers;
 public class EmpresaController : Controller
 {
     private string _nombreempresa;
-    public IActionResult HistorialPedido() => View();
     public IActionResult AgregarAdministrador() => View("UIAdministrador/AgregarAdministrador");
     public IActionResult NuevoConductor() => View("UIConductor/NuevoConductor");
     public IActionResult AgregarVehiculo() => View("UIVehiculo/AgregarVehiculo");
-    public IActionResult AsignarVehiculoAConductor() => View("UIVehiculo/AsignarVehiculoAConductor");
     //Cuando una vista se encuentra en una carpeta dentro de Views, se debe especificar la ruta completa
     //Ejemplo: return View("UIAdministrador/AgregarAdministrador");
     private readonly ILogger<HomeController> _logger;
@@ -108,7 +106,7 @@ public class EmpresaController : Controller
             await _repoVehiculo.AltaAsync(_nuevovehiculo);
 
             TempData["Mensaje"] = "Administrador creada con éxito";
-            return RedirectToAction(nameof(EmpresaController.EmpresaAdministrador));
+            return RedirectToAction(nameof(EmpresaController.VehiculoEmpresa));
         }
         return View(_vehiculo);
     }
@@ -132,5 +130,31 @@ public class EmpresaController : Controller
             return RedirectToAction(nameof(EmpresaController.ConductorEmpresa));
         }
         return View(_conductor);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> HistorialPedido()
+    {
+        var nombre = HttpContext.Session.GetString("NombreEmpresa");
+
+        var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
+        var _HistorialPedido = await _repoEmpresa.ObtenerHistorialXempresaAsync((int)empresa.IdEmpresa);
+
+        return View(_HistorialPedido);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> AsignarVehiculoAConductor()
+    {
+        var conductores = await _repoConductor.ListarConductoresSinVehiculoAsync();
+        var vehiculos = await _repoVehiculo.ListarVehiculosSinConductorAsync();
+
+        var viewModel = new AsignarVehiculoViewModel
+        {
+            Conductores = conductores,
+            Vehiculos = vehiculos
+        };
+
+        return View("UIVehiculo/AsignarVehiculoAConductor", viewModel);
     }
 }

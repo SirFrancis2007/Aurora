@@ -5,4 +5,5 @@ public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int
     public Task<Boolean> EliminarVehiculoAsync(int idVehiculo);
     public Task<IEnumerable<Pedido>> ListarPedidosAsignadosAsync(int vehiculoId);
     public Task<Boolean> CambiarEstadoAsync(int vehiculoId, bool disponible);
+    public Task<List<Vehiculo>> ListarVehiculosSinConductorAsync(); //Vehiculos libres, estado = 1 (true)
 }

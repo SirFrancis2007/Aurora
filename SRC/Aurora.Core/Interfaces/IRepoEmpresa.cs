@@ -9,4 +9,5 @@ public interface IRepoEmpresa : IRepoAlta<Empresa>, IRepoListado<Empresa>, IRepo
     public Task<Empresa?> ObtenerPorNombreAsync(string Nombre); //Obtiene el id de la empresa a partir del nombre
     public Task<IEnumerable<Administrador>> ObtenerAdministradoresXempresaAsync(int xidEmpresa); //Obtiene los administradores de una empresa
     public Task<IEnumerable<Conductor>> ObtenerConductoresXempresaAsync(int xidEmpresa); //Obtiene los conductores de una empresa
+    public Task<IEnumerable<HistorialDTO>> ObtenerHistorialXempresaAsync(int xidEmpresa); //Obtiene el historial de una empresa
 }

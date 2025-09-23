@@ -47,7 +47,7 @@ call UpdateConductor(1, 'samuel1234') ;
 
 call SPCrearVehiculo(@Veh1,'camioncito', 'm34c123', 1000, TRUE)  ;
 call SPCrearVehiculo(@Veh2,'Furgoneta', 'MAT002', 500, TRUE) ;
-call SPCrearVehiculo(@Veh3,'Camión Grande', 'MAT003', 2000, TRUE) ;
+call SPCrearVehiculo(@Veh3,'Camion Grande', 'MAT003', 2000, TRUE) ;
 call SPCrearVehiculo(@Veh4,'Furgoneta Pequeña', 'MAT004', 300, TRUE) ;
 CALL SPCrearVehiculo(@idVeh4, 'Test Truck', 'ZXC123', 1500, TRUE) ;
 

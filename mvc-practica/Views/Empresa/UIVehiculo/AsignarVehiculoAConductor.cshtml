@@ -1,3 +1,4 @@
+@model AsignarVehiculoViewModel
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
@@ -9,23 +10,78 @@
 
 <div class="main-content">
     <div class="text-empresa">
-        <h2>Asignar Vehiculo a conductor</h2>
+        <h2>Asignar Vehiculo a Conductor</h2>
     </div>
 
     <div class="container">
         <form method="post" action="">
             <div class="form-group">
                 <label for="vehiculo">Vehiculo:</label>
-                <select name="vehiculo" class="form-control">
-                    
+                <select id="vehiculo" name="IdVehiculoSeleccionado" class="form-control">
+                    <option value="">-- Selecciona un vehículo --</option>
+                    @foreach (var v in Model.Vehiculos)
+                    {
+                        <option value="@v.IdVehiculo" 
+                                data-tipo="@v.Tipo" 
+                                data-matricula="@v.Matricula" 
+                                data-capacidad="@v.CapacidadMax">
+                            @v.Matricula (@v.Tipo)
+                        </option>
+                    }
                 </select>
 
+                <div id="vehiculo-info" class="info-box"></div>
+
                 <label for="Conductor">Conductor:</label>
-                <select name="Conductor" class="form-control">
-                    
+                <select id="conductor" name="IdConductorSeleccionado" class="form-control">
+                    <option value="">-- Selecciona un conductor --</option>
+                    @foreach (var c in Model.Conductores)
+                    {
+                        <option value="@c.IdConductor" 
+                                data-nombre="@c.Name" 
+                                data-licencia="@c.Licencia">
+                            @c.Name
+                        </option>
+                    }
                 </select>
+
+                <div id="conductor-info" class="info-box"></div>
             </div>
+
+            <button type="submit" class="btn-submit">Asignar Vehiculo a Conductor</button>
         </form>
-        <button type="submit" class="btn-submit">Asignar Vehiculo a Conductor</button>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById("vehiculo").addEventListener("change", function () {
+            var selected = this.options[this.selectedIndex];
+            var infoBox = document.getElementById("vehiculo-info");
+
+            if (selected.value) {
+                infoBox.innerHTML = `
+                    <strong>Tipo:</strong> ${selected.dataset.tipo} <br/>
+                    <strong>Matrícula:</strong> ${selected.dataset.matricula} <br/>
+                    <strong>Capacidad:</strong> ${selected.dataset.capacidad}
+                `;
+            } else {
+                infoBox.innerHTML = "";
+            }
+        });
+
+        document.getElementById("conductor").addEventListener("change", function () {
+            var selected = this.options[this.selectedIndex];
+            var infoBox = document.getElementById("conductor-info");
+
+            if (selected.value) {
+                infoBox.innerHTML = `
+                    <strong>Nombre:</strong> ${selected.dataset.nombre} <br/>
+                    <strong>Licencia:</strong> ${selected.dataset.licencia}
+                `;
+            } else {
+                infoBox.innerHTML = "";
+            }
+        });
+    </script>
+}

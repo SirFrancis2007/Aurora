@@ -128,4 +128,40 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         var Resultado = await Conexion.QueryAsync<Vehiculo>(query, new { IdEmpresa = xidEmpresa });
         return Resultado;
     }
+
+    public Task<IEnumerable<HistorialDTO>> ObtenerHistorialXempresaAsync(int xidEmpresa)
+    {
+        var query = @"
+            SELECT 
+            p.idPedido,
+            p.Name AS NombrePedido,
+            p.Volumen,
+            p.Peso,
+            p.EstadoPedido,
+            p.FechaDespacho,
+            v.Tipo AS VehiculoTipo,
+            v.Matricula AS VehiculoMatricula,
+            c.Name AS NombreConductor,
+            eo.Nombre AS EmpresaOrigen,
+            p.idEmpresa AS idEmpresaOrigen,
+            r.Origen AS RutaOrigen,
+            r.Destino AS RutaDestino,
+            ed.Nombre AS EmpresaDestino,
+            h.EstadoAnterior,
+            h.EstadoNuevo,
+            h.FechaCambio
+        FROM Pedido p
+        INNER JOIN Empresa eo ON p.idEmpresa = eo.idEmpresa
+        INNER JOIN Ruta r ON p.idRuta = r.idRuta
+        INNER JOIN Vehiculo v ON p.idVehiculo = v.idVehiculo
+        INNER JOIN Conductor_has_Vehiculo cv ON v.idVehiculo = cv.idVehiculo
+        INNER JOIN Conductor c ON cv.idConductor = c.idConductor
+        INNER JOIN HistorialPedido h ON p.idPedido = h.idPedido
+        LEFT JOIN Empresa ed ON r.Destino = ed.Nombre
+        WHERE eo.idEmpresa = @IdEmpresa
+        OR ed.idEmpresa = @IdEmpresa;";
+
+        var Resultado = Conexion.QueryAsync<HistorialDTO>(query, new { IdEmpresa = xidEmpresa });
+        return Resultado;
+    }
 }

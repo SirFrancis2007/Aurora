@@ -110,6 +110,12 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         return resultados;
     }
 
+    public Task<List<Conductor>> ListarConductoresSinVehiculoAsync()
+    {
+        var query = @"SELECT * FROM conductor WHERE Disponibilidad = 1;";
+        return Conexion.QueryAsync<Conductor>(query).ContinueWith(task => task.Result.AsList());
+    }
+
     async Task<bool> IRepoConductor.UpdateConductorAsync(Conductor conductor)
     {
         var parametros = new DynamicParameters();
