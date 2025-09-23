@@ -8,24 +8,26 @@ namespace mvc_practica.Controllers;
 
 public class EmpresaController : Controller
 {
+    //Cuando una vista se encuentra en una carpeta dentro de Views, se debe especificar la ruta completa
+    //Ejemplo: return View("UIAdministrador/AgregarAdministrador");
     private string _nombreempresa;
     public IActionResult AgregarAdministrador() => View("UIAdministrador/AgregarAdministrador");
     public IActionResult NuevoConductor() => View("UIConductor/NuevoConductor");
     public IActionResult AgregarVehiculo() => View("UIVehiculo/AgregarVehiculo");
-    //Cuando una vista se encuentra en una carpeta dentro de Views, se debe especificar la ruta completa
-    //Ejemplo: return View("UIAdministrador/AgregarAdministrador");
     private readonly ILogger<HomeController> _logger;
     private IRepoEmpresa _repoEmpresa;
     private IRepoAdministrador _repoAdmin;
     private IRepoVehiculo _repoVehiculo;
     private IRepoConductor _repoConductor;
-    public EmpresaController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdmin, IRepoVehiculo repoVehiculo, IRepoConductor repoConductor) // <-- agrega este parámetro
+    private IRepoVehiculoConductor _repoVehCon;
+    public EmpresaController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdmin, IRepoVehiculo repoVehiculo, IRepoConductor repoConductor, IRepoVehiculoConductor repoVehiculoConductor) // <-- agrega los Int de c/u repo
     {
         _logger = logger;
         _repoEmpresa = repoEmpresa;
         _repoAdmin = repoAdmin;
         _repoVehiculo = repoVehiculo;
         _repoConductor = repoConductor;
+        _repoVehCon = repoVehiculoConductor;
     }
 
     [HttpGet]
@@ -146,15 +148,24 @@ public class EmpresaController : Controller
     [HttpGet]
     public async Task<IActionResult> AsignarVehiculoAConductor()
     {
-        var conductores = await _repoConductor.ListarConductoresSinVehiculoAsync();
-        var vehiculos = await _repoVehiculo.ListarVehiculosSinConductorAsync();
+        var respuesta = await _repoVehCon.Consulta(); 
+        return View("UIVehiculo/AsignarVehiculoAConductor", respuesta);
+    }
 
-        var viewModel = new AsignarVehiculoViewModel
+    [HttpPost]
+    public async Task<IActionResult> AltaAsignacionVehiculoConductor(int idConductor, int idVehiculo, DateOnly FAsignacion)
+    {
+        // inst de obj veh + con
+        var _nuevaasignacion = new VehiculoConductor
         {
-            Conductores = conductores,
-            Vehiculos = vehiculos
+            XidConductor = idConductor,
+            XidVehiculo = idVehiculo,
+            FechaAsignacion = DateTime.Now
         };
 
-        return View("UIVehiculo/AsignarVehiculoAConductor", viewModel);
+        await _repoVehCon.AltaAsync(_nuevaasignacion);
+
+        TempData["Mensaje"] = "La asignacion fue exitosa";
+        return RedirectToAction(nameof(EmpresaController.AsignarVehiculoAConductor));
     }
 }

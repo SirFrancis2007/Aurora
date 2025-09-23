@@ -17,6 +17,7 @@ builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
 builder.Services.AddScoped<IRepoAdministrador, RepoAdministrador>();
 builder.Services.AddScoped<IRepoConductor, RepoConductor>();
 builder.Services.AddScoped<IRepoVehiculo, RepoVehiculo>();
+builder.Services.AddScoped<IRepoVehiculoConductor, RepoVehiculoConductor>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -32,6 +33,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else
+{
+    app.UseExceptionHandler("/Error/ServerError");
+    app.UseStatusCodePagesWithReExecute("/Error/StatusCode", "?code={0}");
 }
 
 app.UseHttpsRedirection();

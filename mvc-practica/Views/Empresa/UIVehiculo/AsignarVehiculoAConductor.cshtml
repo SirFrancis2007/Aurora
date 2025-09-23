@@ -1,11 +1,12 @@
-@model AsignarVehiculoViewModel
+@using Aurora.Core.Models
+@model IEnumerable<VehiculoConductorDTO>
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/_select.css" />
+    <link rel="stylesheet" href="~/css/_select.css" /> 
 }
 
 <div class="main-content">
@@ -13,13 +14,45 @@
         <h2>Asignar Vehiculo a Conductor</h2>
     </div>
 
-    <div class="container">
-        <form method="post" action="">
+    <div class="container-tbl">
+        <div class="table-container">
+            <table class="Content-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Conductor</th>
+                        <th>Licencia</th>
+                        <th>Vehículo</th>
+                        <th>Matrícula</th>
+                        <th>Fecha Asignado</th>
+                        <th>Disponibilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.NombreConductor</td>
+                            <td>@item.Licencia</td>
+                            <td>@(item.Tipo ?? "Sin asignar")</td>
+                            <td>@(item.Matricula ?? "-")</td>
+                            <td>@(item.FechaAsignado?.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@(item.Disponibilidad == 1 ? "Disponible" : "Ocupado")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="container-form">
+        <form method="post" asp-action="AltaAsignacionVehiculoConductor" asp-controller="Empresa">
             <div class="form-group">
                 <label for="vehiculo">Vehiculo:</label>
-                <select id="vehiculo" name="IdVehiculoSeleccionado" class="form-control">
+                <select id="vehiculo" name="idVehiculo" class="form-control">
                     <option value="">-- Selecciona un vehículo --</option>
-                    @foreach (var v in Model.Vehiculos)
+                    @foreach (var v in Model.Where(x => x.EstadoVehiculo == 1))
                     {
                         <option value="@v.IdVehiculo" 
                                 data-tipo="@v.Tipo" 
@@ -33,14 +66,14 @@
                 <div id="vehiculo-info" class="info-box"></div>
 
                 <label for="Conductor">Conductor:</label>
-                <select id="conductor" name="IdConductorSeleccionado" class="form-control">
+                <select id="conductor" name="idConductor" class="form-control">
                     <option value="">-- Selecciona un conductor --</option>
-                    @foreach (var c in Model.Conductores)
+                    @foreach (var c in Model.Where(c => c.Disponibilidad == 1))
                     {
                         <option value="@c.IdConductor" 
-                                data-nombre="@c.Name" 
+                                data-nombre="@c.NombreConductor" 
                                 data-licencia="@c.Licencia">
-                            @c.Name
+                            @c.NombreConductor
                         </option>
                     }
                 </select>

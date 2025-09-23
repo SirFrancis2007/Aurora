@@ -100,13 +100,14 @@ BEGIN
         )
         VALUES (xidConductor, xidVehiculo, CURDATE());
         
-        UPDATE Conductor
+        -- NO SE ACTUALIZA EL ESTADO PORQUE EL ESTADO SOLO SE MODIFICA UNA VEZ QUE EL CONDUCTOR HAYA INICIADO EL RECORRIDO.
+        /*UPDATE Conductor
         SET Disponibilidad = 0
         WHERE idConductor = xidConductor;
         
         UPDATE Vehiculo
         SET Estado = 0
-        WHERE idVehiculo = xidVehiculo;
+        WHERE idVehiculo = xidVehiculo;*/
     END IF;
 END $$
 DELIMITER ;

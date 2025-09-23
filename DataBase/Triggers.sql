@@ -25,7 +25,7 @@ BEGIN
 END $$
 
 -- Trigger para verificar que un conductor tenga licencia válida antes de asignarle un vehículo
-DELIMITER $$
+/*DELIMITER $$
 
 DROP TRIGGER IF EXISTS BefInsertConductorVehiculo $$
 
@@ -40,7 +40,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El conductor no tiene una licencia válida para este tipo de vehículo';
     END IF;
-END $$
+END $$*/
 
 -- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
 DELIMITER $$

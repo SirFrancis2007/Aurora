@@ -56,3 +56,24 @@ WHERE eo.idEmpresa = 2
 
 SELECT * FROM conductor WHERE Disponibilidad = 1;
 SELECT * FROM vehiculo WHERE vehiculo.Estado = 1;
+
+
+-- hacer una consulta que traiga los datos del conductor + del vehiculo asignados, traer todos los datos del conductor + todos los datos del vehiculo. Para a su vez en el select filtrar los que esten libres.
+
+SELECT 
+    c.idConductor, c.Name AS NombreConductor, c.Licencia, c.Disponibilidad,
+    v.idVehiculo, v.Matricula, v.Tipo, v.CapacidadMax, v.Estado AS EstadoVehiculo,
+    cv.FechaAsignado
+FROM Conductor c
+LEFT JOIN Conductor_has_Vehiculo cv ON c.idConductor = cv.idConductor
+LEFT JOIN Vehiculo v ON cv.idVehiculo = v.idVehiculo
+
+UNION
+
+SELECT 
+    NULL AS idConductor, NULL AS NombreConductor, NULL AS Licencia, NULL AS Disponibilidad,
+    v.idVehiculo, v.Matricula, v.Tipo, v.CapacidadMax, v.Estado AS EstadoVehiculo,
+    NULL AS FechaAsignado
+FROM Vehiculo v
+WHERE v.idVehiculo NOT IN (SELECT idVehiculo FROM Conductor_has_Vehiculo);
+
