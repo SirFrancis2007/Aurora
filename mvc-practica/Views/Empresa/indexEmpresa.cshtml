@@ -38,8 +38,8 @@
                             <tr>
                                 <td>@pedido.NombreEmpresa</td>
                                 <td>@pedido.NombrePedido</td>
-                                <td>@pedido.Volumen</td>
-                                <td>@pedido.Peso</td>
+                                <td>@(pedido.Volumen + "m3")</td>
+                                <td>@(pedido.Peso + "Kg")</td>
                                 <td>@pedido.Estado</td>
                                 <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
                             </tr>

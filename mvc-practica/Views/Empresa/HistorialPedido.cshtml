@@ -42,17 +42,17 @@
                         <tr>
                             <td>@historial.idPedido</td>
                             <td>@historial.NombrePedido</td>
-                            <td>@historial.Volumen</td>
-                            <td>@historial.Peso</td>
+                            <td>@(historial.Volumen + "m3")</td>
+                            <td>@(historial.Peso + "kg")</td>
                             <td>@historial.EstadoPedido</td>
-                            <td>@historial.FechaDespacho.ToString("dd/MM/yyyy")</td>                                    <td>@historial.TipoVehiculo</td>
+                            <td>@historial.FechaDespacho.ToString("dd/MM/yyyy")</td>                                    
+                            <td>@historial.TipoVehiculo</td>
                             <td>@historial.Matricula</td>
                             <td>@historial.Conductor</td>
                             <td>@historial.EmpresaOrigen</td>
-                            <td>@historial.idEmpresaOrigen</td>
+                            <td>@historial.EmpresaDestino</td>
                             <td>@historial.Origen</td>
                             <td>@historial.Destino</td>
-                            <td>@historial.EmpresaDestino</td>
                             <td>@historial.EstadoAnterior</td>
                             <td>@historial.EstadoNuevo</td>
                             <td>@historial.FechaCambio</td>

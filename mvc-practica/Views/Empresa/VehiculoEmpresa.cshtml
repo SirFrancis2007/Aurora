@@ -44,8 +44,8 @@
                                 <td>@flota.IdVehiculo</td>
                                 <td>@flota.Tipo</td>
                                 <td>@flota.Matricula</td>
-                                <td>@flota.CapacidadMax</td>
-                                <td>@flota.Estado</td>
+                                <td>@(flota.CapacidadMax + "Kg")</td>
+                                <td>@(flota.Estado ? "Disponible" : "En viaje")</td>
                             </tr>
                         }
                     }

@@ -36,7 +36,7 @@
                             <td>@(item.Tipo ?? "Sin asignar")</td>
                             <td>@(item.Matricula ?? "-")</td>
                             <td>@(item.FechaAsignado?.ToString("dd/MM/yyyy") ?? "-")</td>
-                            <td>@(item.Disponibilidad == 1 ? "Disponible" : "Ocupado")</td>
+                            <td>@(item.Disponibilidad == 1 ? "Disponible" : "En viaje")</td>
                         </tr>
                     }
                 </tbody>
