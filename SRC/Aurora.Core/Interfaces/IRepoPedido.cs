@@ -1,9 +1,27 @@
 namespace Aurora.Core.Interfaces;
 
-public interface IRepoPedido : IRepoAlta<Pedido>, IRepoDetalle<Pedido, int>, IRepoListado<Pedido> 
+public interface IRepoPedido : IRepoAlta<Pedido>, IRepoDetalle<Pedido, int>, IRepoListado<Pedido>
 {
-    public Task<Pedido>? ObtenerPedidoXCondicionAsync(DateTime Xfecha);
-    public Task ActualizarEstadoAsync(int pedidoId, string nuevoEstado);
-    //public Task AsignarVehiculo(int pedidoId, int vehiculoId); 
-    // No hay metodo asignarvehiculo ya que al crear el pedido ya se pide asociarlo con un vehiculo.
+    /// <summary>
+    /// Actualiza el estado de un pedido según la acción de un administrador.
+    /// </summary>
+    /// <param name="idPedido">Identificador del pedido.</param>
+    /// <param name="nuevoEstado">Nuevo estado del pedido.</param>
+    /// <returns>True si se actualizó, False en caso contrario.</returns>
+    public Task<bool> ActualizarEstadoPedidoPorAdmin(int idPedido, string nuevoEstado);
+
+    /// <summary>
+    /// Actualiza el estado de un pedido según la acción de un conductor.
+    /// </summary>
+    /// <param name="idPedido">Identificador del pedido.</param>
+    /// <param name="nuevoEstado">Nuevo estado del pedido.</param>
+    /// <returns>True si se actualizó, False en caso contrario.</returns>
+    public Task<bool> ActualizarEstadoPedidoPorConductor(int idPedido, string nuevoEstado);
+
+    /// <summary>
+    /// Obtiene la lista de pedidos asociados a una empresa.
+    /// </summary>
+    /// <param name="idEmpresa">Identificador de la empresa.</param>
+    /// <returns>Lista de pedidos de la empresa.</returns>
+    public Task<List<PedidoEmpresaDTO>> ObtenerPedidosPorEmpresa(int idEmpresa);
 }

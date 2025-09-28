@@ -49,7 +49,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidVehiculo", vehiculoId);
-        parametros.Add("xdisponible", disponible);    
+        parametros.Add("xdisponible", disponible);
 
         try
         {
@@ -61,11 +61,12 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         catch (System.Exception)
         {
             throw new Exception("Error al actualizar el estado del vehiculo");
-        }    }
+        }
+    }
 
     public async Task<Vehiculo>? DetalleAsync(int indiceABuscar)
     {
-        string query = @"
+        var query = @"
             SELECT *
             FROM Vehiculo 
             WHERE idVehiculo = @vehiculoId";
@@ -89,25 +90,5 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         {
             throw new Exception("Error al eliminar el vehiculo");
         }
-    }
-
-    public async Task<IEnumerable<Pedido>> ListarPedidosAsignadosAsync(int vehiculoId)
-    {
-        string query = @"
-        SELECT p.idPedido, p.Name, p.Volumen, p.Peso, p.EstadoPedido, 
-               p.FechaDespacho, p.idAdministrador, 
-               p.idEmpresa, p.idRuta
-        FROM Vehiculo vhp
-        JOIN Pedido p ON p.idVehiculo = vhp.idVehiculo  
-        WHERE vhp.idVehiculo = @vehiculoId";  
-
-        var pedidos = await Conexion.QueryAsync<Pedido>(query, new { vehiculoId });
-        return pedidos;
-    }
-
-    public Task<List<Vehiculo>> ListarVehiculosSinConductorAsync()
-    {
-        var query = @"SELECT * FROM vehiculo WHERE Estado = 1;"; 
-        return Conexion.QueryAsync<Vehiculo>(query).ContinueWith(task => task.Result.AsList());
     }
 }

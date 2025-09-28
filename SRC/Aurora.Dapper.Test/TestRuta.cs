@@ -32,7 +32,7 @@ public class TestRuta : TestBase
     [Fact]
     public async Task TestObtenerxIdOk()
     {
-        var Resultado = await repoRuta.ObtenerRutaPorCondicionAsync(1, "Cordoba", "Buenos Aires");
+        var Resultado = await repoRuta.ObtenerRutaPorParametrosAsync("Cordoba", "Buenos Aires", 1);
         Assert.NotEmpty(Resultado.Origen);
     } //Check Funcionando 26/06
 }

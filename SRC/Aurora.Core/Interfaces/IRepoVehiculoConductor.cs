@@ -5,6 +5,20 @@ namespace Aurora.Core.Interfaces;
 
 public interface IRepoVehiculoConductor : IRepoAlta<VehiculoConductor>, IRepoDetalle<VehiculoConductor, int>, IRepoListado<VehiculoConductor>
 {
-    // solo se da el alta para la asignarcion de conductor a vehiculo
-    public Task<IEnumerable<VehiculoConductorDTO>> Consulta();
+    /// <summary>
+    /// Asigna un conductor a un vehículo.
+    /// </summary>
+    /// <param name="idVehiculo">Id del vehículo.</param>
+    /// <param name="idConductor">Id del conductor.</param>
+    /// <returns>El registro de asignación creado.</returns>
+    /// <exception cref="InvalidOperationException">Si el vehículo o conductor no existen, o si ya está asignado.</exception>
+    public Task AsignarConductorAVehiculo(int idVehiculo, int idConductor);
+    /// <summary>
+    /// Desagsigna al conductor de un vehiculo siempre y cuando este termine el recorrido y no tenga pedidos asignados.
+    /// </summary>
+    /// <param name="idVehiculo"></param>
+    /// <param name="idConductor"></param>
+    /// <returns></returns>
+    public Task<bool> DesasignarConductorDeVehiculo(int idVehiculo, int idConductor);
+    public Task<IEnumerable<VehiculoConductorDTO>> consultaVehiculoConductor();
 }

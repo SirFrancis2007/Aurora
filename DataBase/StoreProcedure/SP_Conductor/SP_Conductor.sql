@@ -8,7 +8,7 @@ CREATE PROCEDURE SPNuevoConductor(
 )
 BEGIN
     INSERT INTO Conductor (Name, Licencia, Disponibilidad)
-		VALUES (xName, xLicencia, xDisponibilidad);
+		VALUES (xName, xLicencia, 1); -- Predeterminadamente se da 1 que significa DISPONIBLE
     
     SET xidConductor = last_insert_id();
 END $$

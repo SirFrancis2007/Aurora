@@ -20,7 +20,7 @@ public class TestAdministrador :  TestBase
         var NuevoObjecto = FixtureAurora.NuevoAdministrador;
         await _repo.AltaAsync(NuevoObjecto);
 
-        var obtenerNuevoObjecto = _repo.ObtenerDataXidAsync(NuevoObjecto.IdAdministrador);
+        var obtenerNuevoObjecto = _repo.DetalleAsync(NuevoObjecto.IdAdministrador);
         Assert.NotNull(obtenerNuevoObjecto);
     }
 

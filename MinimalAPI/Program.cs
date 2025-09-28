@@ -73,7 +73,7 @@ app.MapGet("/Empresa", async (IRepoEmpresa _repoempresa) =>
 }).WithTags("Empresa");
 
 
-app.MapGet("/PedidosDeEmpresa/{id}", async (uint id, IRepoEmpresa repo) =>
+/*app.MapGet("/PedidosDeEmpresa/{id}", async (uint id, IRepoEmpresa repo) =>
 {
     var resultado = await repo.ObtenerPedidosAsync((int)id);
     return resultado.Any() ? Results.Ok(resultado) : Results.NotFound();
@@ -85,13 +85,13 @@ app.MapDelete("/Empresa/{id}", async (uint id, IRepoEmpresa _repoempresa) =>
     var empresa = await _repoempresa.DetalleAsync(id);
     if (empresa is not null)
     {
-        await _repoempresa.EliminarAdministradorAsync((int)id);
-        await _repoempresa.EliminarEmpresaAsync((int)id);
+        await _repoempresa.EliminarAdministradorAsync((uint)id);
+        await _repoempresa.EliminarEmpresaAsync((uint)id);
         return Results.NoContent();
     }
 
     return Results.NotFound();
-}).WithTags("Empresa");
+}).WithTags("Empresa");*/
 
 
 // METODO PARA CREAR EMPRESA
@@ -178,7 +178,7 @@ app.MapPost("/NuevoConductor", async (ConductoresDTO nuevoconductor, IRepoConduc
     return Results.Created($"/NuevoConductor/{fixture}", fixture);
 }).WithTags("Conductores");
 
-app.MapPatch("/ActualizarConductor", async (ConductorLicenciaDTO updateConductor, IRepoConductor repo) =>
+/*app.MapPatch("/ActualizarConductor", async (ConductorLicenciaDTO updateConductor, IRepoConductor repo) =>
 {
     // Buscar el conductor actual
     var conductor = await repo.DetalleAsync(updateConductor.IdConductor);
@@ -190,7 +190,7 @@ app.MapPatch("/ActualizarConductor", async (ConductorLicenciaDTO updateConductor
     await repo.UpdateConductorAsync(conductor);
 
     return Results.Ok(conductor);
-}).WithTags("Conductores");
+}).WithTags("Conductores");*/
 
 //Esto va ultimo, es la llave de arraque del ASP.NET.
 await app.RunAsync();

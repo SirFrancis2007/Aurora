@@ -2,12 +2,25 @@ namespace Aurora.Core.Interfaces;
 
 public interface IRepoEmpresa : IRepoAlta<Empresa>, IRepoListado<Empresa>, IRepoDetalle<Empresa, uint>
 {
-    public Task<bool> LoginAsync(string Nombre);
-    public Task EliminarEmpresaAsync(int idempresa);
-    public Task EliminarAdministradorAsync(int xidadministrador);
-    public Task<IEnumerable<PedidoEmpresaDTO>> ObtenerPedidosAsync(int xidEmpresa);
-    public Task<Empresa?> ObtenerPorNombreAsync(string Nombre); //Obtiene el id de la empresa a partir del nombre
-    public Task<IEnumerable<Administrador>> ObtenerAdministradoresXempresaAsync(int xidEmpresa); //Obtiene los administradores de una empresa
-    public Task<IEnumerable<Conductor>> ObtenerConductoresXempresaAsync(int xidEmpresa); //Obtiene los conductores de una empresa
-    public Task<IEnumerable<HistorialDTO>> ObtenerHistorialXempresaAsync(int xidEmpresa); //Obtiene el historial de una empresa
+/// <summary>
+    /// Permite a una empresa iniciar sesión.
+    /// </summary>
+    /// <param name="nombre">Nombre de la empresa.</param>
+    /// <param name="contrasena">Contraseña de la empresa.</param>
+    /// <returns>La empresa autenticada, o null si las credenciales no son válidas.</returns>
+    public Task<bool> LoguearseAsync(string nombre, string contrasena);
+
+    /// <summary>
+    /// Elimina una empresa por su Id.
+    /// </summary>
+    /// <param name="id">Identificador de la empresa.</param>
+    /// <returns>True si fue eliminada, False si no existe.</returns>
+    public Task<bool> EliminarEmpresaAsync(uint id);
+
+    /// <summary>
+    /// Obtiene los datos (id + nombre)de la empresa por su nombre.
+    /// </summary>
+    /// <param name="nombre">Nombre de la empresa.</param>
+    /// <returns>La empresa correspondiente al nombre, o null si no existe.</returns>
+    public Task<Empresa?> ObtenerPorNombreAsync(string nombre); 
 }

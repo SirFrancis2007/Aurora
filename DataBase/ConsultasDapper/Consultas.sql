@@ -77,3 +77,5 @@ SELECT
 FROM Vehiculo v
 WHERE v.idVehiculo NOT IN (SELECT idVehiculo FROM Conductor_has_Vehiculo);
 
+
+SELECT * from conductor;

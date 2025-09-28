@@ -38,11 +38,4 @@ public class TestEmpresa : TestBase
         Assert.NotNull(empresas);
         Assert.NotEmpty(empresas);
     } //Check Funcionando 24/06
-
-    [Fact]
-    public async Task TestListaPedidoEmpresa()
-    {
-        var pedidos = await ConRepoEmpresa.ObtenerPedidosAsync(2);
-        Assert.NotNull(pedidos);
-    } //Check Funcionando 24/06
 }

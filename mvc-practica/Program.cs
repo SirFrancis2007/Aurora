@@ -18,6 +18,8 @@ builder.Services.AddScoped<IRepoAdministrador, RepoAdministrador>();
 builder.Services.AddScoped<IRepoConductor, RepoConductor>();
 builder.Services.AddScoped<IRepoVehiculo, RepoVehiculo>();
 builder.Services.AddScoped<IRepoVehiculoConductor, RepoVehiculoConductor>();
+builder.Services.AddScoped<IRepoPedido, RepoPedido>();
+builder.Services.AddScoped<IRepoHisrorialPedido, RepoHistorialPedido>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

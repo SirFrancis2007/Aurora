@@ -29,64 +29,57 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }
         catch (System.Exception e)
         {
-            throw new Exception("Conductor ya registrado",  e);
-        }    
-    }
-
-    public async Task AsignarVehiculoAsync(int conductorId, int vehiculoId)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidConductor", conductorId);
-        parametros.Add("xidVehiculo", vehiculoId);
-
-        try
-        {
-            await Conexion.ExecuteAsync("AsignarVehiculoAConductor", parametros, commandType: CommandType.StoredProcedure);
+            throw new Exception("Conductor ya registrado", e);
         }
-        catch (System.Exception)
-        {
-            throw new Exception("No se pudo Asignar el vehiculo al conductor");
-        }    
-    }
 
-    public async Task DesasignarVehiculoDeConductorAsync(int conductorId, int vehiculoId)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidConductor", conductorId);
-        parametros.Add("xidVehiculo", vehiculoId);
-
-        try
-        {
-            await Conexion.ExecuteAsync("SPDesasignarVehiculoAConductor", parametros);
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("Error al querer cancelar la asignacion al conductor");
-        }    
     }
 
     public async Task<Conductor>? DetalleAsync(int xidConductor)
     {
         var Query = @"Select idConductor, Name, Licencia, Disponibilidad From Conductor Where idConductor = @indice;";
-        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new {indice = xidConductor});
+        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new { indice = xidConductor });
         return resultados;
+
     }
 
-    public async Task EliminarConductorAsync(int idConductor)
+    public async Task<bool> EliminarConductor(int idConductor)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidConductor", idConductor);
 
         try
         {
-            await Conexion.ExecuteAsync("SPDelConductor", parametros);
+            var resultado = await Conexion.ExecuteAsync("SPDelConductor", parametros);
+            if (resultado == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         catch (System.Exception)
         {
             throw new Exception("Error al eliminar al conductor");
-        }    
+        }
+
     }
 
+    public async Task<List<Conductor>> ListarConductoresLibres()
+    {
+        var query = @"SELECT * FROM conductor WHERE Disponibilidad = 1;";
+        var conductores = await Conexion.QueryAsync<Conductor>(query);
+        return conductores.AsList();
+    }
+
+    public async Task<Conductor?> Loguearse(string nombre, string contrasena)
+    {
+        var funtionLogin = "SELECT FLoginConductor(@xNombre, @xLicencia);"; // Crear en bd la funcion FLoginConductor
+        var result = await Conexion.ExecuteScalarAsync<Conductor>(funtionLogin, new { xNombre = nombre, xLicencia = contrasena });
+        return result;
+    }
+    
     public async Task<IEnumerable<Conductor>> ObtenerDataAsync()
     {
         var Query = @"Select * From Conductor";
@@ -94,44 +87,4 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         return resultados;
     }
 
-    public async Task<bool> VefLicenciaAsync(string Licencia, int idConductor, int idVehiculo)
-    {
-        var resultado = await Conexion.ExecuteScalarAsync<bool>
-        (
-            "SELECT VerificarLicenciaValidaParaVehiculo(@idConductor, @idVehiculo)", new { idConductor, idVehiculo }
-        );
-        return resultado;
-    }
-
-    public async Task<Conductor> VerDisponibilidadAsync(int conductorId)
-    {
-        var Query = @"Select Name, Licencia, Disponibilidad from Conductor where idConductor = @conductorId";
-        var resultados = await Conexion.QueryFirstOrDefaultAsync<Conductor>(Query, new { conductorId });
-        return resultados;
-    }
-
-    public Task<List<Conductor>> ListarConductoresSinVehiculoAsync()
-    {
-        var query = @"SELECT * FROM conductor WHERE Disponibilidad = 1;";
-        return Conexion.QueryAsync<Conductor>(query).ContinueWith(task => task.Result.AsList());
-    }
-
-    async Task<bool> IRepoConductor.UpdateConductorAsync(Conductor conductor)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidConductor", conductor.IdConductor);
-        parametros.Add("xName", conductor.Name);
-        parametros.Add("xLicencia", conductor.Licencia);
-        parametros.Add("xDisponibilidad", conductor.Dispobilidad);
-
-        try
-        {
-            await Conexion.ExecuteAsync("UpdateConductor", parametros, commandType: CommandType.StoredProcedure);
-        }
-        catch (System.Exception e)
-        {
-            throw new Exception("Conductor ya registrado", e);
-        }
-        return true;    
-    }
 }

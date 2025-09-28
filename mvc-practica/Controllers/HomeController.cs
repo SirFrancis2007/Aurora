@@ -38,10 +38,9 @@ public class HomeController : Controller
     {
         if (_empresa.Administrador == null)
         {
-            await _repoEmpresa.LoginAsync(_empresa.Empresa.Nombre);
+            await _repoEmpresa.LoguearseAsync(_empresa.Empresa.Nombre, "");
             return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _empresa.Empresa.Nombre });
         }
-
         return View(_empresa);
     }
 
@@ -71,7 +70,7 @@ public class HomeController : Controller
     {
         if (_administrador.Empresa == null)
         {
-            await _repoAdministrador.LoginAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
+            await _repoAdministrador.LoguearseAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
             return RedirectToAction("indexAdmin", "Administrador", new { nombre = _administrador.Administrador.Nombre, password = _administrador.Administrador.Password });
         }
 

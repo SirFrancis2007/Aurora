@@ -24,24 +24,6 @@ BEGIN
     END IF;
 END $$
 
--- Trigger para verificar que un conductor tenga licencia válida antes de asignarle un vehículo
-/*DELIMITER $$
-
-DROP TRIGGER IF EXISTS BefInsertConductorVehiculo $$
-
-CREATE TRIGGER BefInsertConductorVehiculo BEFORE INSERT ON Conductor_has_Vehiculo
-FOR EACH ROW
-BEGIN
-    DECLARE licencia_valida BOOLEAN;
-
-    SET licencia_valida = VerificarLicenciaValidaParaVehiculo(NEW.idConductor, NEW.idVehiculo);
-
-    IF licencia_valida = FALSE THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El conductor no tiene una licencia válida para este tipo de vehículo';
-    END IF;
-END $$*/
-
 -- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
 DELIMITER $$
 

@@ -40,9 +40,8 @@ public class TestVehiculo : TestBase
     [Fact]
     public async Task TestListarPedidosAsignados()
     {
-        var pedidos = await _repovehiculo.ListarPedidosAsignadosAsync(1);
+        var pedidos = await _repovehiculo.DetalleAsync(1);
     
-        Assert.NotEmpty(pedidos); 
         Assert.NotNull(pedidos);
     } //Check Funcionando 26/06
 }

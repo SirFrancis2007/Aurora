@@ -19,16 +19,6 @@ public class TestPedido : TestBase
         Assert.NotNull(vef_nuevo_objecto);
     }//Check Funcionando 26/06
 
-
-    [Fact]
-    public async Task ObtenerPedidoXCondicion()
-    {
-        var fecha = DateTime.Today;
-        var resultado = await _repoPedido.ObtenerPedidoXCondicionAsync(fecha);
-        Assert.NotNull(resultado);
-        Assert.Equal(fecha, resultado.FechaDespacho);
-    } //Check Funcionando 26/06
-
     [Fact]
     // Este es por id
     public async Task Detalle()

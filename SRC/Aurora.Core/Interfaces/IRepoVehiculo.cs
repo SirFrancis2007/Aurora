@@ -2,8 +2,19 @@ namespace Aurora.Core.Interfaces;
 
 public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int>, IRepoListado<Vehiculo>
 {
-    public Task<Boolean> EliminarVehiculoAsync(int idVehiculo);
-    public Task<IEnumerable<Pedido>> ListarPedidosAsignadosAsync(int vehiculoId);
+
+    /// <summary>
+    /// Elimina un vehículo según su Id.
+    /// </summary>
+    /// <param name="id">Identificador del vehículo.</param>
+    /// <returns>True si fue eliminado, False si no existe.</returns>
+    public Task<bool> EliminarVehiculoAsync(int idVehiculo);
+
+    /// <summary>
+    /// Actualiza el estado del vehiculo
+    /// </summary>
+    /// <param name="disponible">Estado.</param>
+    /// <param name="idvehiculo">Identificador del vehículo.</param>
+    /// <returns>True si fue modificado, False si no fue modificado.</returns> 
     public Task<Boolean> CambiarEstadoAsync(int vehiculoId, bool disponible);
-    public Task<List<Vehiculo>> ListarVehiculosSinConductorAsync(); //Vehiculos libres, estado = 1 (true)
 }

@@ -20,7 +20,9 @@ public class EmpresaController : Controller
     private IRepoVehiculo _repoVehiculo;
     private IRepoConductor _repoConductor;
     private IRepoVehiculoConductor _repoVehCon;
-    public EmpresaController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdmin, IRepoVehiculo repoVehiculo, IRepoConductor repoConductor, IRepoVehiculoConductor repoVehiculoConductor) // <-- agrega los Int de c/u repo
+    private IRepoPedido _repoPedido;
+    private IRepoHisrorialPedido _repoHisrorialPedido;
+    public EmpresaController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdmin, IRepoVehiculo repoVehiculo, IRepoConductor repoConductor, IRepoVehiculoConductor repoVehiculoConductor, IRepoPedido repoPedido, IRepoHisrorialPedido repoHisrorialPedido) // <-- agrega los Int de c/u repo
     {
         _logger = logger;
         _repoEmpresa = repoEmpresa;
@@ -28,6 +30,8 @@ public class EmpresaController : Controller
         _repoVehiculo = repoVehiculo;
         _repoConductor = repoConductor;
         _repoVehCon = repoVehiculoConductor;
+        _repoPedido = repoPedido;
+        _repoHisrorialPedido = repoHisrorialPedido;
     }
 
     [HttpGet]
@@ -36,7 +40,7 @@ public class EmpresaController : Controller
         HttpContext.Session.SetString("NombreEmpresa", nombre);
 
         var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
-        var pedidos = await _repoEmpresa.ObtenerPedidosAsync((int)empresa.IdEmpresa);
+        var pedidos = await _repoPedido.ObtenerPedidosPorEmpresa((int)empresa.IdEmpresa);
 
         return View(pedidos);
     }
@@ -47,7 +51,7 @@ public class EmpresaController : Controller
         var nombre = HttpContext.Session.GetString("NombreEmpresa");
 
         var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
-        var administradores = await _repoEmpresa.ObtenerAdministradoresXempresaAsync((int)empresa.IdEmpresa);
+        var administradores = await _repoAdmin.ObtenerPorEmpresaAsync((int)empresa.IdEmpresa);
 
         return View(administradores);
     }
@@ -120,7 +124,6 @@ public class EmpresaController : Controller
         {
             var _nuevoconductor = new Conductor
             {
-                IdConductor = 0,
                 Name = _conductor.Name,
                 Licencia = _conductor.Licencia,
                 Dispobilidad = true //Disponible por defecto
@@ -140,7 +143,7 @@ public class EmpresaController : Controller
         var nombre = HttpContext.Session.GetString("NombreEmpresa");
 
         var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
-        var _HistorialPedido = await _repoEmpresa.ObtenerHistorialXempresaAsync((int)empresa.IdEmpresa);
+        var _HistorialPedido = await _repoHisrorialPedido.ObtenerHistorialCompleto((int)empresa.IdEmpresa);
 
         return View(_HistorialPedido);
     }
@@ -148,7 +151,7 @@ public class EmpresaController : Controller
     [HttpGet]
     public async Task<IActionResult> AsignarVehiculoAConductor()
     {
-        var respuesta = await _repoVehCon.Consulta(); 
+        var respuesta = await _repoVehCon.consultaVehiculoConductor(); 
         return View("UIVehiculo/AsignarVehiculoAConductor", respuesta);
     }
 

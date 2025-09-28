@@ -13,13 +13,13 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
 
     public Task<IEnumerable<Administrador>> ObtenerAsync => ObtenerData();
 
-    public async Task AltaAsync(Administrador NewAdmin)
+    public async Task AltaAsync(Administrador _nuevoadministrador)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidAdministrador", dbType: DbType.Int32, direction: ParameterDirection.Output);
-        parametros.Add("xName", NewAdmin.Nombre);
-        parametros.Add("xPassword", NewAdmin.Password);
-        parametros.Add("xidEmpresa", NewAdmin.IdEmpresa);
+        parametros.Add("xName", _nuevoadministrador.Nombre);
+        parametros.Add("xPassword", _nuevoadministrador.Password);
+        parametros.Add("xidEmpresa", _nuevoadministrador.IdEmpresa);
 
         try
         {
@@ -38,6 +38,28 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         return repuesta;
     }
 
+    public async Task<bool> EliminarAsync(int _idadministrador)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidAdministrador", _idadministrador);
+        try
+        {
+            await Conexion.ExecuteAsync("SPDelAdministrador", parametros);
+            return true;
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("¡Error al eliminar al administrador!");
+        }
+    }
+
+    public async Task<bool> LoguearseAsync(string nombre, string contrasena)
+    {
+        var funtionLogin = "SELECT FLoginAdministrador(@xNombre, @xPassword);";
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = nombre, xPassword = contrasena });
+        return result;
+    }
+
     public async Task<IEnumerable<Administrador>> ObtenerData()
     {
         var Query = @"SELECT Nombre, idEmpresa, Contrasena FROM Administrador";
@@ -45,21 +67,14 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         return repuesta;
     }
 
-    public async Task<IEnumerable<Administrador>> ObtenerDataXidAsync(int ID)
+    public async Task<List<Administrador>> ObtenerPorEmpresaAsync(int idEmpresa)
     {
-        var Query = @"SELECT * FROM Administrador where idAdministrador = @xidAdmin;";
-        var repuesta = await Conexion.QueryAsync<Administrador>(Query, new {xidAdmin = ID});
-        return repuesta;
+        var query = @"Select * From Administrador where idEmpresa = @IdEmpresa;";
+        var Resultado = await Conexion.QueryAsync<Administrador>(query, new { IdEmpresa = idEmpresa });
+        return (List<Administrador>)Resultado;
     }
 
-    public async Task<bool> LoginAsync(string nombre, string password)
-    {
-        var funtionLogin = "SELECT FLoginAdministrador(@xNombre, @xPassword);";
-        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = nombre, xPassword = password });
-        return result;
-    }
-
-    async Task<bool> IRepoAdministrador.UpdateAdministrador(Administrador administrador)
+    public async Task<bool> UpdateAdministrador(Administrador administrador)
     {
         var parametros = new DynamicParameters();
         parametros.Add("xidAdministrador", administrador.IdAdministrador);

@@ -9,35 +9,7 @@ namespace Aurora.Dapper.ADO;
 public class RepoPedido : RepoGenerico, IRepoPedido
 {
     public RepoPedido(IDbConnection conexion) : base(conexion) {}
-
-    Task<IEnumerable<Pedido>> IRepoListado<Pedido>.ObtenerAsync => ObtenerDataAsync();
-
-    public async Task AltaAsync(Pedido NewPedido)
-    {
-        var parametros = new DynamicParameters();
-        parametros.Add("xidPedido", dbType: DbType.Int32, direction: ParameterDirection.Output);
-        parametros.Add("xName",NewPedido.NombrePedido);
-        parametros.Add("xVolumen",NewPedido.Volumen);
-        parametros.Add("xPeso", NewPedido.Peso);
-        parametros.Add("xEstadoPedido", NewPedido.Estado);
-        parametros.Add("xFechaDespacho", NewPedido.FechaDespacho);
-        parametros.Add("xAdministrador_idAdministrador", NewPedido.XidAdministrador);
-        parametros.Add("xEmpresaDestino", NewPedido.XidEmpresa);
-        parametros.Add("xRuta_idRuta", NewPedido.XidRuta);
-        parametros.Add("xidVehiculo", NewPedido.xidVehiculo);
-
-        try
-        {
-            await Conexion.ExecuteAsync("SPCrearPedido", parametros, commandType: CommandType.StoredProcedure);
-
-            NewPedido.IdPedido = parametros.Get<int>("xidPedido");
-        }
-        catch (System.Exception)
-        {
-            throw new Exception("Error al intentar crear un pedido");
-        }    
-    }
-    
+    Task<IEnumerable<Pedido>> IRepoListado<Pedido>.ObtenerAsync => ObtenerDataAsync(); 
     public async Task<IEnumerable<Pedido>> ObtenerDataAsync()
     {
         var Query=@"Select * from Pedido";
@@ -45,32 +17,97 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         return repuesta;
     }
 
-    public async Task ActualizarEstadoAsync(int pedidoId, string nuevoEstado)
+    public async Task<bool> ActualizarEstadoPedidoPorAdmin(int idPedido, string nuevoEstado)
     {
         var parametetros = new DynamicParameters();
-        parametetros.Add("xidPedido",pedidoId);
+        parametetros.Add("xidPedido",idPedido);
         parametetros.Add("xNuevoEstado",nuevoEstado);
         try
         {
-            await Conexion.ExecuteAsync("SPUpdateEstadoPedido", parametetros, commandType :CommandType.StoredProcedure);
+            var resultado = await Conexion.ExecuteAsync("SPUpdateEstadoPedido", parametetros, commandType: CommandType.StoredProcedure);
+            if (resultado == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         catch (System.Exception)
         {
             throw new Exception("No se pudo actualizar el estado del pedido");
-        }   
+        }
+    }
+
+    public async Task<bool> ActualizarEstadoPedidoPorConductor(int idPedido, string nuevoEstado)
+    {
+        var parametetros = new DynamicParameters();
+        parametetros.Add("xidPedido",idPedido);
+        parametetros.Add("xNuevoEstado",nuevoEstado);
+        try
+        {
+            var resultado = await Conexion.ExecuteAsync("SPUpdateEstadoPedido", parametetros, commandType: CommandType.StoredProcedure);
+            if (resultado == 1) return true;
+            else { return false; }
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("No se pudo actualizar el estado del pedido");
+        }
+    }
+
+    public async Task AltaAsync(Pedido _nuevoPedido)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidPedido", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parametros.Add("xName",_nuevoPedido.NombrePedido);
+        parametros.Add("xVolumen",_nuevoPedido.Volumen);
+        parametros.Add("xPeso", _nuevoPedido.Peso);
+        parametros.Add("xEstadoPedido", _nuevoPedido.Estado);
+        parametros.Add("xFechaDespacho", _nuevoPedido.FechaDespacho);
+        parametros.Add("xAdministrador_idAdministrador", _nuevoPedido.XidAdministrador);
+        parametros.Add("xEmpresaDestino", _nuevoPedido.XidEmpresa);
+        parametros.Add("xRuta_idRuta", _nuevoPedido.XidRuta);
+        parametros.Add("xidVehiculo", _nuevoPedido.xidVehiculo);
+
+        try
+        {
+            await Conexion.ExecuteAsync("SPCrearPedido", parametros, commandType: CommandType.StoredProcedure);
+            _nuevoPedido.IdPedido = parametros.Get<int>("xidPedido");
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error al intentar crear un pedido");
+        }
     }
 
     public async Task<Pedido>? DetalleAsync(int indiceABuscar)
     {
         var Query=@"Select * from Pedido where idPedido = @xidPedido";
         var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xidPedido = indiceABuscar});
-        return repuesta;    
+        return repuesta;
     }
 
-    public async Task<Pedido>? ObtenerPedidoXCondicionAsync(DateTime xfecha)
+    public async Task<List<PedidoEmpresaDTO>> ObtenerPedidosPorEmpresa(int idEmpresa)
     {
-        var Query=@"Select * from Pedido where FechaDespacho = @xtiempo";
-        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xtiempo = xfecha});
-        return repuesta;
+        var query = @"
+        SELECT 
+            pe.idPedido AS IdPedido,
+            pe.Name AS NombrePedido,
+            pe.Volumen, 
+            pe.Peso, 
+            pe.EstadoPedido AS Estado,
+            pe.FechaDespacho,
+            emd.idEmpresa AS IdEmpresa,
+            emd.Nombre AS NombreEmpresa
+        FROM Empresa em
+        JOIN Administrador admi USING (idEmpresa)
+        JOIN Pedido pe ON pe.idAdministrador = admi.idAdministrador
+        JOIN Empresa emd ON emd.idEmpresa = pe.idEmpresa
+        WHERE em.idEmpresa = @IdEmpresa OR pe.idEmpresa = @IdEmpresa;
+        ";
+
+        return (List<PedidoEmpresaDTO>)await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = idEmpresa });
     }
 }

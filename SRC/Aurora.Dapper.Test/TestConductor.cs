@@ -32,39 +32,11 @@ public class TestConductor : TestBase
         Assert.NotNull(Resultado);
         Assert.Equal("Samuel", Resultado.Name);
     } //Check Funcionando 26/06
-
-    [Fact]
-    public async Task AsignarVehiculo()
-    {
-        await _RepoConductor.AsignarVehiculoAsync(5,1);
-
-        /*Para verificar ver su disponbilidad*/
-        var vef_disponibilidad = await _RepoConductor.VerDisponibilidadAsync(1);
-        Assert.NotNull(vef_disponibilidad);
-        Assert.Equal(false, vef_disponibilidad.Dispobilidad);
-    }  //Check Funcionando 27/06
-
-    [Fact]
-    public async Task DesasignarVehiculo()
-    {        
-        await _RepoConductor.DesasignarVehiculoDeConductorAsync(1,5);
-        
-        var vef_disponibilidad = await _RepoConductor.VerDisponibilidadAsync(1);
-        Assert.NotNull(vef_disponibilidad);
-        Assert.Equal(false, vef_disponibilidad.Dispobilidad);
-        //Check Funcionando 27/06
-    }
     
     [Fact]
-    public async Task TestDisponibilidad()
+    public async Task TestListarConductoresLibres()
     {
-        var resultado = await _RepoConductor.VerDisponibilidadAsync(1); //Check Funcionando 27/06
+        var resultado = await _RepoConductor.ListarConductoresLibres(); //Check Funcionando 27/06
         Assert.NotNull(resultado);
-    }
-
-    [Fact]
-    public async Task TestVefLicencia()
-    {
-        Assert.False(await _RepoConductor.VefLicenciaAsync(FixtureAurora.NuevoConductor.Licencia, FixtureAurora.NuevoConductor.IdConductor, 1));
     }
 }

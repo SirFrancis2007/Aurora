@@ -7,12 +7,9 @@ namespace Aurora.Dapper.ADO;
 
 public class RepoRuta : RepoGenerico, IRepoRuta
 {
-    public RepoRuta(IDbConnection conexion) : base(conexion)
-    {
-    }
+    public RepoRuta(IDbConnection conexion) : base(conexion) {}
 
     public Task<IEnumerable<Ruta>> ObtenerAsync => ObtenerData();
-
     public async Task<IEnumerable<Ruta>> ObtenerData()
     {
         var query = @"Select * from Ruta";
@@ -45,10 +42,11 @@ public class RepoRuta : RepoGenerico, IRepoRuta
         return Resultado;
     }
 
-    public async Task<Ruta> ObtenerRutaPorCondicionAsync(int? idRuta, string Origen, string Destino)
+
+    public async Task<Ruta?> ObtenerRutaPorParametrosAsync(string origen, string destino, int idRuta)
     {
         var query = @"Select * from Ruta where idRuta = @Indice or Origen = @xOrigen or Destino = @xDestino";
-        var Resultado = await Conexion.QueryFirstOrDefaultAsync<Ruta>(query, new {Indice = idRuta, xOrigen = Origen, xDestino = Destino});
+        var Resultado = await Conexion.QueryFirstOrDefaultAsync<Ruta>(query, new {Indice = idRuta, xOrigen = origen, xDestino = destino});
         return Resultado;
     }
 }
