@@ -29,7 +29,7 @@ public class FixtureAurora
             IdConductor = 0,
             Name = "Miguel",
             Licencia = "4h5d5fh",
-            Dispobilidad = true         
+            Disponibilidad = true         
         };
 
         _nuevoVehiculo = new(){

@@ -126,7 +126,7 @@ public class EmpresaController : Controller
             {
                 Name = _conductor.Name,
                 Licencia = _conductor.Licencia,
-                Dispobilidad = true //Disponible por defecto
+                Disponibilidad = true //Disponible por defecto
             };
 
             await _repoConductor.AltaAsync(_nuevoconductor);

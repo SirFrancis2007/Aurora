@@ -171,7 +171,7 @@ app.MapPost("/NuevoConductor", async (ConductoresDTO nuevoconductor, IRepoConduc
         IdConductor = 0,
         Name = nuevoconductor.Name,
         Licencia = nuevoconductor.Licencia,
-        Dispobilidad = true
+        Disponibilidad = true
     };
     await _repo.AltaAsync(fixture);
 

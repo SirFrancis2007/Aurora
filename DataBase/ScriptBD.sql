@@ -9,10 +9,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `aurorabd` ;
 
+
 -- -----------------------------------------------------
 -- Schema aurorabd
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `aurorabd` DEFAULT CHARACTER SET utf8 ;
+ALTER DATABASE aurorabd CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 USE `aurorabd` ;
 
 -- -----------------------------------------------------
@@ -123,15 +125,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `aurorabd`.`Conductor`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `aurorabd`.`Conductor` ;
-
 CREATE TABLE IF NOT EXISTS `aurorabd`.`Conductor` (
   `idConductor` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NULL,
+  `Name` VARCHAR(45) NOT NULL,
   `Licencia` VARCHAR(45) NULL,
-  `Disponibilidad` TINYINT NULL,
-  PRIMARY KEY (`idConductor`))
-ENGINE = InnoDB;
+  `Disponibilidad` BOOLEAN NOT NULL DEFAULT 1,
+  PRIMARY KEY (`idConductor`)) 
+  ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------

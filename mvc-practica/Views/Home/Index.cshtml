@@ -28,43 +28,57 @@
     </section>
 
     <!--Aca se encuentra la estrucutra de los modales de inicio sesion y registro-->
-    <!-- Modal LOGIN EMPRESA-->
-    <section class="modal-login">
-        <div class="modal container-login">
-            <a href="#" class="Modal-close">Close</a>
-            <form asp-action="Login_Empresa" asp-controller="Home" method="post">
-                <label asp-for="Empresa.Nombre" for="name">Company</label>
-                <input asp-for="Empresa.Nombre" type="text">
-                
-                <button class="btn-summit">Summit</button>
+    <!-- Modal LOGIN EMPRESA -->
+    <section id="modal-login-empresa" class="modal">
+        <div class="modal__container">
+            <div class="modal__header">
+                <h2 class="modal__title">Login Empresa</h2>
+                <a href="#" class="modal__close">×</a>
+            </div>
+            <form asp-action="Login_Empresa" asp-controller="Home" method="post" class="modal__form">
+                <div class="modal__field">
+                    <label asp-for="Empresa.Nombre" class="modal__label">Nombre de la Empresa</label>
+                    <input asp-for="Empresa.Nombre" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
+                </div>
+                <button type="submit" class="modal__submit">Iniciar Sesión</button>
             </form>
         </div>
     </section>
 
-    <!-- Modal SIGNUP EMPRESA-->
-    <section class="modal-signup">
-        <div class="modal container-signup">
-            <a href="#" class="Modal-close">Close</a>
-            <form asp-action="Post_Empresa" asp-controller="Home" method="post">
-                <label asp-for="Empresa.Nombre">Company</label>
-                <input asp-for="Empresa.Nombre" type="text" />
-                <button type="submit" class="btn-summit">Submit</button>
+    <!-- Modal SIGNUP EMPRESA -->
+    <section id="modal-signup-empresa" class="modal">
+        <div class="modal__container">
+            <div class="modal__header">
+                <h2 class="modal__title">Registro Empresa</h2>
+                <a href="#" class="modal__close">×</a>
+            </div>
+            <form asp-action="Post_Empresa" asp-controller="Home" method="post" class="modal__form">
+                <div class="modal__field">
+                    <label asp-for="Empresa.Nombre" class="modal__label">Nombre de la Empresa</label>
+                    <input asp-for="Empresa.Nombre" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
+                </div>
+                <button type="submit" class="modal__submit">Registrar Empresa</button>
             </form>
         </div>
     </section>
 
-    <!-- Modal LOGIN Admin -->
-    <section class="modal-admin">
-        <div class="modal container-admin">
-            <a href="#" class="Modal-close">Close</a>
-            <form asp-action="Login_Administrador" method="post">
-                <label asp-for="Administrador.Nombre">Nombre</label>
-                <input asp-for="Administrador.Nombre" type="text" />
-
-                <label asp-for="Administrador.Password">Password</label>
-                <input asp-for="Administrador.Password" type="password" />
-
-                <button class="btn-summit">Summit</button>
+    <!-- Modal LOGIN ADMIN -->
+    <section id="modal-login-admin" class="modal">
+        <div class="modal__container">
+            <div class="modal__header">
+                <h2 class="modal__title">Login Administrador</h2>
+                <a href="#" class="modal__close">×</a>
+            </div>
+            <form asp-action="Login_Administrador" method="post" class="modal__form">
+                <div class="modal__field">
+                    <label asp-for="Administrador.Nombre" class="modal__label">Usuario</label>
+                    <input asp-for="Administrador.Nombre" type="text" class="modal__input" placeholder="Ingresa tu usuario">
+                </div>
+                <div class="modal__field">
+                    <label asp-for="Administrador.Password" class="modal__label">Contraseña</label>
+                    <input asp-for="Administrador.Password" type="password" class="modal__input" placeholder="Ingresa tu contraseña">
+                </div>
+                <button type="submit" class="modal__submit">Iniciar Sesión</button>
             </form>
         </div>
     </section>

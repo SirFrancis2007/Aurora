@@ -53,168 +53,176 @@
 /*Modals*/
 
 .modal {
-    font-family: Cabin;
-}
-
-.modal-signup {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #111111bd;
+    background-color: rgba(17, 17, 17, 0.85);
+    backdrop-filter: blur(4px);
     display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Cabin', -apple-system, BlinkMacSystemFont, sans-serif;
+    z-index: 1000;
 }
 
-.container-signup {
-    margin: auto;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90%;
-    border-radius: 16px;
-    padding: 3em 2.5rem;
-    background-color: #e6e6e6;
-    display: grid;
-    gap: 1em;
-    place-items: center;
-    grid-auto-columns: 100%;
-}
-
-.Modal-close {
-    text-decoration: none;
-    color:#081524;
-    display: inline-block;
-}
-
-.modal-signup--show {
+/* Modal activo */
+.modal--active {
     opacity: 1;
-    pointer-events: unset;
+    visibility: visible;
+    pointer-events: auto;
 }
 
-.modal form{
-    border: 1px solid rgb(199, 199, 199);
-    background-color: #f7fafc;
-    border-radius: 16px;
-    padding: 10px 10px;
+/* Contenedor del modal */
+.modal__container {
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Animación cuando está activo */
+.modal--active .modal__container {
+    transform: translateY(0) scale(1);
+}
+
+/* Header del modal */
+.modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.modal__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #081524;
+    margin: 0;
+}
+
+/* Botón de cerrar */
+.modal__close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: #f8fafc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.modal__close:hover {
+    background: #e2e8f0;
+    color: #475569;
+    transform: scale(1.05);
+}
+
+/* Formulario */
+.modal__form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.5rem;
 }
 
-form input {
-    position: relative;
-    width: 100%;
-    border: 2px solid #1b2e46;
-    border-radius: 12px;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    background: #f7fafc;
+/* Grupo de campo */
+.modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-form label {
-    display: block;
-    margin-bottom: 8px;
-    color: #4a5568;
+/* Etiquetas */
+.modal__label {
+    font-size: 0.875rem;
     font-weight: 500;
-    font-size: 0.95rem;
+    color: #374151;
+    margin: 0;
 }
 
-.btn-summit {
-    background-color: #1a4578;
-    color: #e6e6e6;
-    border-radius: 16px;
-    border-color: 1px solid #1a4578;
-    height:5vh;
-    transition: 1s all ease-in-out;
+/* Inputs */
+.modal__input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: #ffffff;
+    color: #1f2937;
+    box-sizing: border-box;
 }
 
-.btn-summit:hover{
-    transform: translateY(-5px);
-    background-color: #112d4e;
+.modal__input:focus {
+    outline: none;
+    border-color: #081524;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.btn-summit:focus{
-    transform: translateY(-1px);
+.modal__input::placeholder {
+    color: #9ca3af;
 }
 
-/*Modal de login*/
+/* Botón de envío */
+.modal__submit {
+    background: #081524;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
 
-.modal-login {
-    position: fixed;
+.modal__submit::before {
+    content: '';
+    position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #111111bd;
-    display: flex;
-    opacity: 0;
-    pointer-events: none;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
-.container-login {
-    margin: auto;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90%;
-    border-radius: 16px;
-    padding: 3em 2.5rem;
-    background-color: #e6e6e6;
-    display: grid;
-    gap: 1em;
-    place-items: center;
-    grid-auto-columns: 100%;
+.modal__submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
 }
 
-.Modal-close {
-    text-decoration: none;
-    color:#081524;
-    padding: 1em 3em;
-    display: inline-block;
+.modal__submit:hover::before {
+    left: 100%;
 }
 
-.modal-login--show {
-    opacity: 1;
-    pointer-events: unset;
-}
-
-/*Modal de admin*/
-
-.modal-admin {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #111111bd;
-    display: flex;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.container-admin {
-    margin: auto;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90%;
-    border-radius: 16px;
-    padding: 3em 2.5rem;
-    background-color: #e6e6e6;
-    display: grid;
-    gap: 1em;
-    place-items: center;
-    grid-auto-columns: 100%;
-}
-
-.Modal-close {
-    text-decoration: none;
-    color:#081524;
-    padding: 1em 3em;
-    display: inline-block;
-}
-
-.modal-admin--show {
-    opacity: 1;
-    pointer-events: unset;
+.modal__submit:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
 }

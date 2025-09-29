@@ -1,55 +1,83 @@
+// Variables para los modales
 const OpenModalRegister = document.querySelector('.btn-registro'); 
-const modal = document.querySelector('.modal-signup');              
-const CloseModals = document.querySelectorAll('.Modal-close');
+const modalRegister = document.querySelector('#modal-signup-empresa');              
+const CloseModals = document.querySelectorAll('.modal__close');
 
-/*Var para login*/
+/* Variables para login empresa */
 const OpenModalLogin = document.querySelector('.btn-login');
-const ModalLogin = document.querySelector('.modal-login');    
-const CloseModalsLogin = document.querySelectorAll('.Modal-close');
+const modalLogin = document.querySelector('#modal-login-empresa');    
 
-/*Var para admin login*/
+/* Variables para login admin */
 const OpenModalAdmin = document.querySelector('.btn-login-admin');
-const ModalLoginAdmin = document.querySelector('.modal-admin');    
-const CloseModalsLoginAdmin = document.querySelectorAll('.Modal-close');
+const modalAdmin = document.querySelector('#modal-login-admin');    
 
+// Función para cerrar todos los modales
+function closeAllModals() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.classList.remove('modal--active');
+    });
+    // Prevenir scroll del body
+    document.body.style.overflow = 'auto';
+}
 
-OpenModalRegister.addEventListener('click', (e)=> {
-    e.preventDefault();
-    modal.classList.add('modal-signup--show');
-});
+// Función para abrir modal específico
+function openModal(modal) {
+    closeAllModals();
+    modal.classList.add('modal--active');
+    // Prevenir scroll del body cuando el modal está abierto
+    document.body.style.overflow = 'hidden';
+}
 
+// Evento para registro
+if (OpenModalRegister && modalRegister) {
+    OpenModalRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(modalRegister);
+    });
+}
 
+// Evento para login empresa
+if (OpenModalLogin && modalLogin) {
+    OpenModalLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(modalLogin);
+    });
+}
+
+// Evento para login admin
+if (OpenModalAdmin && modalAdmin) {
+    OpenModalAdmin.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(modalAdmin);
+    });
+}
+
+// Eventos para cerrar modales
 CloseModals.forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        modal.classList.remove('modal-signup--show');
+        closeAllModals();
     });
 });
 
-/*Para login*/
-
-OpenModalLogin.addEventListener('click', (e)=> {
-    e.preventDefault();
-    ModalLogin.classList.add('modal-login--show');
+// Cerrar modal al hacer click fuera del contenido
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+        closeAllModals();
+    }
 });
 
-CloseModalsLogin.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        ModalLogin.classList.remove('modal-login--show');
-    });
+// Cerrar modal con tecla ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeAllModals();
+    }
 });
 
-/*Para admin login*/
-
-OpenModalAdmin.addEventListener('click', (e)=> {
-    e.preventDefault();
-    ModalLoginAdmin.classList.add('modal-admin--show');
-});
-
-CloseModalsLogin.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        ModalLoginAdmin.classList.remove('modal-admin--show');
+// Prevenir que el click dentro del contenedor cierre el modal
+document.querySelectorAll('.modal__container').forEach(container => {
+    container.addEventListener('click', (e) => {
+        e.stopPropagation();
     });
 });

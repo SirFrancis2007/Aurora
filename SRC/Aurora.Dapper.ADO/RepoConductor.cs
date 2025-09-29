@@ -20,7 +20,7 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         parametros.Add("xidConductor", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("xName", elemento.Name);
         parametros.Add("xLicencia", elemento.Licencia);
-        parametros.Add("xDisponibilidad", elemento.Dispobilidad);
+        parametros.Add("xDisponibilidad", elemento.Disponibilidad);
 
         try
         {
