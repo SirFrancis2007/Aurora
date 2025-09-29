@@ -151,6 +151,6 @@ Esto abrirá el emulador de acciones HTTP, organizado por entidad.
  - Francisco Agustin Garcia (SirFrancis2007)
 
 **Hecho con cariño para los open source**
-**Agradezco quienes hicieron posible este sueño, mi formacion**
+**Agradezco quienes hicieron posible este sueño**
 
-*Atte: Francisco Agustin Garcia, Abanderado Nacional*
+*Atte: Francisco Agustin Garcia
