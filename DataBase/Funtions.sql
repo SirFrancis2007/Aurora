@@ -45,22 +45,21 @@ END $$
 DELIMITER $$
 
 DROP FUNCTION IF EXISTS FLoginEmpresa $$
-CREATE FUNCTION FLoginEmpresa(xNombre VARCHAR(100), xContrasena VARCHAR(45))
-RETURNS BOOLEAN
+CREATE FUNCTION FLoginEmpresa(xNombre VARCHAR(100), xContrasena VARCHAR(100))
+RETURNS TINYINT(1)
 READS SQL DATA
 BEGIN
-    DECLARE existe BOOLEAN DEFAULT FALSE;
+    DECLARE existe TINYINT(1) DEFAULT 0;
 
-    IF EXISTS (SELECT 1 FROM Empresa e WHERE e.Nombre = xNombre AND e.Contrasena = xContrasena) THEN
-        SET existe = TRUE;
-    ELSE
-        SET existe = FALSE;
-    END IF;
+    SELECT COUNT(*) > 0
+    INTO existe
+    FROM Empresa e
+    WHERE e.Nombre = xNombre
+      AND e.Contrasena = xContrasena;
 
     RETURN existe;
 END $$
 
-DELIMITER ;
 
 DELIMITER $$
 DROP FUNCTION IF EXISTS FLoginAdministrador $$

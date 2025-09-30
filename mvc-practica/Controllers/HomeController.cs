@@ -38,8 +38,15 @@ public class HomeController : Controller
     {
         if (_empresa.Administrador == null)
         {
-            await _repoEmpresa.LoguearseAsync(_empresa.Empresa.Nombre.Trim().ToLower(), "");
-            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _empresa.Empresa.Nombre });
+            var resultado = await _repoEmpresa.LoguearseAsync(_empresa.Empresa.Nombre.Trim().ToLower(), _empresa.Empresa.Contrasena);
+            if (resultado == true)
+            {
+                return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _empresa.Empresa.Nombre });
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
         return View(_empresa);
     }
