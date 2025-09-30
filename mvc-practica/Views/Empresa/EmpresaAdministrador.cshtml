@@ -34,11 +34,20 @@
                     else
                     {
                         @foreach (var admins in Model)
-                        {
-                            <tr>
-                                <td>@admins.Nombre</td>
-                            </tr>
-                        }
+                            {
+                                <tr>
+                                    <td>@admins.Nombre</td>
+                                    <td>
+                                        <form asp-action="EliminarAdministrador"
+                                            asp-controller="Empresa"
+                                            asp-route-idAdministrador="@admins.IdAdministrador"
+                                            method="post"
+                                            onsubmit="return confirm('¿Estás seguro de despedir a @admins.Nombre?');">
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }                 
                     }
                 </tbody>
             </table>

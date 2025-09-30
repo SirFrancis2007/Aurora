@@ -36,12 +36,12 @@ DELIMITER ;
 
 -- Procedimiento para actualizar datos de un conductor
 DELIMITER $$
-Drop PROCEDURE IF EXISTS  UpdateConductor $$
+Drop PROCEDURE IF EXISTS  SPUpdateConductor $$
 
-CREATE PROCEDURE UpdateConductor(xidConductor INT,xLicencia VARCHAR(45))
+CREATE PROCEDURE SPUpdateConductor(xidConductor INT, xnombre VARCHAR(50),xLicencia VARCHAR(45), xDisponibilidad BOOL)
 BEGIN
     UPDATE Conductor
-    SET Licencia = xLicencia
+    SET Licencia = xLicencia, Name = xnombre, Disponibilidad = xDisponibilidad
     WHERE idConductor = xidConductor;
 END $$
 DELIMITER ;

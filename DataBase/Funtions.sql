@@ -45,13 +45,13 @@ END $$
 DELIMITER $$
 
 DROP FUNCTION IF EXISTS FLoginEmpresa $$
-CREATE FUNCTION FLoginEmpresa(xNombre VARCHAR(100))
+CREATE FUNCTION FLoginEmpresa(xNombre VARCHAR(100), xContrasena VARCHAR(45))
 RETURNS BOOLEAN
 READS SQL DATA
 BEGIN
     DECLARE existe BOOLEAN DEFAULT FALSE;
 
-    IF EXISTS (SELECT 1 FROM Empresa e WHERE e.Nombre = xNombre) THEN
+    IF EXISTS (SELECT 1 FROM Empresa e WHERE e.Nombre = xNombre AND e.Contrasena = xContrasena) THEN
         SET existe = TRUE;
     ELSE
         SET existe = FALSE;

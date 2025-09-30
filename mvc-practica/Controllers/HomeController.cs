@@ -38,7 +38,7 @@ public class HomeController : Controller
     {
         if (_empresa.Administrador == null)
         {
-            await _repoEmpresa.LoguearseAsync(_empresa.Empresa.Nombre, "");
+            await _repoEmpresa.LoguearseAsync(_empresa.Empresa.Nombre.Trim().ToLower(), "");
             return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _empresa.Empresa.Nombre });
         }
         return View(_empresa);
@@ -53,14 +53,14 @@ public class HomeController : Controller
             var _nuevaempresa = new Empresa
             {
                 IdEmpresa = 0,
-                Nombre = empresa.Nombre
+                Nombre = empresa.Nombre.Trim().ToLower(),
+                Contrasena = empresa.Contrasena.Trim().ToLower()
             };
-
 
             await _repoEmpresa.AltaAsync(_nuevaempresa);
 
             TempData["Mensaje"] = "Empresa creada con éxito";
-            return RedirectToAction(nameof(EmpresaController.IndexEmpresa), nameof(EmpresaController), empresa) ;
+            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = empresa.Nombre }) ;
         }
         return View(empresa);
     }

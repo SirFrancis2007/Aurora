@@ -1,0 +1,33 @@
+@using Aurora.Core
+@model Conductor
+
+@{
+    ViewData["Title"] = "Empresa";
+    Layout = "_EmpresaLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/_form.css" />
+}
+
+<!-- Formulario para agregar un nuevo administrador -->
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Actualizar Conductor</h2>
+    </div>
+
+    <div class="container">
+        <form method="post" asp-action="UpdateConductor" asp-controller="Empresa">
+            <div class="form-group">
+                <input type="hidden" asp-for="IdConductor" />
+
+                <label for="nombre">Nombre del Conductor:</label>
+                <input type="text" asp-for="Name" required />
+
+                <label for="nombre">Licencia:</label>
+                <input type="text" asp-for="Licencia" required />
+            </div>
+            <button type="submit" class="btn-submit">Actualizar Administrador</button>
+        </form>
+    </div>
+</div>

@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `aurorabd`.`Empresa` ;
 CREATE TABLE IF NOT EXISTS `aurorabd`.`Empresa` (
   `idEmpresa` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NULL,
+  `Contrasena` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idEmpresa`),
   UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) VISIBLE)
 ENGINE = InnoDB;

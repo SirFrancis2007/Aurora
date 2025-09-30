@@ -87,4 +87,22 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         return resultados;
     }
 
+    public async Task<bool> ActualizarConductor(Conductor _conductor)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidConductor", _conductor.IdConductor);
+        parametros.Add("xnombre", _conductor.Name);
+        parametros.Add("xLicencia", _conductor.Licencia);
+        parametros.Add("xDisponibilidad", _conductor.Disponibilidad == true);
+
+        try
+        {
+            await Conexion.ExecuteAsync("SPUpdateConductor", parametros, commandType: CommandType.StoredProcedure);
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            throw new Exception("¡Error al actualizar el administrador!", e);
+        }
+    }
 }

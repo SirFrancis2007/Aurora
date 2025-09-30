@@ -82,8 +82,8 @@ public class EmpresaController : Controller
             var _nuevoadmin = new Administrador
             {
                 IdAdministrador = 0,
-                Nombre = _admin.Nombre,
-                Password = _admin.Password,
+                Nombre = _admin.Nombre.Trim(),
+                Password = _admin.Password.Trim(),
                 IdEmpresa = empresa.IdEmpresa
             };
 
@@ -103,8 +103,8 @@ public class EmpresaController : Controller
             var _nuevovehiculo = new Vehiculo
             {
                 IdVehiculo = 0,
-                Tipo = _vehiculo.Tipo,
-                Matricula = _vehiculo.Matricula,
+                Tipo = _vehiculo.Tipo.Trim(),
+                Matricula = _vehiculo.Matricula.Trim(),
                 CapacidadMax = _vehiculo.CapacidadMax,
                 Estado = true //Disponible por defecto
             };
@@ -124,8 +124,8 @@ public class EmpresaController : Controller
         {
             var _nuevoconductor = new Conductor
             {
-                Name = _conductor.Name,
-                Licencia = _conductor.Licencia,
+                Name = _conductor.Name.Trim(),
+                Licencia = _conductor.Licencia.Trim(),
                 Disponibilidad = true //Disponible por defecto
             };
 
@@ -151,7 +151,7 @@ public class EmpresaController : Controller
     [HttpGet]
     public async Task<IActionResult> AsignarVehiculoAConductor()
     {
-        var respuesta = await _repoVehCon.consultaVehiculoConductor(); 
+        var respuesta = await _repoVehCon.consultaVehiculoConductor();
         return View("UIVehiculo/AsignarVehiculoAConductor", respuesta);
     }
 
@@ -170,5 +170,38 @@ public class EmpresaController : Controller
 
         TempData["Mensaje"] = "La asignacion fue exitosa";
         return RedirectToAction(nameof(EmpresaController.AsignarVehiculoAConductor));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EliminarAdministrador(int idAdministrador)
+    {
+        await _repoAdmin.EliminarAsync(idAdministrador);
+        return RedirectToAction(nameof(EmpresaAdministrador));
+    }
+
+    public async Task<IActionResult> ActualizarConductor(int id)
+    {
+        var conductor = await _repoConductor.DetalleAsync(id);
+        if (conductor == null)
+            return NotFound();
+
+        return View("UIConductor/ActualizarConductor", conductor);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateConductor(Conductor _conductor)
+    {
+        if (!ModelState.IsValid)
+            return View("UIConductor/ActualizarConductor", _conductor);
+
+        var conductor = new Conductor
+        {
+            Name = _conductor.Name.Trim(),
+            Licencia = _conductor.Licencia.Trim(),
+            Disponibilidad = _conductor.Disponibilidad = true
+        }; 
+    
+        await _repoConductor.ActualizarConductor(conductor);
+        return RedirectToAction(nameof(ConductorEmpresa));
     }
 }

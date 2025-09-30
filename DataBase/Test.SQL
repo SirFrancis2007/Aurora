@@ -2,11 +2,11 @@ use aurorabd;
 
 -- Datos de prueba
 
-Call PSCrearEmpresa (@Idempresa1,'Empresa Norte src');
-Call PSCrearEmpresa (@Idempresa2,'Empresa Sur SA');
-Call PSCrearEmpresa (@Idempresa3,'Sancor Seguro') ;
-CALL PSCrearEmpresa (@Idempresa4, 'Empresa Para Eliminar');
-Call PSCrearEmpresa (@Idempresa5,'Arcor Chocolateria');
+Call PSCrearEmpresa (@Idempresa1,'Empresa Norte src', 'Empresa1');
+Call PSCrearEmpresa (@Idempresa2,'Empresa Sur SA', 'Empresa2');
+Call PSCrearEmpresa (@Idempresa3,'Sancor Seguro', 'Empresa3');
+CALL PSCrearEmpresa (@Idempresa4, 'Empresa Para Eliminar', 'Empresa4');
+Call PSCrearEmpresa (@Idempresa5,'Arcor Chocolateria', 'Empresa5');
 
 
 /*se borrara ya que no tiene nada asignado*/
@@ -23,8 +23,6 @@ Call SPNuevoAdministrador(@id1,'Victor', 'victor1234', @Idempresa1) ;
 Call SPNuevoAdministrador(@id2,'Victoria', 'vic1234', @Idempresa1) ;
 Call SPNuevoAdministrador(@id3,'pepe', 'pepe1234', @Idempresa2) ;
 Call SPNuevoAdministrador(@id4,'messi', 'messi1234', @Idempresa2) ;
-CALL SPNuevoAdministrador(@id4, 'Laura', 'laura1234', @Idempresa4) ;
-
 
 
 Call SPDelAdministrador(4);
@@ -40,7 +38,7 @@ Call SPNuevoConductor(@id4c,'pepe', 'pepe1234', TRUE) ;
 call SPDelConductor(4);
 
 
-call UpdateConductor(1, 'samuel1234') ;
+call SPUpdateConductor(1, 'Leo' ,'leon1234', true) ;
 
 /*Nuevos Vehiculos*/
 

@@ -22,7 +22,8 @@ public class FixtureAurora
         _nuevaempresa = new()
         {
             IdEmpresa = 0,
-            Nombre = "Empresa Creado desde Fixture"
+            Nombre = "Empresa Creado desde Fixture",
+            Contrasena = "123456"
         };
 
         _nuevoConductor =  new(){

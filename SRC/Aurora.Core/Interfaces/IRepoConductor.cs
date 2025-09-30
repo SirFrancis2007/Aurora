@@ -22,4 +22,11 @@ public interface IRepoConductor : IRepoAlta<Conductor>, IRepoDetalle<Conductor, 
     /// </summary>
     /// <returns>Lista de conductores libres.</returns>
     public Task<List<Conductor>> ListarConductoresLibres();
+
+    /// <summary>
+    /// Actualizar datos de un conductor
+    /// </summary>
+    /// <param name="conductor"></param>
+    /// <returns></returns>
+    Task<bool> ActualizarConductor(Conductor _conductor);
 }

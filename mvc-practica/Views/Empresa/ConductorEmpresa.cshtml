@@ -33,6 +33,15 @@
                             <td>@conductor.Name</td>
                             <td>@conductor.Licencia</td>
                             <td>@(conductor.Disponibilidad ? "Disponible" : "En viaje")</td>
+                            <td>
+                                <td>
+                                    <a asp-action="ActualizarConductor"
+                                    asp-route-id="@conductor.IdConductor"
+                                    class="btn btn-update">
+                                        Modificar
+                                    </a>
+                                </td>
+                            </td>
                         </tr>
                     }
             </table>

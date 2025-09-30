@@ -21,8 +21,8 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
 
     public async Task<bool> LoguearseAsync(string nombre, string contrasena)
     {
-        var funtionLogin = "SELECT FLoginEmpresa(@xNombre);";
-        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = nombre });
+        var funtionLogin = "SELECT FLoginEmpresa(@xNombre, @xContrasena);";
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = nombre, xContrasena = contrasena });
         return result;
 
     }
@@ -61,6 +61,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         var parametros = new DynamicParameters();
         parametros.Add("xidEmpresa", direction: ParameterDirection.Output);
         parametros.Add("xNombre", NuevaEmpresa.Nombre);
+        parametros.Add("xContrasena", NuevaEmpresa.Contrasena);
         try
         {
             await Conexion.ExecuteAsync("PSCrearEmpresa", parametros, commandType: CommandType.StoredProcedure); // "PSCrearEmpresa" SP para crear empresa
