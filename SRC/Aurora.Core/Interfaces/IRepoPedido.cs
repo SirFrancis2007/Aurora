@@ -1,3 +1,5 @@
+using Aurora.Core.Models;
+
 namespace Aurora.Core.Interfaces;
 
 public interface IRepoPedido : IRepoAlta<Pedido>, IRepoDetalle<Pedido, int>, IRepoListado<Pedido>
@@ -24,4 +26,11 @@ public interface IRepoPedido : IRepoAlta<Pedido>, IRepoDetalle<Pedido, int>, IRe
     /// <param name="idEmpresa">Identificador de la empresa.</param>
     /// <returns>Lista de pedidos de la empresa.</returns>
     public Task<List<PedidoEmpresaDTO>> ObtenerPedidosPorEmpresa(int idEmpresa);
+
+    /// <summary>
+    /// Obtiene la lista de pedidos asociados a una empresa en el estado RECIBIDO. Bandeja de Entrada Administradores
+    /// </summary>
+    /// <param name="idEmpresa">Identificador de la empresa.</param>
+    /// <returns>Lista de pedidos de la empresa.</returns>
+    public Task<List<PedidoRutaDTO>> ObtenerPedidosEmpresa(int idEmpresa);
 }

@@ -2,6 +2,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
+using Aurora.Core.Models;
 using Dapper;
 
 namespace Aurora.Dapper.ADO;
@@ -109,5 +110,29 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         ";
 
         return (List<PedidoEmpresaDTO>)await Conexion.QueryAsync<PedidoEmpresaDTO>(query, new { IdEmpresa = idEmpresa });
+    }
+
+    public async Task<List<PedidoRutaDTO>> ObtenerPedidosEmpresa(int idEmpresa)
+    {
+        var query = @"SELECT 
+                    p.idPedido,
+                    p.Name AS NombrePedido,
+                    p.Peso,
+                    p.Volumen,
+                    p.EstadoPedido,
+                    p.FechaDespacho,
+                    r.Origen,
+                    r.Destino,
+                    e.Nombre AS EmpresaOrigen
+                FROM Pedido p
+                INNER JOIN Ruta r 
+                    ON p.idRuta = r.idRuta
+                INNER JOIN Empresa e 
+                    ON p.idEmpresa = e.idEmpresa
+                WHERE p.EstadoPedido = 'Entregado'
+                AND p.idEmpresa = @idEmpresa;
+                ";
+
+        return (List<PedidoRutaDTO>)await Conexion.QueryAsync<PedidoRutaDTO>(query, new { IdEmpresa = idEmpresa });
     }
 }

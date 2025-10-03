@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/Sidebar_shared.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
     <title>@ViewData["Title"] Aurora</title>
     <script type="importmap"></script>
+
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <section class="sidebar">
@@ -21,17 +22,24 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="Administrador" asp-action="EmpresaAdministrador">
+                        <a asp-controller="Administrador" asp-action="Historial">
                             <img src="~/icon/HistorialIcon.png" alt="">
                             <i class="fas fa-history"></i>
                             <span>Historial de Paquetes</span>
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="Administrador" asp-action="EmpresaAdministrador">
+                        <a asp-controller="Administrador" asp-action="AgregarRuta">
                             <img src="~/icon/RutaIcon.png" alt="">
                             <i class="fas fa-history"></i>
                             <span>Agregar Ruta</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Administrador" asp-action="IndexAdmin">
+                            <img src="~/icon/RutaIcon.png" alt="">
+                            <i class="fas fa-history"></i>
+                            <span>Bandeja de entrada</span>
                         </a>
                     </li>
                     <li>

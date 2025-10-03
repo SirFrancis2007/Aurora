@@ -77,12 +77,16 @@ public class HomeController : Controller
     {
         if (_administrador.Empresa == null)
         {
-            await _repoAdministrador.LoguearseAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
-            return RedirectToAction("indexAdmin", "Administrador", new { nombre = _administrador.Administrador.Nombre, password = _administrador.Administrador.Password });
-        }
 
-        // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
-        ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
+            var repuesta = await _repoAdministrador.LoguearseAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
+            if (repuesta == true)
+                return RedirectToAction("indexAdmin", "Administrador", new { nombre = _administrador.Administrador.Nombre });
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
+                // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
+            }
+        }
         return View(_administrador);
     }
 }

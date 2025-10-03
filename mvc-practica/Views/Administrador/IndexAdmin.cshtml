@@ -1,19 +1,25 @@
-@{
-    ViewData["Title"] = "Administradores";
-    Layout = "_AdminLayout";
-}
 <!-- Admin podra hacer 
     _ Hacer Pedidos
     _ Recibir pedidos
     _ Log Out
-    _ Ver el Historial de los paquetes-->
+    _ Ver el Historial de los paquetes
+    _ Tendra una bandeja de entrada donde tenga solos los pedidos que esten en el estado entregado y un boton donde tenga para actualizar el estaod de pedidos a RECIBIDOS-->
+
+@using Aurora.Core.Models
+@model IEnumerable<PedidoRutaDTO>
+
+@{
+    ViewData["Title"] = "Administradores";
+    Layout = "_AdminLayout";
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/_Component.css" />
 }
 
 <div class="main-content">
     <div class="menu">
-        <a asp-action="AgregarVehiculo" asp-controller="Empresa">Nuevo Pedido</a>
+        <a asp-action="AgregarPedido" asp-controller="Administrador">Nuevo Pedido</a>
     </div>
 
     <div class="container">
@@ -22,18 +28,35 @@
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>id</th>
-                        <th>Paquete</th>
-                        <th>Volumen</th>
+                        <th>ID</th>
+                        <th>Nombre Pedido</th>
                         <th>Peso</th>
+                        <th>Volumen</th>
                         <th>Estado</th>
                         <th>Fecha Despacho</th>
+                        <th>Empresa Origen</th>
+                        <th>Empresa Destino</th>
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th>Matricula</th>
-                        <th>Conductor</th>
                     </tr>
                 </thead>
+                <tbody>
+                    @foreach (var pedido in Model)
+                    {
+                        <tr>
+                            <td>@pedido.IdPedido</td>
+                            <td>@pedido.NombrePedido</td>
+                            <td>@pedido.Peso</td>
+                            <td>@pedido.Volumen</td>
+                            <td>@pedido.Estado</td>
+                            <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                            <td>@pedido.EmpresaOrigen</td>
+                            <td>@pedido.EmpresaDestino</td>
+                            <td>@pedido.Origen</td>
+                            <td>@pedido.Destino</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </div>
     </div>

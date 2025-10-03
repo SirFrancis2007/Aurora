@@ -99,7 +99,8 @@ app.MapPost("/Empresa", async (EmpresaDTO dto, IRepoEmpresa _repoempresa) =>
 {
     var empresa = new Empresa
     {
-        Nombre = dto.Nombre
+        Nombre = dto.Nombre,
+        Contrasena = dto.Contrasena
     };
 
     await _repoempresa.AltaAsync(empresa);

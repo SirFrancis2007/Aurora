@@ -2,7 +2,7 @@ namespace Aurora.Core.Interfaces;
 
 public interface IRepoAdministrador : IRepoAlta<Administrador>, IRepoDetalle<Administrador, int>, IRepoListado<Administrador>
 {
-/// <summary>
+    /// <summary>
     /// Permite a un administrador iniciar sesión.
     /// </summary>
     /// <param name="nombre">Nombre del administrador.</param>
@@ -23,11 +23,18 @@ public interface IRepoAdministrador : IRepoAlta<Administrador>, IRepoDetalle<Adm
     /// <param name="idEmpresa">Identificador de la empresa.</param>
     /// <returns>Lista de administradores de esa empresa.</returns>
     Task<List<Administrador>> ObtenerPorEmpresaAsync(int idEmpresa);
-    
+
     /// <summary>
     /// Actualizar datos de un administrador
     /// </summary>
     /// <param name="administrador"></param>
     /// <returns></returns>
     Task<bool> UpdateAdministrador(Administrador administrador);
+    
+    /// <summary>
+    /// Obtener credenciales segun nombre y contraseña
+    /// </summary>
+    /// <param name="administrador"></param>
+    /// <returns></returns>
+    Task<Administrador> ObtenerCredenciales(string nombreAdministrador);
 }

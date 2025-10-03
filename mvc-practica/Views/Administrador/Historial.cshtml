@@ -1,0 +1,63 @@
+@using Aurora.Core
+@model IEnumerable<HistorialDTO>
+@{
+    ViewData["Title"] = "Administrador";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/_component.css" />
+}
+
+<div class="main-content">
+    <div class="container">
+        <h1>Historial de Pedidos</h1>
+        <div class="table-container">
+            <table class="Content-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>idPedido</th>
+                        <th>NombrePedido</th>
+                        <th>Volumen</th>
+                        <th>Peso</th>
+                        <th>EstadoPedido</th>
+                        <th>FechaDespacho</th>
+                        <th>TipoVehiculo</th>
+                        <th>Matricula</th>
+                        <th>Conductor</th>
+                        <th>EmpresaOrigen</th>
+                        <th>EmpresaDestino</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>EstadoAnterior</th>
+                        <th>EstadoNuevo</th>
+                        <th>FechaCambio</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var historial in Model)
+                    {
+                        <tr>
+                            <td>@historial.idPedido</td>
+                            <td>@historial.NombrePedido</td>
+                            <td>@(historial.Volumen + "m3")</td>
+                            <td>@(historial.Peso + "kg")</td>
+                            <td>@historial.EstadoPedido</td>
+                            <td>@historial.FechaDespacho.ToString("dd/MM/yyyy")</td>                                    
+                            <td>@historial.TipoVehiculo</td>
+                            <td>@historial.Matricula</td>
+                            <td>@historial.Conductor</td>
+                            <td>@historial.EmpresaOrigen</td>
+                            <td>@historial.EmpresaDestino</td>
+                            <td>@historial.Origen</td>
+                            <td>@historial.Destino</td>
+                            <td>@historial.EstadoAnterior</td>
+                            <td>@historial.EstadoNuevo</td>
+                            <td>@historial.FechaCambio</td>
+                        </tr>
+                    }
+            </table>
+        </div>
+    </div>
+</div>

@@ -92,4 +92,13 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         }
         return true;
     }
+
+    public async Task<Administrador> ObtenerCredenciales(string nombreAdministrador)
+    {
+        var query = @"SELECT * FROM Administrador WHERE Nombre = @nombre ";
+        var resultado = await Conexion.QueryFirstOrDefaultAsync<Administrador>(
+            query, new { nombre = nombreAdministrador }
+        );
+        return resultado;
+    }
 }

@@ -1,0 +1,31 @@
+@using Aurora.Core
+@model Ruta
+
+@{
+    ViewData["Title"] = "Empresa";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/_form.css" />
+}
+
+<!-- Formulario para agregar una nueva ruta -->
+<div class="main-content">
+    <div class="text-empresa">
+        <h2>Agregar Nueva Ruta</h2>
+    </div>
+
+    <div class="container">
+        <form method="post" asp-action="AgregarRuta" asp-controller="Administrador">
+            <div class="form-group">
+                <label asp-for="Origen">Nombre Origen:</label>
+                <input type="text" asp-for="Origen" required />
+
+                <label asp-for="Destino">Nombre Destino:</label>
+                <input type="text" asp-for="Destino" required />
+            </div>
+            <button type="submit" class="btn-submit">Agregar Ruta</button>
+        </form>
+    </div>
+</div>
