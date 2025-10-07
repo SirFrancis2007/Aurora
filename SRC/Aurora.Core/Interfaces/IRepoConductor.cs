@@ -8,7 +8,7 @@ public interface IRepoConductor : IRepoAlta<Conductor>, IRepoDetalle<Conductor, 
     /// <param name="nombre">Nombre del conductor.</param>
     /// <param name="contrasena">Contraseña del conductor.</param>
     /// <returns>El conductor autenticado, o null si las credenciales no son válidas.</returns>
-    public Task<Conductor?> Loguearse(string nombre, string contrasena);
+    public Task<bool> Loguearse(string nombre, string contrasena);
 
     /// <summary>
     /// Elimina un conductor según su Id.
@@ -29,4 +29,18 @@ public interface IRepoConductor : IRepoAlta<Conductor>, IRepoDetalle<Conductor, 
     /// <param name="conductor"></param>
     /// <returns></returns>
     Task<bool> ActualizarConductor(Conductor _conductor);
+
+    /// <summary>
+    /// Obtener datos de un conductor por nombre
+    /// </summary>
+    /// <param name="conductor"></param>
+    /// <returns></returns>
+    public Task<Conductor> ObtenerConductorPorNombre(string Nombre);
+
+    /// <summary>
+    /// Actualizar Estado de un conductor
+    /// </summary>
+    /// <param name="conductor"></param>
+    /// <returns></returns>
+    public Task<bool> ActualizarEstadoConductor(int id);
 }

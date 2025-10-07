@@ -73,10 +73,10 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         return conductores.AsList();
     }
 
-    public async Task<Conductor?> Loguearse(string nombre, string contrasena)
+    public async Task<bool> Loguearse(string nombre, string contrasena)
     {
-        var funtionLogin = "SELECT FLoginConductor(@xNombre, @xLicencia);"; // Crear en bd la funcion FLoginConductor
-        var result = await Conexion.ExecuteScalarAsync<Conductor>(funtionLogin, new { xNombre = nombre, xLicencia = contrasena });
+        var funtionLogin = "SELECT FLoginConductor(@xNombre, @xLicencia);"; 
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = nombre, xLicencia = contrasena });
         return result;
     }
     
@@ -104,5 +104,20 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         {
             throw new Exception("¡Error al actualizar el administrador!", e);
         }
+    }
+
+    public async Task<Conductor> ObtenerConductorPorNombre(string Nombre)
+    {
+        var query = @"SELECT idConductor FROM Conductor WHERE Name = @Nombre";
+        var resultado = await Conexion.QueryAsync<Conductor>(query, new { Name = Nombre });
+        return (Conductor)resultado;
+    }
+
+    public async Task<bool> ActualizarEstadoConductor(int id)
+    {
+        // Ya en la Funcion se cambia el estado a en "En viaje"
+        var funtionLogin = "SELECT FncActualizarEstadoConductor(@xidconductor);"; 
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xidconductor = id });
+        return result;
     }
 }

@@ -33,4 +33,11 @@ public interface IRepoPedido : IRepoAlta<Pedido>, IRepoDetalle<Pedido, int>, IRe
     /// <param name="idEmpresa">Identificador de la empresa.</param>
     /// <returns>Lista de pedidos de la empresa.</returns>
     public Task<List<PedidoRutaDTO>> ObtenerPedidosEmpresa(int idEmpresa);
+
+    /// <summary>
+    /// Obtiene la lista de pedidos asociados a una vehiculo. Bandeja de Entrada de conductor
+    /// </summary>
+    /// <param name="idVehiculo">Identificador del vehiculo.</param>
+    /// <returns>Lista de pedidos del vehiculo.</returns>
+    public Task<List<PedidoRutaDTO>> ObtenerPedidosPorVehiculo(int idVehiculo);
 }

@@ -19,4 +19,6 @@ public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int
     public Task<Boolean> CambiarEstadoAsync(int vehiculoId, bool disponible);
 
     public Task<IEnumerable<Vehiculo>> ObtenerVehiculosDisponibles();
+
+    public Task<bool> ActualizarEstadoVehiculo(int id);
 }

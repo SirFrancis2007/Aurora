@@ -80,3 +80,42 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FLoginConductor $$
+CREATE FUNCTION FLoginConductor(xNombre VARCHAR(45), xLicencia VARCHAR(45))
+RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    DECLARE existe BOOLEAN DEFAULT FALSE;
+
+    IF EXISTS (SELECT 1 FROM conductor WHERE Name = xNombre and Licencia = xLicencia) THEN
+        SET existe = TRUE;
+    ELSE 
+        SET existe = FALSE;
+    END IF;
+
+    RETURN existe;
+END $$
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FncActualizarEstadoConductor $$
+CREATE FUNCTION FncActualizarEstadoConductor(xidconductor TINYINT)
+RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    UPDATE conductor c
+    SET Disponibilidad = 0 -- Significa que esta en viaje.
+    WHERE c.idConductor = xidconductor;
+END $$
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FncActualizarEstadoVehiculo $$
+CREATE FUNCTION FncActualizarEstadoVehiculo(xidVehiculo TINYINT)
+RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    UPDATE vehiculo
+    SET Estado = 0 -- Significa que esta en viaje.
+    WHERE idVehiculo = xidVehiculo;
+END $$

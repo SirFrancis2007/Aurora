@@ -135,4 +135,24 @@ public class RepoPedido : RepoGenerico, IRepoPedido
 
         return (List<PedidoRutaDTO>)await Conexion.QueryAsync<PedidoRutaDTO>(query, new { IdEmpresa = idEmpresa });
     }
+
+    public async Task<List<PedidoRutaDTO>> ObtenerPedidosPorVehiculo(int idVehiculo)
+    {
+        var query = @"SELECT 
+                    p.idPedido,
+                    p.Name AS NombrePedido,
+                    p.Peso,
+                    p.Volumen,
+                    p.EstadoPedido AS Estado,
+                    p.FechaDespacho,
+                    e.Nombre AS EmpresaOrigen,
+                    r.Origen,
+                    r.Destino
+                FROM Pedido p
+                INNER JOIN Empresa e ON p.idEmpresa = e.idEmpresa
+                INNER JOIN Ruta r ON p.idRuta = r.idRuta
+                WHERE p.idVehiculo = @idVehiculo;
+                ";
+        return (List<PedidoRutaDTO>)await Conexion.QueryAsync<PedidoRutaDTO>(query, new { idVehiculo = idVehiculo });
+    }
 }

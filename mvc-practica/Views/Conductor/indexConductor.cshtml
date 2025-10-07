@@ -77,7 +77,6 @@
                     const fila = e.target.closest("tr");
                     const idPedido = fila.getAttribute("data-id");
 
-                    // Llamado al backend
                     const response = await fetch(`/Conductor/MarcarEntregado/${idPedido}`, { method: "POST" });
 
                     if (response.ok) {

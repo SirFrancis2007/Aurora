@@ -93,8 +93,21 @@ public class RepoVehiculoConductor : RepoGenerico, IRepoVehiculoConductor
         }    
     }
 
-    public Task<VehiculoConductor>? DetalleAsync(int indiceABuscar)
+    public async Task<VehiculoConductor?> DetalleAsync(int idConductor)
     {
-        throw new NotImplementedException();
+        var query = @"SELECT idVehiculo 
+                    FROM Conductor_has_Vehiculo 
+                    WHERE idConductor = @idConductor;";
+        var resultado = await Conexion.QueryFirstOrDefaultAsync<VehiculoConductor>(query, new { idConductor });
+        return resultado;
+    }
+
+    public async Task<int> ObtenerVehiculoPorIdConductor(int idConductor)
+    {
+        var query = @"SELECT idVehiculo 
+                    FROM Conductor_has_Vehiculo 
+                    WHERE idConductor = @idConductor;";
+        var resultado = await Conexion.QueryFirstOrDefaultAsync<int>(query, new { idConductor });
+        return resultado;
     }
 }

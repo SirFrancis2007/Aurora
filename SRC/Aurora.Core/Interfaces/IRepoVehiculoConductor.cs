@@ -20,5 +20,17 @@ public interface IRepoVehiculoConductor : IRepoAlta<VehiculoConductor>, IRepoDet
     /// <param name="idConductor"></param>
     /// <returns></returns>
     public Task<bool> DesasignarConductorDeVehiculo(int idVehiculo, int idConductor);
+
+    /// <summary>
+    /// Condulta sobre los conductores.
+    /// </summary>
+    /// <returns></returns>
     public Task<IEnumerable<VehiculoConductorDTO>> consultaVehiculoConductor();
+
+    /// <summary>
+    /// Obtiene el id del vehiculo asignado al conductor
+    /// </summary>
+    /// <param name="idConductor"></param>
+    /// <returns></returns>
+    public Task<int> ObtenerVehiculoPorIdConductor(int idConductor);
 }

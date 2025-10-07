@@ -97,4 +97,12 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         var query = @"SELECT * From vehiculo WHERE Estado = 1";
         return await Conexion.QueryAsync<Vehiculo>(query);
     }
+
+    public async Task<bool> ActualizarEstadoVehiculo(int id)
+    { 
+        // Ya en la Funcion se cambia el estado a en "En viaje"
+        var funtionLogin = "SELECT FncActualizarEstadoVehiculo(@xidVehiculo);"; 
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xidVehiculo = id });
+        return result;
+    }
 }

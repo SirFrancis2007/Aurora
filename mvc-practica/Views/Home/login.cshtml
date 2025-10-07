@@ -11,7 +11,7 @@
 }
 
 <section class="container-login">
-    <form class="form">
+    <form asp-action="AutenticacionConductor" asp-controller="Conductor" class="form">
         <p class="form-title">Ingreso Conductores</p>
         <div class="input-container">
             <label asp-for="Name" class="modal__label">Nombre del Conductor</label>
@@ -20,7 +20,7 @@
 
         <div class="input-container">
             <label asp-for="Licencia" class="modal__label">Licencia del conductor</label>
-            <input asp-for="Licencia" type="text" class="modal__input" placeholder="Ingresa tu Licencia">        
+            <input asp-for="Licencia" type="password" class="modal__input" placeholder="Ingresa tu Licencia">        
         </div>
         <button type="submit" class="submit">Ingresar</button>
    </form>
