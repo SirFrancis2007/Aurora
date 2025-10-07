@@ -1,0 +1,27 @@
+@using Aurora.Core
+@model Conductor
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_nullLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/_invdform.css"/>
+}
+
+<section class="container-login">
+    <form class="form">
+        <p class="form-title">Ingreso Conductores</p>
+        <div class="input-container">
+            <label asp-for="Name" class="modal__label">Nombre del Conductor</label>
+            <input asp-for="Name" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
+        </div>
+
+        <div class="input-container">
+            <label asp-for="Licencia" class="modal__label">Licencia del conductor</label>
+            <input asp-for="Licencia" type="text" class="modal__input" placeholder="Ingresa tu Licencia">        
+        </div>
+        <button type="submit" class="submit">Ingresar</button>
+   </form>
+</section>

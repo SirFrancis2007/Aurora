@@ -1,32 +1,93 @@
+@using Aurora.Core.Models
+@model IEnumerable<PedidoRutaDTO>
+
 @{
-    ViewData["Title"] = "Administradores";
-    Layout = "_AdminLayout";
+    ViewData["Title"] = "Bandeja de Entrada - Conductor";
+    Layout = "_ConductorLayout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/IndexAdmin.css" />
+    <link rel="stylesheet" href="~/css/_Component.css" />
 }
 
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Bienvenido #Nombre Admin</h2>
-    </div>
-
     <div class="container">
         <h1>Bandeja de Entrada</h1>
+
+        <div class="actions">
+            <form asp-action="IniciarViaje" method="post">
+                <button type="submit" class="btn btn-primary">Iniciar viaje</button>
+            </form>
+        </div>
+
         <div class="table-container">
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>id</th>
+                        <th>ID</th>
                         <th>Paquete</th>
                         <th>Fecha Despacho</th>
                         <th>Origen</th>
                         <th>Destino</th>
                         <th>Estado</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
+                <tbody id="tabla-pedidos">
+                    @foreach (var pedido in Model)
+                    {
+                        <tr data-id="@pedido.IdPedido" data-estado="@pedido.Estado">
+                            <td>@pedido.IdPedido</td>
+                            <td>@pedido.NombrePedido</td>
+                            <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                            <td>@pedido.Origen</td>
+                            <td>@pedido.Destino</td>
+                            <td class="estado">@pedido.Estado</td>
+                            <td>
+                                @if (pedido.Estado == "En viaje")
+                                {
+                                    <button class="btn-entregar btn btn-warning">Entregar</button>
+                                }
+                                else if (pedido.Estado == "Entregado")
+                                {
+                                    <span class="badge bg-success">Entregado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Desconocido</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const botones = document.querySelectorAll(".btn-entregar");
+
+            botones.forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    e.preventDefault();
+
+                    const fila = e.target.closest("tr");
+                    const idPedido = fila.getAttribute("data-id");
+
+                    // Llamado al backend
+                    const response = await fetch(`/Conductor/MarcarEntregado/${idPedido}`, { method: "POST" });
+
+                    if (response.ok) {
+                        e.target.outerHTML = `<span class='badge bg-success'>Entregado</span>`;
+                        fila.querySelector(".estado").innerText = "Entregado";
+                    } else {
+                        alert("Error al marcar el pedido como entregado");
+                    }
+                });
+            });
+        });
+    </script>
+}

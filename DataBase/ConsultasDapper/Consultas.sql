@@ -97,3 +97,6 @@ INNER JOIN Empresa e
     ON p.idEmpresa = e.idEmpresa
 WHERE p.EstadoPedido = 'Entregado'
   AND p.idEmpresa = @idEmpresa;
+
+
+SELECT * From vehiculo WHERE Estado = 1; 

@@ -91,4 +91,10 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
             throw new Exception("Error al eliminar el vehiculo");
         }
     }
+
+    public async Task<IEnumerable<Vehiculo>> ObtenerVehiculosDisponibles()
+    {
+        var query = @"SELECT * From vehiculo WHERE Estado = 1";
+        return await Conexion.QueryAsync<Vehiculo>(query);
+    }
 }

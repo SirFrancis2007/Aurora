@@ -17,4 +17,6 @@ public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int
     /// <param name="idvehiculo">Identificador del vehículo.</param>
     /// <returns>True si fue modificado, False si no fue modificado.</returns> 
     public Task<Boolean> CambiarEstadoAsync(int vehiculoId, bool disponible);
+
+    public Task<IEnumerable<Vehiculo>> ObtenerVehiculosDisponibles();
 }

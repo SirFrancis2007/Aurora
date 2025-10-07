@@ -21,43 +21,57 @@
     <div class="menu">
         <a asp-action="AgregarPedido" asp-controller="Administrador">Nuevo Pedido</a>
     </div>
-
-    <div class="container">
-        <h1>Bandeja de Entrada</h1>
-        <div class="table-container">
-            <table class="Content-table">
-                <thead class="table-header">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre Pedido</th>
-                        <th>Peso</th>
-                        <th>Volumen</th>
-                        <th>Estado</th>
-                        <th>Fecha Despacho</th>
-                        <th>Empresa Origen</th>
-                        <th>Empresa Destino</th>
-                        <th>Origen</th>
-                        <th>Destino</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var pedido in Model)
-                    {
+        <div class="container">
+            <h1>Bandeja de Entrada</h1>
+            <div class="table-container">
+                <table class="Content-table">
+                    <thead class="table-header">
                         <tr>
-                            <td>@pedido.IdPedido</td>
-                            <td>@pedido.NombrePedido</td>
-                            <td>@pedido.Peso</td>
-                            <td>@pedido.Volumen</td>
-                            <td>@pedido.Estado</td>
-                            <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
-                            <td>@pedido.EmpresaOrigen</td>
-                            <td>@pedido.EmpresaDestino</td>
-                            <td>@pedido.Origen</td>
-                            <td>@pedido.Destino</td>
+                            <th>ID</th>
+                            <th>Nombre Pedido</th>
+                            <th>Peso</th>
+                            <th>Volumen</th>
+                            <th>Estado</th>
+                            <th>Fecha Despacho</th>
+                            <th>Empresa Origen</th>
+                            <th>Empresa Destino</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Acciones</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var pedido in Model)
+                        {
+                            <tr>
+                                <td>@pedido.IdPedido</td>
+                                <td>@pedido.NombrePedido</td>
+                                <td>@pedido.Peso</td>
+                                <td>@pedido.Volumen</td>
+                                <td>@pedido.Estado</td>
+                                <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                                <td>@pedido.EmpresaOrigen</td>
+                                <td>@pedido.EmpresaDestino</td>
+                                <td>@pedido.Origen</td>
+                                <td>@pedido.Destino</td>
+                                <td>
+                                    @if (pedido.Estado != "Entregado")
+                                    {
+                                        <form asp-action="MarcarComoEntregado" method="post" style="display:inline;">
+                                            <input type="hidden" name="idPedido" value="@pedido.IdPedido" />
+                                            <button type="submit" class="btn btn-success">Marcar como Entregado</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Entregado</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

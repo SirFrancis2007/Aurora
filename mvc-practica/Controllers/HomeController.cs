@@ -12,6 +12,7 @@ public class HomeController : Controller
     public IActionResult About() => View();
     public IActionResult Contact() => View();
     public IActionResult FAQ() => View();
+    public IActionResult login() => View();
     
     private readonly ILogger<HomeController> _logger;
     private readonly IRepoEmpresa _repoEmpresa;

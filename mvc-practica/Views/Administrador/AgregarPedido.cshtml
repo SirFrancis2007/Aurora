@@ -1,3 +1,5 @@
+@model PedidoViewModel;
+
 @{
     ViewData["Title"] = "Administrador";
     Layout = "_AdminLayout";
@@ -7,38 +9,60 @@
     <link rel="stylesheet" href="~/css/_form.css" />
 }
 
-<!-- Formulario para agregar un nuevo Pedido -->
 <div class="main-content">
     <div class="text-empresa">
         <h2>Agregar Nuevo Pedido</h2>
     </div>
 
     <div class="container">
-        <form method="post" action="">
+        <form asp-action="AgregarPedido" method="post">
             <div class="form-group">
-                <label for="Name">Titulo:</label>
-                <input type="text" name="Tipo" required />
+                <label>Título:</label>
+                <input asp-for="Titulo" class="form-control" required />
 
-                <label for="Volumen">Volumen:</label>
-                <input type="text" name="Tipo" required />
+                <label>Volumen:</label>
+                <input asp-for="Volumen" class="form-control" required />
 
-                <label for="Peso">Peso:</label>
-                <input type="text" name="Tipo" required />
+                <label>Peso:</label>
+                <input asp-for="Peso" class="form-control" required />
 
-                <label for="Estado">Estado:</label>
-                <select name="" id="">
-                    <option value="Despachado">Despachado</option>   
+                <label>Estado:</label>
+                <select asp-for="Estado" class="form-control">
+                    <option value="Despachado">Despachado</option>
+                    <option value="Pendiente">Pendiente</option>
                 </select>
 
-                <label for="">Fecha Despacho</label>
+                <label>Fecha Despacho:</label>
+                <input asp-for="FechaDespacho" type="date" class="form-control" required />
 
-                <label for="Name">Ruta:</label>
-                <select name="" id=""></select>
+                <label>Ruta:</label>
+                <select asp-for="IdRuta" class="form-control">
+                    @foreach (var ruta in Model.Rutas)
+                    {
+                        <option value="@ruta.IdRuta">@ruta.Origen - @ruta.Destino</option>
+                    }
+                </select>
 
-                <label for="Name">Empresa Destino:</label>
-                <select name="" id=""></select>
+                <label>Empresa Destino:</label>
+                <select asp-for="IdEmpresaDestino" class="form-control">
+                    @foreach (var empresa in Model.Empresas)
+                    {
+                        <option value="@empresa.IdEmpresa">@empresa.Nombre</option>
+                    }
+                </select>
+
+                <label>Vehículo:</label>
+                <select asp-for="IdVehiculo" class="form-control">
+                    @foreach (var v in Model.Vehiculos)
+                    {
+                        <option value="@v.IdVehiculo">
+                            @v.Tipo - @v.Matricula (Capacidad: @v.CapacidadMax)
+                        </option>
+                    }
+                </select>
             </div>
-            <button type="submit" class="btn-submit">Elegir Vehiculo</button>
+
+            <button type="submit" class="btn-submit">Despachar</button>
         </form>
     </div>
 </div>
