@@ -106,12 +106,13 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         }
     }
 
-    public async Task<Conductor> ObtenerConductorPorNombre(string Nombre)
+    public async Task<Conductor> ObtenerConductorPorNombre(string nombre)
     {
-        var query = @"SELECT idConductor FROM Conductor WHERE Name = @Nombre";
-        var resultado = await Conexion.QueryAsync<Conductor>(query, new { Name = Nombre });
-        return (Conductor)resultado;
+        var query = @"SELECT idConductor, Name FROM Conductor WHERE Name = @nombre";
+        var resultado = await Conexion.QueryFirstOrDefaultAsync<Conductor>(query, new { nombre });
+        return resultado;
     }
+
 
     public async Task<bool> ActualizarEstadoConductor(int id)
     {
