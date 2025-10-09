@@ -9,6 +9,7 @@ namespace mvc_practica.Controllers;
 
 public class AdministradorController : Controller
 {
+
     private readonly ILogger<HomeController> _logger;
     public IRepoEmpresa _repoEmpresa;
     public IRepoHisrorialPedido _repoHistorial;
@@ -51,6 +52,7 @@ public class AdministradorController : Controller
         return View(_HistorialPedido);
     }
 
+    public IActionResult AgregarRuta() => View();
     [HttpPost]
     public async Task<IActionResult> AgregarRuta(Ruta _ruta)
     {

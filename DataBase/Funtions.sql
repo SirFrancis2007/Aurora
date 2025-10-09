@@ -107,6 +107,8 @@ BEGIN
     UPDATE conductor c
     SET Disponibilidad = 0 -- Significa que esta en viaje.
     WHERE c.idConductor = xidconductor;
+
+    RETURN TRUE;
 END $$
 
 DELIMITER $$
@@ -118,4 +120,6 @@ BEGIN
     UPDATE vehiculo
     SET Estado = 0 -- Significa que esta en viaje.
     WHERE idVehiculo = xidVehiculo;
+
+    RETURN TRUE;
 END $$
