@@ -27,18 +27,18 @@ END $$
 -- Trigger para actualizar la disponibilidad del conductor al asignarle un vehículo
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS AftInsertConductorVehiculo $$
+/*DROP TRIGGER IF EXISTS AftInsertConductorVehiculo $$
 
 CREATE TRIGGER AftInsertConductorVehiculo AFTER INSERT ON Conductor_has_Vehiculo
 FOR EACH ROW
 BEGIN
     -- Al asignar un vehículo, el conductor ya no está disponible para otros vehículos
     UPDATE Conductor
-    SET Disponibilidad = 0
+    SET Disponibilidad = 1
     WHERE idConductor = NEW.idConductor;
 END $$
 
-
+*/
 DELIMITER $$
 
 DROP TRIGGER IF EXISTS VefInsPedido $$

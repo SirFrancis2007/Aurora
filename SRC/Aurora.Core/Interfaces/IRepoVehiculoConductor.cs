@@ -22,10 +22,16 @@ public interface IRepoVehiculoConductor : IRepoAlta<VehiculoConductor>, IRepoDet
     public Task<bool> DesasignarConductorDeVehiculo(int idVehiculo, int idConductor);
 
     /// <summary>
-    /// Condulta sobre los conductores.
+    /// Condulta sobre los vehiculos solos libres osea que su estado sea 1.
     /// </summary>
     /// <returns></returns>
-    public Task<IEnumerable<VehiculoConductorDTO>> consultaVehiculoConductor();
+    public Task<IEnumerable<VehiculoConductorDTO>> consultaVehiculoLibres();
+
+    /// <summary>
+    /// Condulta sobre los conductores solos libres osea que su estado sea 1.
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<VehiculoConductorDTO>> consultaConductoresLibres();
 
     /// <summary>
     /// Obtiene el id del vehiculo asignado al conductor
@@ -33,4 +39,16 @@ public interface IRepoVehiculoConductor : IRepoAlta<VehiculoConductor>, IRepoDet
     /// <param name="idConductor"></param>
     /// <returns></returns>
     public Task<int> ObtenerVehiculoPorIdConductor(int idConductor);
+
+    /// <summary>
+    /// Se obtiene los conductores con sus vehiculos asignados.
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<VehiculoConductorDTO>> ConsultaConductoresAsignados();
+
+    /// <summary>
+    /// Se obtiene los conductores con sus vehiculos asignados.
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<VehiculoConductorDTO>> ConsultaConductoresNOAsignados();
 }

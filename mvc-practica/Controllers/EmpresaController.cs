@@ -2,6 +2,7 @@ using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using mvc_practica.Models;
 using Xunit.Sdk;
 
 namespace mvc_practica.Controllers;
@@ -151,8 +152,14 @@ public class EmpresaController : Controller
     [HttpGet]
     public async Task<IActionResult> AsignarVehiculoAConductor()
     {
-        var respuesta = await _repoVehCon.consultaVehiculoConductor();
-        return View("UIVehiculo/AsignarVehiculoAConductor", respuesta);
+        var viewModel = new AsignacionVehiculoViewModel
+        {
+            ConductoresAsignados = await _repoVehCon.ConsultaConductoresAsignados(),
+            ConductoresNoAsignados = await _repoVehCon.ConsultaConductoresNOAsignados(),
+            VehiculosNoAsignados = await _repoVehCon.consultaVehiculoLibres()
+        };
+
+        return View("UIVehiculo/AsignarVehiculoAConductor", viewModel);
     }
 
     [HttpPost]

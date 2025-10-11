@@ -30,27 +30,16 @@ public class RepoVehiculoConductor : RepoGenerico, IRepoVehiculoConductor
 
     }
 
-    public async Task<IEnumerable<VehiculoConductorDTO>> consultaVehiculoConductor()
+    public async Task<IEnumerable<VehiculoConductorDTO>> ConsultaConductoresAsignados()
     {
-        var query = @"SELECT
-            c.idConductor, c.Name AS NombreConductor, c.Licencia, c.Disponibilidad,
-            v.idVehiculo, v.Matricula, v.Tipo, v.CapacidadMax, v.Estado AS EstadoVehiculo,
-            cv.FechaAsignado
-        FROM Conductor c
-        LEFT JOIN Conductor_has_Vehiculo cv ON c.idConductor = cv.idConductor
-        LEFT JOIN Vehiculo v ON cv.idVehiculo = v.idVehiculo
-
-        UNION
-
-        SELECT
-            NULL AS idConductor, NULL AS NombreConductor, NULL AS Licencia, NULL AS Disponibilidad,
-            v.idVehiculo, v.Matricula, v.Tipo, v.CapacidadMax, v.Estado AS EstadoVehiculo,
-            NULL AS FechaAsignado
-        FROM Vehiculo v
-        WHERE v.idVehiculo NOT IN (SELECT idVehiculo FROM Conductor_has_Vehiculo);";
-
-        var resultado = await Conexion.QueryAsync<VehiculoConductorDTO>(query);
-        return resultado;
+        var query = @"SELECT 
+                        c.idConductor, c.Name AS NombreConductor, c.Licencia, c.Disponibilidad,
+                        v.idVehiculo, v.Matricula, v.Tipo, v.CapacidadMax, v.Estado,
+                        cv.FechaAsignado
+                    FROM Conductor c
+                    INNER JOIN Conductor_has_Vehiculo cv ON c.idConductor = cv.idConductor
+                    INNER JOIN Vehiculo v ON cv.idVehiculo = v.idVehiculo;";
+        return await Conexion.QueryAsync<VehiculoConductorDTO>(query);
     }
 
     public async Task<bool> DesasignarConductorDeVehiculo(int idVehiculo, int idConductor)
@@ -110,4 +99,36 @@ public class RepoVehiculoConductor : RepoGenerico, IRepoVehiculoConductor
         var resultado = await Conexion.QueryFirstOrDefaultAsync<int>(query, new { idConductor });
         return resultado;
     }
+
+    public async Task<IEnumerable<VehiculoConductorDTO>> consultaVehiculoLibres()
+    {
+        var query = @"SELECT 
+                    v.idVehiculo, v.Matricula, v.Tipo, v.CapacidadMax
+                FROM Vehiculo v
+                WHERE v.idVehiculo NOT IN (
+                    SELECT idVehiculo FROM Conductor_has_Vehiculo
+                );";
+        return await Conexion.QueryAsync<VehiculoConductorDTO>(query);
+    }
+
+    public async Task<IEnumerable<VehiculoConductorDTO>> consultaConductoresLibres()
+    {
+        var query = @"SELECT 
+                    c.idConductor, c.Name AS NombreConductor, c.Licencia
+                FROM Conductor c
+                WHERE c.idConductor NOT IN (
+                    SELECT idConductor FROM Conductor_has_Vehiculo
+                );";
+        return await Conexion.QueryAsync<VehiculoConductorDTO>(query);
+    }
+
+    public async Task<IEnumerable<VehiculoConductorDTO>> ConsultaConductoresNOAsignados()
+    {
+        var query = @"SELECT 
+                            c.idConductor, c.Name AS NombreConductor, c.Licencia
+                        FROM Conductor c
+                        WHERE c.idConductor NOT IN (
+                            SELECT idConductor FROM Conductor_has_Vehiculo
+                        );";
+        return await Conexion.QueryAsync<VehiculoConductorDTO>(query);    }
 }

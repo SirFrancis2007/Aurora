@@ -79,7 +79,7 @@ public class ConductorController : Controller
     }
 
     [HttpPost]
-    [Route("Conductor/MarcarEntregado/{idPedido}")]
+    [Route("/Conductor/MarcarEntregado/{idPedido}")]
     public async Task<IActionResult> MarcarEntregado(int idPedido)
     {
         await _repoPedido.ActualizarEstadoPedidoPorConductor(idPedido, "Entregado");

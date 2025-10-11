@@ -1,5 +1,6 @@
 @using Aurora.Core.Models
-@model IEnumerable<VehiculoConductorDTO>
+@model AsignacionVehiculoViewModel
+
 @{
     ViewData["Title"] = "Empresa";
     Layout = "_EmpresaLayout";
@@ -28,14 +29,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.ConductoresAsignados)
                     {
                         <tr>
                             <td>@item.NombreConductor</td>
                             <td>@item.Licencia</td>
-                            <td>@(item.Tipo ?? "Sin asignar")</td>
-                            <td>@(item.Matricula ?? "-")</td>
-                            <td>@(item.FechaAsignado?.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@item.Tipo</td>
+                            <td>@item.Matricula</td>
+                            <td>@item.FechaAsignado?.ToString("dd/MM/yyyy")</td>
                             <td>@(item.Disponibilidad == 1 ? "Disponible" : "En viaje")</td>
                         </tr>
                     }
@@ -52,14 +53,9 @@
                 <label for="vehiculo">Vehiculo:</label>
                 <select id="vehiculo" name="idVehiculo" class="form-control">
                     <option value="">-- Selecciona un vehículo --</option>
-                    @foreach (var v in Model.Where(x => x.EstadoVehiculo == 1))
+                    @foreach (var v in Model.VehiculosNoAsignados)
                     {
-                        <option value="@v.IdVehiculo" 
-                                data-tipo="@v.Tipo" 
-                                data-matricula="@v.Matricula" 
-                                data-capacidad="@v.CapacidadMax">
-                            @v.Matricula (@v.Tipo)
-                        </option>
+                        <option value="@v.IdVehiculo">@v.Matricula (@v.Tipo)</option>
                     }
                 </select>
 
@@ -68,16 +64,11 @@
                 <label for="Conductor">Conductor:</label>
                 <select id="conductor" name="idConductor" class="form-control">
                     <option value="">-- Selecciona un conductor --</option>
-                    @foreach (var c in Model.Where(c => c.Disponibilidad == 1))
+                    @foreach (var c in Model.ConductoresNoAsignados)
                     {
-                        <option value="@c.IdConductor" 
-                                data-nombre="@c.NombreConductor" 
-                                data-licencia="@c.Licencia">
-                            @c.NombreConductor
-                        </option>
+                        <option value="@c.IdConductor">@c.NombreConductor</option>
                     }
                 </select>
-
                 <div id="conductor-info" class="info-box"></div>
             </div>
 
@@ -85,36 +76,3 @@
         </form>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        document.getElementById("vehiculo").addEventListener("change", function () {
-            var selected = this.options[this.selectedIndex];
-            var infoBox = document.getElementById("vehiculo-info");
-
-            if (selected.value) {
-                infoBox.innerHTML = `
-                    <strong>Tipo:</strong> ${selected.dataset.tipo} <br/>
-                    <strong>Matrícula:</strong> ${selected.dataset.matricula} <br/>
-                    <strong>Capacidad:</strong> ${selected.dataset.capacidad}
-                `;
-            } else {
-                infoBox.innerHTML = "";
-            }
-        });
-
-        document.getElementById("conductor").addEventListener("change", function () {
-            var selected = this.options[this.selectedIndex];
-            var infoBox = document.getElementById("conductor-info");
-
-            if (selected.value) {
-                infoBox.innerHTML = `
-                    <strong>Nombre:</strong> ${selected.dataset.nombre} <br/>
-                    <strong>Licencia:</strong> ${selected.dataset.licencia}
-                `;
-            } else {
-                infoBox.innerHTML = "";
-            }
-        });
-    </script>
-}
