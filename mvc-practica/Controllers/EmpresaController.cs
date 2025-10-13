@@ -198,17 +198,30 @@ public class EmpresaController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateConductor(Conductor _conductor)
     {
-        if (!ModelState.IsValid)
-            return View("UIConductor/ActualizarConductor", _conductor);
-
-        var conductor = new Conductor
+        while (VefDisponibilidadConductor(_conductor).Result == true)
         {
-            Name = _conductor.Name.Trim(),
-            Licencia = _conductor.Licencia.Trim(),
-            Disponibilidad = _conductor.Disponibilidad = true
-        }; 
-    
-        await _repoConductor.ActualizarConductor(conductor);
-        return RedirectToAction(nameof(ConductorEmpresa));
+            if (!ModelState.IsValid)
+                return View("UIConductor/ActualizarConductor", _conductor);
+
+            var conductor = new Conductor
+            {
+                Name = _conductor.Name.Trim(),
+                Licencia = _conductor.Licencia.Trim(),
+                Disponibilidad = _conductor.Disponibilidad = true
+            };
+
+            await _repoConductor.ActualizarConductor(conductor);
+            return RedirectToAction(nameof(ConductorEmpresa));
+        }
+        return RedirectToAction(nameof(ConductorEmpresa));   
+    }
+
+    private async Task<bool> VefDisponibilidadConductor(Conductor _conductor)
+    {
+        Conductor resultado = await _repoConductor.DetalleAsync(_conductor.IdConductor);
+        if (resultado.Disponibilidad == false)
+            return false;
+        else
+            return true;
     }
 }

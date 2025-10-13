@@ -4,12 +4,12 @@ using mvc_practica.Models;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using System.Collections;
+using Microsoft.IdentityModel.Tokens;
 
 namespace mvc_practica.Controllers;
 
 public class AdministradorController : Controller
 {
-
     private readonly ILogger<HomeController> _logger;
     public IRepoEmpresa _repoEmpresa;
     public IRepoHisrorialPedido _repoHistorial;
@@ -58,13 +58,14 @@ public class AdministradorController : Controller
     {
         if (ModelState.IsValid)
         {
-            var _nuevaruta = new Ruta
+            var _nuevaRuta = new Ruta
             {
-                Origen = _ruta.Origen,
-                Destino = _ruta.Destino
+                Origen = LimpiarCampo(_ruta.Origen, nameof(_ruta.Origen)),
+                Destino = LimpiarCampo(_ruta.Destino, nameof(_ruta.Destino))
             };
 
-            await _repoRuta.AltaAsync(_nuevaruta);
+
+            await _repoRuta.AltaAsync(_nuevaRuta);
             TempData["Mensaje"] = "Ruta Creada";
             var Nombre = HttpContext.Session.GetString("nombreAdministrador");
             return RedirectToAction("IndexAdmin", new { nombre = Nombre });
@@ -73,7 +74,16 @@ public class AdministradorController : Controller
         return View();
     }
 
+    private string LimpiarCampo(string valor, string nombreCampo)
+    {
+        if (string.IsNullOrWhiteSpace(valor))
+            throw new ArgumentNullException(nombreCampo, $"El campo {nombreCampo} no puede estar vacío.");
+
+        return valor.Trim().ToLower();
+    }
+
     [HttpGet]
+    // Este mth solo muestra el 
     public async Task<IActionResult> AgregarPedido()
     {
         var idAdministrador = HttpContext.Session.GetInt32("idAdministrador");
@@ -103,14 +113,15 @@ public class AdministradorController : Controller
 
 
     [HttpPost]
+    //Este mth es literalmetne la accion de alta pedido
     public async Task<IActionResult> AgregarPedido(PedidoViewModel dto)
     {
         var idAdministrador = HttpContext.Session.GetInt32("idAdministrador");
         var pedido = new Pedido
         {
             NombrePedido = dto.Titulo,
-            Volumen = dto.Volumen,
-            Peso = dto.Peso,
+            Volumen = await VefNumeros(dto.Volumen),
+            Peso = await VefNumeros(dto.Peso),
             Estado = dto.Estado,
             FechaDespacho = DateTime.Today,
             XidRuta = dto.IdRuta,
@@ -125,18 +136,26 @@ public class AdministradorController : Controller
         var nombre = HttpContext.Session.GetString("nombreAdministrador");
         return RedirectToAction("IndexAdmin", new { nombre });
     }
-    
+
     [HttpPost]
-    public async Task<IActionResult> ActualizarEstado(int idPedido)
+    public async Task<IActionResult> MarcarComoEntregado(int idPedido)
     {
         if (idPedido <= 0)
             return BadRequest("ID de pedido inválido.");
 
-        await _repoPedido.ActualizarEstadoPedidoPorAdmin(idPedido, "Entregado");
+        await _repoPedido.ActualizarEstadoPedidoPorAdmin(idPedido, "Recibido");
 
-        TempData["Mensaje"] = "Pedido marcado como entregado.";
+        TempData["Mensaje"] = "Pedido marcado como Recibido.";
 
         var nombre = HttpContext.Session.GetString("nombreAdministrador");
         return RedirectToAction("IndexAdmin", new { nombre });
+    }
+    
+    private async Task<double> VefNumeros(double n)
+    {
+        if (n < 0)
+            throw new ArgumentOutOfRangeException(nameof(n), "El campo no acepta medidas negativas.");
+
+        return await Task.FromResult(n);    
     }
 }
