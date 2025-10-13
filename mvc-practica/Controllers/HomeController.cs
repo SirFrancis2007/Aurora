@@ -17,14 +17,17 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IRepoEmpresa _repoEmpresa;
     private readonly IRepoAdministrador _repoAdministrador;
+    private readonly IRepoConductor _repoConductor;
     public Empresa _empresa;
     public Administrador _administrador;
+    public Conductor _conductor;
 
-    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdministrador)
+    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdministrador, IRepoConductor repoConductor)
     {
         _logger = logger;
         _repoEmpresa = repoEmpresa;
         _repoAdministrador = repoAdministrador;
+        _repoConductor = repoConductor;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -89,6 +92,36 @@ public class HomeController : Controller
             }
         }
         return View(_administrador);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AutenticacionConductor(Conductor _conductor)
+    {
+        try
+        {
+            var _vefConductor = new Conductor
+            {
+                Name = _conductor.Name.Trim().ToLower(),
+                Licencia = _conductor.Licencia.Trim().ToLower(),
+                Disponibilidad = true /*Este parametro no se le proporciona al ADO*/
+            };
+
+            var repuesta = await _repoConductor.Loguearse(_vefConductor.Name, _vefConductor.Licencia);
+            if (repuesta == true)
+            {
+                return RedirectToAction("IndexConductor", "Conductor", new { nombre = _vefConductor.Name });
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
+                // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
+            }
+        }
+        catch
+        {
+            return NotFound();
+        }
+        return View();
     }
 }
 

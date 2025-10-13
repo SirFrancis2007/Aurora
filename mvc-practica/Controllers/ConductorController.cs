@@ -24,32 +24,9 @@ public class ConductorController : Controller
         _repoVehiculo = repoVehiculo;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AutenticacionConductor(Conductor _conductor)
+    public async Task<IActionResult> IndexConductor(string nombre)
     {
-        try
-        {
-            var repuesta = await _repoConductor.Loguearse(_conductor.Name, _conductor.Licencia);
-            if (repuesta == true)
-            {
-                HttpContext.Session.SetString("Nombre", _conductor.Name);
-                return RedirectToAction(nameof(ConductorController.IndexConductor));
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
-                // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
-            }
-        }
-        catch
-        {
-            return NotFound();
-        }
-        return View();
-    }
-
-    public async Task<IActionResult> IndexConductor()
-    {
+        HttpContext.Session.SetString("Nombre", nombre);
         var _nombre = HttpContext.Session.GetString("Nombre");
 
         if (string.IsNullOrEmpty(_nombre))
@@ -64,18 +41,18 @@ public class ConductorController : Controller
     [HttpPost]
     public async Task<IActionResult> IniciarViaje()
     {
-        var nombre = HttpContext.Session.GetString("nombreConductor");
-        if (string.IsNullOrEmpty(nombre))
+        var _nombre = HttpContext.Session.GetString("Nombre");
+        if (string.IsNullOrEmpty(_nombre))
             return RedirectToAction("Login", "Home");
 
-        var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
+        var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
         await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje
 
         await _repoVehiculo.ActualizarEstadoVehiculo(conductor.IdConductor); // En viaje
         await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
 
         TempData["Mensaje"] = "Viaje iniciado correctamente.";
-        return RedirectToAction("IndexConductor");
+        return RedirectToAction("IndexConductor", _nombre);
     }
 
     [HttpPost]
