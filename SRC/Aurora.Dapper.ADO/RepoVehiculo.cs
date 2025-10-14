@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.Schema;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
+using Aurora.Core.Models;
 using Dapper;
 
 namespace Aurora.Dapper.ADO;
@@ -92,10 +93,21 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         }
     }
 
-    public async Task<IEnumerable<Vehiculo>> ObtenerVehiculosDisponibles()
+    public async Task<IEnumerable<VehiculoDTO>> ObtenerVehiculosDisponibles()
     {
-        var query = @"SELECT * From vehiculo WHERE Estado = 1";
-        return await Conexion.QueryAsync<Vehiculo>(query);
+        var query = @"SELECT 
+            v.Tipo,
+            v.idVehiculo,
+            v.Matricula,
+            v.CapacidadMax,
+            IFNULL(SUM(p.Peso), 0) AS PesoTotalPedidos,
+            (v.CapacidadMax - IFNULL(SUM(p.Peso), 0)) AS CapacidadRestante
+        FROM Vehiculo v
+        LEFT JOIN Pedido p ON v.idVehiculo = p.idVehiculo
+        WHERE v.Estado = 1
+        GROUP BY v.idVehiculo, v.Matricula, v.CapacidadMax;
+        ";
+        return await Conexion.QueryAsync<VehiculoDTO>(query);
     }
 
     public async Task<bool> ActualizarEstadoVehiculo(int id)
@@ -105,4 +117,5 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xidVehiculo = id });
         return result;
     }
+
 }

@@ -18,28 +18,21 @@
                         <a asp-controller="Administrador" asp-action="AgregarPedido">
                             <img src="~/icon/UserIcon.png" alt="">
                             <i class="fas fa-shopping-cart"></i>
-                            <span>Realizar Pedido</span>
+                            <span>Nuevo Pedido</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Administrador" asp-action="Historial">
                             <img src="~/icon/HistorialIcon.png" alt="">
                             <i class="fas fa-history"></i>
-                            <span>Historial de Paquetes</span>
+                            <span>Historial General</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Administrador" asp-action="AgregarRuta">
                             <img src="~/icon/RutaIcon.png" alt="">
                             <i class="fas fa-history"></i>
-                            <span>Agregar Ruta</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Administrador" asp-action="IndexAdmin">
-                            <img src="~/icon/RutaIcon.png" alt="">
-                            <i class="fas fa-history"></i>
-                            <span>Bandeja de entrada</span>
+                            <span>NUeva Ruta</span>
                         </a>
                     </li>
                     <li>
@@ -54,7 +47,7 @@
         </div>
     </section>
 
-    <div class="container">
+    <div class="main-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

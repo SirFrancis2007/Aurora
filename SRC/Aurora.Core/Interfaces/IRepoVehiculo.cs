@@ -1,3 +1,5 @@
+using Aurora.Core.Models;
+
 namespace Aurora.Core.Interfaces;
 
 public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int>, IRepoListado<Vehiculo>
@@ -18,7 +20,7 @@ public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int
     /// <returns>True si fue modificado, False si no fue modificado.</returns> 
     public Task<Boolean> CambiarEstadoAsync(int vehiculoId, bool disponible);
 
-    public Task<IEnumerable<Vehiculo>> ObtenerVehiculosDisponibles();
+    public Task<IEnumerable<VehiculoDTO>> ObtenerVehiculosDisponibles();
 
     public Task<bool> ActualizarEstadoVehiculo(int id);
 }

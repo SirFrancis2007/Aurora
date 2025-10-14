@@ -1,4 +1,5 @@
 using Aurora.Core;
+using Aurora.Core.Models;
 
 public class PedidoViewModel
 {
@@ -12,8 +13,10 @@ public class PedidoViewModel
     public required int IdVehiculo { get; set; }
     public required int IdAdministrador { get; set; }
 
+    //VAR DE CANTIDAD DE CAPACIDAD RESTANTE: COTEMPLA UN CALCULO DE EN BASE A LA CAPACIDAD MAXIMA - LA SUMATORIA DEL PESO DE LOS PEDIDOS DE ESE VEHICULO
+
     // Estas lista serviran para almacenar los datos para los select.
-    public IEnumerable<Ruta> Rutas { get; set; }
-    public IEnumerable<Empresa> Empresas { get; set; }
-    public IEnumerable<Vehiculo> Vehiculos { get; set; }
+    public IEnumerable<Ruta>? Rutas { get; set; }
+    public IEnumerable<Empresa>? Empresas { get; set; }
+    public IEnumerable<VehiculoDTO>? Vehiculos { get; set; }
 }

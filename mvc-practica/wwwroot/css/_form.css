@@ -31,7 +31,7 @@ label {
     font-weight: 500;
 }
 
-input[type="text"] {
+input {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #e2e8f0;
@@ -41,7 +41,7 @@ input[type="text"] {
     background-color: #fafafa;
 }
 
-input[type="text"]:focus {
+input:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
@@ -54,9 +54,10 @@ input[type="text"]:focus {
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 10px;
     font-weight: 500;
     cursor: pointer;
+    margin-top: 16px;
     transition: background-color 0.3s;
 }
 

@@ -6,7 +6,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/_form.css" />
+    <link rel="stylesheet" href="~/css/_formPedido.css" />
 }
 
 <div class="main-content">
@@ -16,52 +16,50 @@
 
     <div class="container">
         <form asp-action="AgregarPedido" method="post">
-            <div class="form-group">
-                <label>Título:</label>
-                <input asp-for="Titulo" class="form-control" required />
+                <div class="form-group">
+                    <label>Título:</label>
+                    <input asp-for="Titulo" type="text" required />
 
-                <label>Volumen:</label>
-                <input asp-for="Volumen" class="form-control" required />
+                    <label>Volumen (m³):</label>
+                    <input asp-for="Volumen" type="text" required />
 
-                <label>Peso:</label>
-                <input asp-for="Peso" class="form-control" required />
+                    <label>Peso (kg):</label>
+                    <input asp-for="Peso" type="text" required />
 
-                <label>Estado:</label>
-                <select asp-for="Estado" class="form-control">
-                    <option value="Despachado">Despachado</option>
-                    <option value="Pendiente">Pendiente</option>
-                </select>
+                    <label>Estado:</label>
+                    <select asp-for="Estado">
+                        <option value="Despachado">Despachado</option>
+                    </select>
 
-                <label>Fecha Despacho:</label>
-                <input asp-for="FechaDespacho" type="date" class="form-control" required />
+                    <label>Fecha Despacho:</label>
+                    <input asp-for="FechaDespacho" type="date" required />
 
-                <label>Ruta:</label>
-                <select asp-for="IdRuta" class="form-control">
-                    @foreach (var ruta in Model.Rutas)
-                    {
-                        <option value="@ruta.IdRuta">@ruta.Origen - @ruta.Destino</option>
-                    }
-                </select>
+                    <label>Ruta:</label>
+                    <select asp-for="IdRuta">
+                        @foreach (var ruta in Model.Rutas)
+                        {
+                            <option value="@ruta.IdRuta">@ruta.Origen - @ruta.Destino</option>
+                        }
+                    </select>
 
-                <label>Empresa Destino:</label>
-                <select asp-for="IdEmpresaDestino" class="form-control">
-                    @foreach (var empresa in Model.Empresas)
-                    {
-                        <option value="@empresa.IdEmpresa">@empresa.Nombre</option>
-                    }
-                </select>
+                    <label>Empresa Destino:</label>
+                    <select asp-for="IdEmpresaDestino">
+                        @foreach (var empresa in Model.Empresas)
+                        {
+                            <option value="@empresa.IdEmpresa">@empresa.Nombre</option>
+                        }
+                    </select>
 
-                <label>Vehículo:</label>
-                <select asp-for="IdVehiculo" class="form-control">
-                    @foreach (var v in Model.Vehiculos)
-                    {
-                        <option value="@v.IdVehiculo">
-                            @v.Tipo - @v.Matricula (Capacidad: @v.CapacidadMax)
-                        </option>
-                    }
-                </select>
-            </div>
-
+                    <label>Vehículo:</label>
+                    <select asp-for="IdVehiculo">
+                        @foreach (var v in Model.Vehiculos)
+                        {
+                            <option value="@v.IdVehiculo">
+                                @v.Tipo :Tipo - @v.Matricula :Matricula - @v.CapacidadRestante kg)
+                            </option>
+                        }
+                    </select>
+                </div>
             <button type="submit" class="btn-submit">Despachar</button>
         </form>
     </div>

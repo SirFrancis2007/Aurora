@@ -100,3 +100,14 @@ WHERE p.EstadoPedido = 'Entregado'
 
 
 SELECT * From vehiculo WHERE Estado = 1; 
+
+SELECT 
+    v.idVehiculo,
+    v.Matricula,
+    v.CapacidadMax,
+    IFNULL(SUM(p.Peso), 0) AS PesoTotalPedidos,
+    (v.CapacidadMax - IFNULL(SUM(p.Peso), 0)) AS CapacidadRestante
+FROM Vehiculo v
+LEFT JOIN Pedido p ON v.idVehiculo = p.idVehiculo
+WHERE v.Estado = 1
+GROUP BY v.idVehiculo, v.Matricula, v.CapacidadMax;
