@@ -35,6 +35,15 @@ public class ConductorController : Controller
         var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
         var _idvehiculoVinculado = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
         var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(_idvehiculoVinculado);
+
+        bool todosEntregados = pedidos.All(p => p.Estado == "Entregado");
+
+        if (todosEntregados)
+        {
+            await _repoVehiculo.CambiarEstadoAsync(_idvehiculoVinculado, true);
+            await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor);
+            return RedirectToAction("Login", "Home");
+        }
         return View(pedidos);
     }
 
