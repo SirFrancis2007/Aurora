@@ -56,3 +56,16 @@ BEGIN
     -- Aclaracion: El trigger UpdateHistorialPedido se encargará de crear el registro en el historial
 END $$
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS SPActualizarEstadoPedidosPorVehiculo;
+DELIMITER $$
+CREATE PROCEDURE SPActualizarEstadoPedidosPorVehiculo(
+    IN xIdVehiculo INT,
+    IN xNuevoEstado VARCHAR(45)
+)
+BEGIN
+    UPDATE Pedido
+    SET EstadoPedido = xNuevoEstado
+    WHERE idVehiculo = xIdVehiculo;
+END $$
+DELIMITER ;

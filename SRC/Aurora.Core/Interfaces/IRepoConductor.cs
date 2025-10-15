@@ -43,4 +43,11 @@ public interface IRepoConductor : IRepoAlta<Conductor>, IRepoDetalle<Conductor, 
     /// <param name="conductor"></param>
     /// <returns></returns>
     public Task<bool> ActualizarEstadoConductor(int id);
+
+    /// <summary>
+    /// Liberar al conductor (lo deja disponible)
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public Task<bool> FncLiberarEstadoConductor(int id);
 }

@@ -123,3 +123,29 @@ BEGIN
 
     RETURN TRUE;
 END $$
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FncLiberarEstadoConductor $$
+CREATE FUNCTION FncActualizarEstadoConductor(xidconductor TINYINT)
+RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    UPDATE conductor c
+    SET Disponibilidad = 1 -- Significa que entrego todos los paquetes asignados por lo que ahora cambia a disponible
+    WHERE c.idConductor = xidconductor;
+
+    RETURN TRUE;
+END $$
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS FncLiberarEstadoVehiculo $$
+CREATE FUNCTION FncActualizarEstadoVehiculo(xidVehiculo TINYINT)
+RETURNS BOOLEAN
+READS SQL DATA
+BEGIN
+    UPDATE vehiculo
+    SET Estado = 1 -- Significa que se entrego todos los paquetes asignados por lo que ahora cambia a disponible
+    WHERE idVehiculo = xidVehiculo;
+
+    RETURN TRUE;
+END $$

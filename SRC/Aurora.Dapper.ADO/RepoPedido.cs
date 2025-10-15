@@ -41,20 +41,20 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         }
     }
 
-    public async Task<bool> ActualizarEstadoPedidoPorConductor(int idPedido, string nuevoEstado)
+    public async Task<bool> ActualizarEstadoPedidoPorConductor(int idConductor, string nuevoEstado)
     {
-        var parametetros = new DynamicParameters();
-        parametetros.Add("xidPedido",idPedido);
-        parametetros.Add("xNuevoEstado",nuevoEstado);
+        var parametros = new DynamicParameters();
+        parametros.Add("xIdVehiculo", idConductor);
+        parametros.Add("xNuevoEstado", nuevoEstado);
+
         try
         {
-            var resultado = await Conexion.ExecuteAsync("SPUpdateEstadoPedido", parametetros, commandType: CommandType.StoredProcedure);
-            if (resultado == 1) return true;
-            else { return false; }
+            var resultado = await Conexion.ExecuteAsync("SPActualizarEstadoPedidosPorVehiculo", parametros, commandType: CommandType.StoredProcedure);
+            return resultado > 0;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-            throw new Exception("No se pudo actualizar el estado del pedido");
+            throw new Exception($"Error al actualizar los pedidos del conductor: {ex.Message}");
         }
     }
 
@@ -151,7 +151,7 @@ public class RepoPedido : RepoGenerico, IRepoPedido
                 FROM Pedido p
                 INNER JOIN Empresa e ON p.idEmpresa = e.idEmpresa
                 INNER JOIN Ruta r ON p.idRuta = r.idRuta
-                WHERE p.idVehiculo = @idVehiculo;
+                WHERE p.idVehiculo = @idVehiculo and EstadoPedido != 'Entregado';
                 ";
         return (List<PedidoRutaDTO>)await Conexion.QueryAsync<PedidoRutaDTO>(query, new { idVehiculo = idVehiculo });
     }

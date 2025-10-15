@@ -121,4 +121,11 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xidconductor = id });
         return result;
     }
+
+    public async Task<bool> FncLiberarEstadoConductor(int id)
+    {
+        var funtionLogin = "SELECT FncLiberarEstadoConductor(@xidconductor);"; 
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xidconductor = id });
+        return result;
+    }
 }

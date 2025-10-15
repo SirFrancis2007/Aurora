@@ -41,7 +41,7 @@ public class ConductorController : Controller
         if (todosEntregados)
         {
             await _repoVehiculo.CambiarEstadoAsync(_idvehiculoVinculado, true);
-            await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor);
+            await _repoConductor.FncLiberarEstadoConductor(conductor.IdConductor);
             return RedirectToAction("Login", "Home");
         }
         return View(pedidos);
@@ -55,9 +55,12 @@ public class ConductorController : Controller
             return RedirectToAction("Login", "Home");
 
         var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
-        await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje
+        await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje //esta aca esta bien
+        var idvehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor); //  Aca se obtiene el id del vehiculo a partir de una consulta hecha al la tabla vehiculo-conductor (del muhco a muchos) en base al id del conductor.
+        // hay que actualizar el estado del vehiculo en base al conductor asignado, asi que hay que ver vehiculo-conductor y ahi actualizar el estado del vehiculo para que se actualice el vehiculo asginado al conductor
+        await _repoVehiculo.ActualizarEstadoVehiculo(idvehiculo);  // En viaje
 
-        await _repoVehiculo.ActualizarEstadoVehiculo(conductor.IdConductor); // En viaje
+        // Pedido tiene el idVehiculo, asi que hay que obtener el idVehiculo del conductor y ahi actualizar el estado del pedido
         await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
 
         TempData["Mensaje"] = "Viaje iniciado correctamente.";
