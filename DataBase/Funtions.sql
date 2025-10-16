@@ -126,7 +126,7 @@ END $$
 
 DELIMITER $$
 DROP FUNCTION IF EXISTS FncLiberarEstadoConductor $$
-CREATE FUNCTION FncActualizarEstadoConductor(xidconductor TINYINT)
+CREATE FUNCTION FncLiberarEstadoConductor(xidconductor TINYINT)
 RETURNS BOOLEAN
 READS SQL DATA
 BEGIN
@@ -139,7 +139,7 @@ END $$
 
 DELIMITER $$
 DROP FUNCTION IF EXISTS FncLiberarEstadoVehiculo $$
-CREATE FUNCTION FncActualizarEstadoVehiculo(xidVehiculo TINYINT)
+CREATE FUNCTION FncLiberarEstadoVehiculo(xidVehiculo TINYINT)
 RETURNS BOOLEAN
 READS SQL DATA
 BEGIN
