@@ -60,11 +60,22 @@ public class ConductorController : Controller
         // hay que actualizar el estado del vehiculo en base al conductor asignado, asi que hay que ver vehiculo-conductor y ahi actualizar el estado del vehiculo para que se actualice el vehiculo asginado al conductor
         await _repoVehiculo.ActualizarEstadoVehiculo(idvehiculo);  // En viaje
 
-        // Pedido tiene el idVehiculo, asi que hay que obtener el idVehiculo del conductor y ahi actualizar el estado del pedido
-        await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
+        /*var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idvehiculo);
+        var existePedidoEntregasos = pedidos.Any(p => p.Estado == "Entregado");
+        if (pedidos.Count > 0)
+        {
+            return RedirectToAction("Login", "Home");
+        }
+        else
+        {
+            // Pedido tiene el idVehiculo, asi que hay que obtener el idVehiculo del conductor y ahi actualizar el estado del pedido
+            await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
+        }*/
 
+        await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
+        
         TempData["Mensaje"] = "Viaje iniciado correctamente.";
-        return RedirectToAction("IndexConductor", _nombre);
+        return RedirectToAction("IndexConductor", new { nombre = _nombre });
     }
 
     [HttpPost]

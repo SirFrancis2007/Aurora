@@ -113,15 +113,13 @@ public class HomeController : Controller
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
-                // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
+                return RedirectToAction("Index");
             }
         }
         catch
         {
-            return NotFound();
+            return View();
         }
-        return View();
     }
 }
 
