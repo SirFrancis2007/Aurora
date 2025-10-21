@@ -23,4 +23,6 @@ public interface IRepoVehiculo : IRepoAlta<Vehiculo>, IRepoDetalle<Vehiculo, int
     public Task<IEnumerable<VehiculoDTO>> ObtenerVehiculosDisponibles();
 
     public Task<bool> ActualizarEstadoVehiculo(int id);
+
+    public Task<bool> RestaurarPesoVehiculo(int idvehiculo, int idpedido);
 }

@@ -7,5 +7,4 @@ public class VehiculoDTO
     public string Tipo { get; }
     public double CapacidadMax { get; }
     public double PesoTotalPedidos { get; }
-    public double CapacidadRestante { get; }
 }

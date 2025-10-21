@@ -213,7 +213,7 @@ public class EmpresaController : Controller
             await _repoConductor.ActualizarConductor(conductor);
             return RedirectToAction(nameof(ConductorEmpresa));
         }
-        return RedirectToAction(nameof(ConductorEmpresa));   
+        return RedirectToAction(nameof(ConductorEmpresa));
     }
 
     private async Task<bool> VefDisponibilidadConductor(Conductor _conductor)
@@ -223,5 +223,23 @@ public class EmpresaController : Controller
             return false;
         else
             return true;
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> DesvincularVehiculoConductor(int idConductor, int idVehiculo)
+    {
+        try
+        {
+            await _repoVehCon.DesasignarConductorDeVehiculo(idConductor, idVehiculo);
+            await _repoVehiculo.CambiarEstadoAsync(idVehiculo, true);
+            await _repoConductor.FncLiberarEstadoConductor(idConductor);
+            TempData["Mensaje"] = "Vehículo desvinculado correctamente.";
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = "Ocurrió un error al desvincular el vehículo: " + ex.Message;
+        }
+
+        return RedirectToAction("AsignarVehiculoAConductor"); 
     }
 }

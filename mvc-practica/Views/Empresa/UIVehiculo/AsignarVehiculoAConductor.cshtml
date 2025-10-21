@@ -12,7 +12,7 @@
 
 <div class="main-content">
     <div class="text-empresa">
-        <h2>Asignar Vehiculo a Conductor</h2>
+        <h2>Asignar Vehículo a Conductor</h2>
     </div>
 
     <div class="container-tbl">
@@ -26,6 +26,7 @@
                         <th>Matrícula</th>
                         <th>Fecha Asignado</th>
                         <th>Disponibilidad</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,15 @@
                             <td>@item.Matricula</td>
                             <td>@item.FechaAsignado?.ToString("dd/MM/yyyy")</td>
                             <td>@(item.Disponibilidad == 1 ? "Disponible" : "En viaje")</td>
+                            <td>
+                                <form asp-controller="Empresa" asp-action="DesvincularVehiculoConductor" method="post" style="display:inline;">
+                                    <input type="hidden" name="idConductor" value="@item.IdConductor" />
+                                    <input type="hidden" name="idVehiculo" value="@item.IdVehiculo" />
+                                    <button type="submit" class="btn-desvincular">
+                                        Desvincular vehículo de conductor
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 </tbody>

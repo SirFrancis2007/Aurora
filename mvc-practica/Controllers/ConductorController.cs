@@ -34,7 +34,9 @@ public class ConductorController : Controller
 
         var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
         var _idvehiculoVinculado = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
+        HttpContext.Session.SetInt32("idvehiculo", _idvehiculoVinculado);
         var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(_idvehiculoVinculado);
+        var pedidosMostrar = pedidos.Where(p => p.Estado == "Despachado");
 
         bool todosEntregados = pedidos.All(p => p.Estado == "Entregado");
 
@@ -44,7 +46,9 @@ public class ConductorController : Controller
             await _repoConductor.FncLiberarEstadoConductor(conductor.IdConductor);
             return RedirectToAction("Login", "Home");
         }
-        return View(pedidos);
+
+
+        return View(pedidosMostrar);
     }
 
     [HttpPost]
@@ -55,25 +59,29 @@ public class ConductorController : Controller
             return RedirectToAction("Login", "Home");
 
         var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
-        await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje //esta aca esta bien
-        var idvehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor); //  Aca se obtiene el id del vehiculo a partir de una consulta hecha al la tabla vehiculo-conductor (del muhco a muchos) en base al id del conductor.
-        // hay que actualizar el estado del vehiculo en base al conductor asignado, asi que hay que ver vehiculo-conductor y ahi actualizar el estado del vehiculo para que se actualice el vehiculo asginado al conductor
-        await _repoVehiculo.ActualizarEstadoVehiculo(idvehiculo);  // En viaje
+        var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
 
-        /*var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idvehiculo);
-        var existePedidoEntregasos = pedidos.Any(p => p.Estado == "Entregado");
-        if (pedidos.Count > 0)
+        var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
+
+        var pedidoEntregado = pedidos.Count(p => p.Estado == "Entregado");
+        if (pedidoEntregado >= 1)
         {
-            return RedirectToAction("Login", "Home");
+            TempData["Mensaje"] = "Ya se inicio el viaje";
+            return RedirectToAction("IndexConductor", new { nombre = _nombre });
         }
-        else
-        {
-            // Pedido tiene el idVehiculo, asi que hay que obtener el idVehiculo del conductor y ahi actualizar el estado del pedido
-            await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
-        }*/
 
+        bool todosEntregados = pedidos.All(p => p.Estado == "Entregado");
+
+        if (todosEntregados)
+        {
+            TempData["Mensaje"] = "Todos los pedidos ya fueron entregados. No se puede iniciar un nuevo viaje.";
+            return RedirectToAction("IndexConductor", new { nombre = _nombre });
+        }
+
+        await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje
+        await _repoVehiculo.ActualizarEstadoVehiculo(idVehiculo);              // En viaje
         await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
-        
+
         TempData["Mensaje"] = "Viaje iniciado correctamente.";
         return RedirectToAction("IndexConductor", new { nombre = _nombre });
     }
@@ -82,7 +90,29 @@ public class ConductorController : Controller
     [Route("/Conductor/MarcarEntregado/{idPedido}")]
     public async Task<IActionResult> MarcarEntregado(int idPedido)
     {
-        await _repoPedido.ActualizarEstadoPedidoPorConductor(idPedido, "Entregado");
-        return Ok();
+        var detalle_pedido = await _repoPedido.DetalleAsync(idPedido);
+        var _nombre = HttpContext.Session.GetString("Nombre");
+        if (detalle_pedido.Estado == "Entregado")
+        {
+            return RedirectToAction("IndexConductor", new { nombre = _nombre });
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(_nombre))
+                return RedirectToAction("Login", "Home");
+            var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
+            var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
+            var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
+            bool todosEntregados = pedidos.All(p => p.Estado == "Entregado");
+            if (todosEntregados)
+            {
+                await _repoPedido.ActualizarEstadoPedidoPorConductor(idPedido, "Entregado");
+                // hay que devolverle el peso original: Hacer consutla del peso del pedido, asginarle ese peso al vehiculo y sumarle.
+                var _idvehiculo = HttpContext.Session.GetInt32("idvehiculo");
+                await _repoVehiculo.RestaurarPesoVehiculo((int)_idvehiculo, idPedido);
+                return Ok();
+            }
+            return Ok();
+        }
     }
 }

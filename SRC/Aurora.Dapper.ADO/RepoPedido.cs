@@ -76,6 +76,7 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         {
             await Conexion.ExecuteAsync("SPCrearPedido", parametros, commandType: CommandType.StoredProcedure);
             _nuevoPedido.IdPedido = parametros.Get<int>("xidPedido");
+            await ActualizarPesoVehiculo(_nuevoPedido.IdPedido, _nuevoPedido.xidVehiculo);
         }
         catch (System.Exception)
         {
@@ -83,10 +84,27 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         }
     }
 
+    public async Task<bool> ActualizarPesoVehiculo(int idPedido, int idVehiculo)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidVehiculo", idVehiculo);
+        parametros.Add("xidpedido", idPedido);
+
+        try
+        {
+            var filasAfectadas = await Conexion.ExecuteAsync("SPRestarPesoVehiculo", parametros, commandType: CommandType.StoredProcedure);
+            return filasAfectadas > 0;
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al actualizar el peso del vehículo");
+        }
+    }
+
     public async Task<Pedido>? DetalleAsync(int indiceABuscar)
     {
-        var Query=@"Select * from Pedido where idPedido = @xidPedido";
-        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new {xidPedido = indiceABuscar});
+        var Query = @"Select * from Pedido where idPedido = @xidPedido";
+        var repuesta = await Conexion.QueryFirstOrDefaultAsync<Pedido>(Query, new { xidPedido = indiceABuscar });
         return repuesta;
     }
 

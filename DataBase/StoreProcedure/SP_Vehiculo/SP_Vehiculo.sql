@@ -50,14 +50,61 @@ DELIMITER $$
 Drop PROCEDURE IF EXISTS  SPActualizarEstadoVehiculo $$
 CREATE PROCEDURE SPActualizarEstadoVehiculo(xidVehiculo INT, xdisponible BOOLEAN)
 BEGIN
-	-- Ojo que esto vendria aser un trigger ya qeu al asignarle almenos un pedido/conductor ya se cambia la disponibilidad
     UPDATE Vehiculo
-    SET Estado = CASE
-        WHEN xdisponible THEN 0
-        ELSE 1
-    END
+    SET Estado = xdisponible 
     WHERE idVehiculo = xidVehiculo;
 END $$
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS SPRestaurarPesoVehiculo $$
+
+CREATE PROCEDURE SPRestaurarPesoVehiculo (xidVehiculo INT, xidpedido INT)
+BEGIN
+    DECLARE v_peso DECIMAL;
+    DECLARE v_capacidadActual DECIMAL;
+
+    SELECT CapacidadMax INTO v_capacidadActual
+    FROM Vehiculo
+    WHERE IdVehiculo = xidVehiculo;
+
+    SELECT Peso INTO v_peso
+    FROM Pedido
+    WHERE IdPedido = xidpedido;
+
+    IF v_peso IS NOT NULL AND v_capacidadActual IS NOT NULL THEN
+        UPDATE Vehiculo
+        SET CapacidadMax = v_capacidadActual + v_peso
+        WHERE IdVehiculo = xidVehiculo;
+    END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS SPRestarPesoVehiculo $$
+
+CREATE PROCEDURE SPRestarPesoVehiculo (IN xidVehiculo INT,IN xidpedido INT)
+BEGIN
+    DECLARE v_peso DECIMAL(10,2);
+    DECLARE v_capacidadMax DECIMAL(10,2);
+
+    SELECT CapacidadMax INTO v_capacidadMax
+    FROM Vehiculo
+    WHERE IdVehiculo = xidVehiculo;
+
+    SELECT Peso INTO v_peso
+    FROM Pedido
+    WHERE IdPedido = xidpedido;
+
+    IF v_peso IS NOT NULL AND v_capacidadMax IS NOT NULL THEN
+        UPDATE Vehiculo
+        SET CapacidadMax = v_capacidadMax - v_peso
+        WHERE IdVehiculo = xidVehiculo;
+    END IF;
+END $$
+DELIMITER ;
+
 
 -- --------------------------------------------------------------------------------------------
 
@@ -99,15 +146,6 @@ BEGIN
             FechaAsignado
         )
         VALUES (xidConductor, xidVehiculo, CURDATE());
-        
-        -- NO SE ACTUALIZA EL ESTADO PORQUE EL ESTADO SOLO SE MODIFICA UNA VEZ QUE EL CONDUCTOR HAYA INICIADO EL RECORRIDO.
-        /*UPDATE Conductor
-        SET Disponibilidad = 0
-        WHERE idConductor = xidConductor;
-        
-        UPDATE Vehiculo
-        SET Estado = 0
-        WHERE idVehiculo = xidVehiculo;*/
     END IF;
 END $$
 DELIMITER ;
@@ -120,19 +158,19 @@ CREATE PROCEDURE SPDesasignarVehiculoAConductor(
     xidVehiculo INT
 )
 BEGIN
-    DECLARE pedidosEnVehiculo INT;
+    DECLARE esDisponible INT;
 
-    SELECT COUNT(*) INTO pedidosEnVehiculo
-    FROM Pedido
+    SELECT v.Estado INTO esDisponible
+    FROM vehiculo v
     WHERE idVehiculo = xidVehiculo;
 
-    IF pedidosEnVehiculo > 0 THEN
+    IF esDisponible = 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No se puede desasignar el vehículo porque tiene pedidos activos';
     ELSE
         DELETE FROM Conductor_has_Vehiculo
         WHERE idConductor = xidConductor
-          AND idVehiculo = xidVehiculo;
+        AND idVehiculo = xidVehiculo;
         
         UPDATE Conductor
         SET Disponibilidad = 1

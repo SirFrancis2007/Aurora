@@ -130,7 +130,7 @@ public class AdministradorController : Controller
             XidAdministrador = (int)idAdministrador
         };
 
-        await _repoPedido.AltaAsync(pedido);
+        await _repoPedido.AltaAsync(pedido);        
         TempData["Mensaje"] = "Pedido creado exitosamente";
 
         var nombre = HttpContext.Session.GetString("nombreAdministrador");

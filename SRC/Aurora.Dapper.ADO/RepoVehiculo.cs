@@ -99,9 +99,7 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
             v.Tipo,
             v.idVehiculo,
             v.Matricula,
-            v.CapacidadMax,
-            IFNULL(SUM(p.Peso), 0) AS PesoTotalPedidos,
-            (v.CapacidadMax - IFNULL(SUM(p.Peso), 0)) AS CapacidadRestante
+            v.CapacidadMax
         FROM Vehiculo v
         LEFT JOIN Pedido p ON v.idVehiculo = p.idVehiculo
         WHERE v.Estado = 1
@@ -118,4 +116,20 @@ public class RepoVehiculo : RepoGenerico, IRepoVehiculo
         return result;
     }
 
+    public async Task<bool> RestaurarPesoVehiculo(int idvehiculo, int idpedido)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xidVehiculo", idvehiculo);
+        parametros.Add("xidPedido", idpedido);
+
+        try
+        {
+            var filasAfectadas = await Conexion.ExecuteAsync("SPRestaurarPesoVehiculo", parametros, commandType: CommandType.StoredProcedure);
+            return filasAfectadas > 0;
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al restaurar el peso del vehículo");
+        }
+    }
 }
