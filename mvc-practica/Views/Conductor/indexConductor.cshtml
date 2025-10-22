@@ -38,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-pedidos">
-                    @foreach (var pedido in Model)
+                    @foreach (var pedido in Model.Where(p => p.Estado != "Entregado"))                    
                     {
                         <tr data-id="@pedido.IdPedido" data-estado="@pedido.Estado">
                             <td>@pedido.IdPedido</td>
