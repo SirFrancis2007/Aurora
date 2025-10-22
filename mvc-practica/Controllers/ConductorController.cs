@@ -87,8 +87,8 @@ public class ConductorController : Controller
         var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
         var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
 
-        // El problema es que el mth hace una modificacion parcial, osea si se entrega uno, se entregan todos. Lo que genera incosistencia. Hayq ue crear un mth que solo modifique el estado del pedido individualmente. 
-        await _repoPedido.ActualizarEstadoPedidoPorConductor(idPedido, "Entregado");
+        // RESUELTO: El problema es que el mth hace una modificacion parcial, osea si se entrega uno, se entregan todos. Lo que genera incosistencia. Hayq ue crear un mth que solo modifique el estado del pedido individualmente. 
+        await _repoPedido.ActualizarEstadoPedidoIndividual(idPedido, "Entregado");
         await _repoVehiculo.RestaurarPesoVehiculo(idVehiculo, idPedido);
 
         var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
@@ -102,5 +102,4 @@ public class ConductorController : Controller
 
         return Ok();
     }
-
 }

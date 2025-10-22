@@ -69,3 +69,17 @@ BEGIN
     WHERE idVehiculo = xIdVehiculo;
 END $$
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS SPActualizarEstadoPedidoIndividual;
+DELIMITER $$
+CREATE PROCEDURE SPActualizarEstadoPedidoIndividual(
+    IN xIdPedido INT,
+    IN xNuevoEstado VARCHAR(45)
+)
+BEGIN
+    UPDATE Pedido
+    SET EstadoPedido = xNuevoEstado
+    WHERE idPedido = xIdPedido;
+END $$
+DELIMITER ;
+

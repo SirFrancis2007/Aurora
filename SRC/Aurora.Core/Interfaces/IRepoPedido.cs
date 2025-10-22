@@ -21,6 +21,13 @@ public interface IRepoPedido : IRepoAlta<Pedido>, IRepoDetalle<Pedido, int>, IRe
     public Task<bool> ActualizarEstadoPedidoPorConductor(int idPedido, string nuevoEstado);
 
     /// <summary>
+    /// Actualizar pedido individualmente.
+    /// </summary>
+    /// <param name="pedido">Objeto pedido con los datos actualizados.</param>
+    /// <returns>True si se actualizó, False en caso contrario.</returns>
+    public Task<bool> ActualizarEstadoPedidoIndividual(int idPedido, string nuevoEstado);
+
+    /// <summary>
     /// Obtiene la lista de pedidos asociados a una empresa.
     /// </summary>
     /// <param name="idEmpresa">Identificador de la empresa.</param>

@@ -174,4 +174,21 @@ public class RepoPedido : RepoGenerico, IRepoPedido
         ";
         return (List<PedidoRutaDTO>)await Conexion.QueryAsync<PedidoRutaDTO>(query, new { idVehiculo = idVehiculo });
     }
+
+    public async Task<bool> ActualizarEstadoPedidoIndividual(int idPedido, string nuevoEstado)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("xIdPedido", idPedido);
+        parametros.Add("xNuevoEstado", nuevoEstado);
+
+        try
+        {
+            var resultado = await Conexion.ExecuteAsync("SPActualizarEstadoPedidoIndividual", parametros, commandType: CommandType.StoredProcedure);
+            return resultado > 0;
+    }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al actualizar el pedido individual: {ex.Message}");
+        }
+    }
 }
