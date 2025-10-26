@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    border: solid 1px red;
+    height: 100vh;
+}
+
+html{ 
+    display: flex;
+}
+
+header {
+    width: 100%;
+    border: solid 1px blue;
+}
+
+nav ul {
+    display: flex;
+    gap: 120px;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 10px 20px;
+}
+
+ul figure img {
+    width: 80px;
+    height: 80px;
+}
+
+/*Btn del header admin y cond*/
+.btn-header {
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Cabin', sans-serif;
+}
+
+/*Contenido principal*/
+
+.container
+{
+    border: 1px solid green;
+}
+
+
+/*Style Footer*/
+
+footer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: end;
+    font-family: Cabin;
+    color: #838383;
+}
+

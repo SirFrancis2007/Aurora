@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/css/styles_shared.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/_Layout.css" asp-append-version="true" />
     <title>@ViewData["Title"] Aurora</title>
     <link rel="icon" href="~/icon/Isotipo.ico" type="image/x-icon">
     <script type="importmap"></script>
@@ -14,11 +14,11 @@
     <header>
         <nav>
             <ul>
-                <button>Administradores</button>
+                <button class="btn-header">Administradores</button>
                 <figure>
-                    <img src="" alt=""> <!-- Aca va el isotipo-->
+                    <img src="~/icon/isotipo.ico" alt="isotipo"> <!-- Aca va el isotipo-->
                 </figure>
-                <button>conductores</button>
+                <button class="btn-header">conductores</button>
             </ul>
         </nav>
     </header>
@@ -36,6 +36,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/JavaScript/modals.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

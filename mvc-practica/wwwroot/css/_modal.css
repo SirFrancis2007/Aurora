@@ -1,56 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
-
-.main-text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    height: 60vh;
-    max-width: 100%; 
-    margin: 0 auto;
-    padding: 60px; 
-    box-sizing: border-box;
-    margin-top: 50px;
-}
-
-.main-text img {
-    width: 50%; 
-    height: auto;
-    object-fit: contain; 
-}
-
-.text {
-    font-family: Cabin;
-    width: 50%;
-    padding-right: 20px;
-}
-
-#t1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-#span-text{
-    font-size: 1.4rem;
-}
-
-#btn-header {
-    margin-top: 20px;
-    font-family: Cabin;
-    color: #e6e6e6;
-    background-color: #081524;
-    border-radius: 16px;
-    border: 2px solid #ffff;
-    width: 200px;
-    height: 50px;
-    transition: all 1s ease-in-out;
-}
-
-#btn-header:hover {
-    background-color: #123052;
-    border-radius: 0px 16px 0px 16px;
-}
-
-/*Modals*/
+/*Modal*/
 
 .modal {
     position: fixed;
@@ -95,12 +43,10 @@
     position: relative;
 }
 
-/* Animación cuando está activo */
 .modal--active .modal__container {
     transform: translateY(0) scale(1);
 }
 
-/* Header del modal */
 .modal__header {
     display: flex;
     justify-content: space-between;
@@ -117,7 +63,6 @@
     margin: 0;
 }
 
-/* Botón de cerrar */
 .modal__close {
     width: 40px;
     height: 40px;
@@ -141,21 +86,18 @@
     transform: scale(1.05);
 }
 
-/* Formulario */
 .modal__form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-/* Grupo de campo */
 .modal__field {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-/* Etiquetas */
 .modal__label {
     font-size: 0.875rem;
     font-weight: 500;
@@ -163,7 +105,6 @@
     margin: 0;
 }
 
-/* Inputs */
 .modal__input {
     width: 100%;
     padding: 0.875rem 1rem;
@@ -186,7 +127,6 @@
     color: #9ca3af;
 }
 
-/* Botón de envío */
 .modal__submit {
     background: #081524;
     color: white;
