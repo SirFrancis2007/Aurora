@@ -3,15 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using mvc_practica.Models;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace mvc_practica.Controllers;
 
 public class HomeController : Controller
 {
     public IActionResult Index() => View();
-    public IActionResult About() => View();
-    public IActionResult Contact() => View();
-    public IActionResult FAQ() => View();
     public IActionResult login() => View();
     
     private readonly ILogger<HomeController> _logger;
@@ -36,25 +34,6 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    //Mth para loguearse y validar empresa
-    [HttpPost]
-    public async Task<IActionResult> Login_Empresa(IndexViewModel _empresa)
-    {
-        if (_empresa.Administrador == null)
-        {
-            var resultado = await _repoEmpresa.LoguearseAsync(_empresa.Empresa.Nombre.Trim().ToLower(), _empresa.Empresa.Contrasena);
-            if (resultado == true)
-            {
-                return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _empresa.Empresa.Nombre });
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
-        }
-        return View(_empresa);
-    }
-
     //Mth para registrarse y crear empresa
     [HttpPost]
     public async Task<IActionResult> Post_Empresa(Empresa empresa)
@@ -71,55 +50,50 @@ public class HomeController : Controller
             await _repoEmpresa.AltaAsync(_nuevaempresa);
 
             TempData["Mensaje"] = "Empresa creada con éxito";
-            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = empresa.Nombre }) ;
+            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = empresa.Nombre });
         }
         return View(empresa);
     }
-
+    
     [HttpPost]
-    public async Task<IActionResult> Login_Administrador(IndexViewModel _administrador)
+    public async Task<IActionResult> LoginUniversal(AutenticacionDTO _datos)
     {
-        if (_administrador.Empresa == null)
-        {
+        bool resultado = false;
 
-            var repuesta = await _repoAdministrador.LoguearseAsync(_administrador.Administrador.Nombre, _administrador.Administrador.Password);
-            if (repuesta == true)
-                return RedirectToAction("indexAdmin", "Administrador", new { nombre = _administrador.Administrador.Nombre });
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Credenciales inválidas. Por favor, inténtalo de nuevo.");
-                // Si las credenciales no son válidas, muestra un mensaje de error o redirige a la página de inicio de sesión
-            }
-        }
-        return View(_administrador);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> AutenticacionConductor(Conductor _conductor)
-    {
-        try
+        var _vefCredenciales = new AutenticacionDTO
         {
-            var _vefConductor = new Conductor
-            {
-                Name = _conductor.Name.Trim().ToLower(),
-                Licencia = _conductor.Licencia.Trim().ToLower(),
-                Disponibilidad = true /*Este parametro no se le proporciona al ADO*/
-            };
+            Usuario = _datos.Usuario?.Trim().ToLower(),
+            Contrasena = _datos.Contrasena?.Trim().ToLower(),
+            Rol = _datos.Rol?.Trim().ToLower()
+        };
 
-            var repuesta = await _repoConductor.Loguearse(_vefConductor.Name, _vefConductor.Licencia);
-            if (repuesta == true)
-            {
-                return RedirectToAction("IndexConductor", "Conductor", new { nombre = _vefConductor.Name });
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
-        }
-        catch
+        switch (_vefCredenciales.Rol.ToLower())
         {
-            return View();
+            case "empresa":
+                resultado = await _repoEmpresa.LoguearseAsync(_vefCredenciales.Usuario, _vefCredenciales.Contrasena);
+                if (resultado)
+                    return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _vefCredenciales.Usuario });
+                break;
+
+            case "admin":
+                resultado = await _repoAdministrador.LoguearseAsync(_vefCredenciales.Usuario, _vefCredenciales.Contrasena);
+                if (resultado)
+                    return RedirectToAction("IndexAdmin", "Administrador", new { nombre = _vefCredenciales.Usuario });
+                break;
+
+            case "conductor":
+                resultado = await _repoConductor.Loguearse(_vefCredenciales.Usuario, _vefCredenciales.Contrasena);
+                if (resultado)
+                    return RedirectToAction("IndexConductor", "Conductor", new { nombre = _vefCredenciales.Usuario });
+                break;
+
+            default:
+                ModelState.AddModelError("", "Rol no válido.");
+                break;
         }
+
+        ModelState.AddModelError("", "Credenciales incorrectas");
+        return View("Index");
     }
 }
 

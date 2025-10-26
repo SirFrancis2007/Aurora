@@ -1,5 +1,6 @@
 ﻿@using Aurora.Core
-@model mvc_practica.Models.IndexViewModel
+@model mvc_practica.Models.AutenticacionDTO
+
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
@@ -9,34 +10,40 @@
     <link rel="stylesheet" href="~/css/index.css"/>
 }
 
-
-<section>
-    <div class="main-text">
-        <div class="text">
-            <h1 id="t1">Logistic System</h1>
-            <span id="span-text">Prepare your package! Control your business and track every package. Easy, Free, secure. Aurora offers a unique service for your business to thrive. Register and get started. Welcome!</span>
-            <button id="btn-header" class="btn-registro">Registrer</button>
-            <button id="btn-header" class="btn-login">Login in</button>
-        </div>
-        <img src="~/images/logistica2.jpg" alt="Logistica">
+<section class="main-container">
+    <div class="title">
+        <h1>Aurora</h1>
+        <h4>Sistema de logistica</h4>
+    </div>
+    <div class="content">
+        <span>Plataforma para gestionar mercancia entre entidades, vehiculos, administradores, conductores. Foncalizado en la eficiencia, integridad y la simplicidad</span>
+        <button id="btn-header" class="btn-registro">Registrer</button>
+        <button id="btn-header" class="btn-login">Login in</button>
     </div>
 </section>
 
 <!--Aca se encuentra la estrucutra de los modales de inicio sesion y registro-->
-<!-- Modal LOGIN EMPRESA -->
+<!-- Modal LOGIN Universal (se podran loguear todos los actores por igual) -->
 <section id="modal-login-empresa" class="modal">
     <div class="modal__container">
         <div class="modal__header">
             <h2 class="modal__title">Login Empresa</h2>
             <a href="#" class="modal__close">×</a>
         </div>
-        <form asp-action="Login_Empresa" asp-controller="Home" method="post" class="modal__form">
+        <form asp-action="LoginUniversal" asp-controller="Home" method="post">
             <div class="modal__field">
-                <label asp-for="Empresa.Nombre" class="modal__label">Nombre de la Empresa</label>
-                <input asp-for="Empresa.Nombre" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
+                <label asp-for="Usuario" class="modal__label">Nombre de Usuario</label>
+                <input asp-for="Usuario" type="text" class="modal__input" placeholder="Ingrese su nombre de usuario">
 
-                <label asp-for="Empresa.Contrasena" class="modal__label">Contraseña</label>
-                <input asp-for="Empresa.Contrasena" type="password" class="modal__input" placeholder="Ingrese la contraseña">
+                <label asp-for="Contrasena" class="modal__label">Contraseña</label>
+                <input asp-for="Contrasena" type="password" class="modal__input" placeholder="Ingrese su contraseña">
+
+                <label for="rol">Seleccione su tipo de rol</label>
+                <select name="Rol" required>
+                    <option value="empresa">Empresa</option>
+                    <option value="admin">Administrador</option>
+                    <option value="conductor">Conductor</option>
+                </select>
             </div>
             <button type="submit" class="modal__submit">Iniciar Sesión</button>
         </form>
@@ -52,35 +59,16 @@
         </div>
         <form asp-action="Post_Empresa" asp-controller="Home" method="post" class="modal__form">
             <div class="modal__field">
-                <label asp-for="Empresa.Nombre" class="modal__label">Nombre de la Empresa</label>
-                <input asp-for="Empresa.Nombre" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
+                <label asp-for="Usuario" class="modal__label">Nombre de la Empresa</label>
+                <input asp-for="Usuario" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
                 
-                <label asp-for="Empresa.Contrasena" class="modal__label">Contraseña</label>
-                <input asp-for="Empresa.Contrasena" type="password"  class="modal__input" placeholder="Ingrese la contraseña">
+                <label asp-for="Contrasena" class="modal__label">Contraseña</label>
+                <input asp-for="Contrasena" type="password"  class="modal__input" placeholder="Ingrese la contraseña">
             </div>
             <button type="submit" class="modal__submit">Registrar Empresa</button>
         </form>
     </div>
 </section>
 
-<!-- Modal LOGIN ADMIN -->
-<section id="modal-login-admin" class="modal">
-    <div class="modal__container">
-        <div class="modal__header">
-            <h2 class="modal__title">Login Administrador</h2>
-            <a href="#" class="modal__close">×</a>
-        </div>
-        <form asp-action="Login_Administrador" method="post" class="modal__form">
-            <div class="modal__field">
-                <label asp-for="Administrador.Nombre" class="modal__label">Usuario</label>
-                <input asp-for="Administrador.Nombre" type="text" class="modal__input" placeholder="Ingresa tu usuario">
-            </div>
-            <div class="modal__field">
-                <label asp-for="Administrador.Password" type="password" class="modal__label">Contraseña</label>
-                <input asp-for="Administrador.Password" type="password" class="modal__input" placeholder="Ingresa tu contraseña">
-            </div>
-            <button type="submit" class="modal__submit">Iniciar Sesión</button>
-        </form>
-    </div>
-</section>
+
 <script src="~/JavaScript/modals.js"></script>
