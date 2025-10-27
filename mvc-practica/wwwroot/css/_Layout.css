@@ -6,8 +6,8 @@
 
 body {
     width: 100%;
-    border: solid 1px red;
     height: 100vh;
+    background-color: #081524;
 }
 
 html{ 
@@ -16,7 +16,6 @@ html{
 
 header {
     width: 100%;
-    border: solid 1px blue;
 }
 
 nav ul {
@@ -33,7 +32,6 @@ ul figure img {
     height: 80px;
 }
 
-/*Btn del header admin y cond*/
 .btn-header {
     text-decoration: none;
     background-color: transparent;
@@ -42,14 +40,6 @@ ul figure img {
     font-size: 18px;
     font-family: 'Cabin', sans-serif;
 }
-
-/*Contenido principal*/
-
-.container
-{
-    border: 1px solid green;
-}
-
 
 /*Style Footer*/
 

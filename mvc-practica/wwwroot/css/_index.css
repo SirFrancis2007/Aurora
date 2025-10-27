@@ -1,7 +1,86 @@
+#bg-video {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    object-fit: cover; 
+    z-index: -1; 
+}
+
 .main-container {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
     height: 80vh;
+}
+
+.overlay {
+    text-align: center;
+    color: white; 
+    padding: 20px;
+}
+
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: whitesmoke;
+}
+
+.content {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center;
+    padding: 20px;
+    max-width: 600px;
+    color: whitesmoke;
+}
+
+.content button {
+    margin: 10px 5px;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+}
+
+.content button + button {
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+h1{
+    font-size: 5em;
+}
+
+h4 {
+    font-size: 1.2em;
+}
+
+span {
+    margin-bottom: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+button {
+    background-color: #e6e6e6;
+    color:#081524;
+    font-weight: bold;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 16px 0px 16px 0px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    border-radius: 16px 16px 16px 16px;
+    font-size: 1rem;
 }

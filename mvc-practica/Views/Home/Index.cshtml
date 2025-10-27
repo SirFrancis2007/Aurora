@@ -7,19 +7,32 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/_modal.css"/>
     <link rel="stylesheet" href="~/css/_index.css"/>
+    <link rel="stylesheet" href="~/css/_movilindex.css"/>
+    <link rel="stylesheet" href="~/css/_modal.css"/>
 }
 
 <section class="main-container">
-    <div class="title">
-        <h1>Aurora</h1>
-        <h4>Sistema de logistica</h4>
-    </div>
-    <div class="content">
-        <span>Plataforma para gestionar mercancia entre entidades, vehiculos, administradores, conductores. Foncalizado en la eficiencia, integridad y la simplicidad</span>
-        <button id="btn-header" class="btn-registro">Registrer</button>
-        <button id="btn-header" class="btn-login">Login in</button>
+    <video autoplay muted loop id="bg-video">
+        <source src="~/videos/Background.mp4"
+                type="video/mp4">
+        Tu navegador no soporta videos HTML5.
+    </video>
+    <div class="overlay">
+        <div class="title">
+            <h1>Aurora</h1>
+            <h4>Sistema de logística</h4>
+        </div>
+        <div class="content">
+            <span>
+                Plataforma para gestionar mercancía entre entidades, vehículos, administradores y conductores. 
+                Focalizado en la eficiencia, integridad y la simplicidad.
+            </span>
+            <div class="btn-group">
+                <button class="btn-registro">Register</button>
+                <button class="btn-login">Login in</button>
+            </div>
+        </div>
     </div>
 </section>
 
