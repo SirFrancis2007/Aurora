@@ -7,27 +7,35 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_form.css" />
 }
 
-<!-- Formulario para agregar un nuevo administrador -->
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Agregar Nuevo Conductor</h2>
-    </div>
+    <div class="form-inscripcion">
+        <div class="formulario">
+            <h2>Agregar Nuevo Conductor</h2>
 
-    <div class="container">
-        <form method="post" asp-action="AltaConductor" asp-controller="Empresa">
-            <div class="form-group">
-                <label for="nombre">Nombre de usuario - Conductor:</label>
-                <input type="text" asp-for="Name" required />
+            <form method="post" asp-action="AltaAdministrador" asp-controller="Empresa">
+                <div class="form-group">
+                    <label asp-for="Name">Nombre de usuario del Conductor:</label>
+                    <input type="text" asp-for="Name" required />
 
-                <label for="nombre">Licencia:</label>
-                <input type="text" asp-for="Licencia" required />
+                    <label asp-for="Licencia">Licencia del Conductor:</label>
+                    <input type="password" asp-for="Licencia" required />
+                </div>
+                <button type="submit" class="btn-submit">Agregar Conductor</button>
+            </form>
+        </div>
 
-                <!--La disponibilidad se asume y se instancia como true == 1 (osea disponible)-->
-            </div>
-            <button type="submit" class="btn-submit">Agregar Administrador</button>
-        </form>
+        <div class="inscripciones">
+            <h3>Recuerda</h3>
+            <p>
+                La seguridad de tu empresa es fundamental. Asegúrate de asignar contraseñas seguras y mantener la confidencialidad de las credenciales de los Conductores.
+            </p>
+            <p>
+                Asegurate de posisionar bien los datos ingresados para evitar errores de autenticación. <br> ¡Esta accion podra modificada posteriormente!
+            </p>
+        </div>
     </div>
 </div>

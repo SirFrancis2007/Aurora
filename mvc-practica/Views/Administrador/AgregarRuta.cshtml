@@ -7,25 +7,35 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_form.css" />
 }
 
-<!-- Formulario para agregar una nueva ruta -->
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Agregar Nueva Ruta</h2>
-    </div>
+    <div class="form-inscripcion">
+        <div class="formulario">
+            <h2>Nueva Ruta</h2>
 
-    <div class="container">
-        <form method="post" asp-action="AgregarRuta" asp-controller="Administrador">
-            <div class="form-group">
-                <label asp-for="Origen">Nombre Origen:</label>
-                <input type="text" asp-for="Origen" required />
+            <form method="post" asp-action="AgregarRuta" asp-controller="Administrador">
+                <div class="form-group">
+                    <label asp-for="Origen">Origen de la ruta</label>
+                    <input type="text" asp-for="Origen" required />
 
-                <label asp-for="Destino">Nombre Destino:</label>
-                <input type="text" asp-for="Destino" required />
-            </div>
-            <button type="submit" class="btn-submit">Agregar Ruta</button>
-        </form>
+                    <label asp-for="Destino">Destino de la ruta:</label>
+                    <input type="password" asp-for="Destino" required />
+                </div>
+                <button type="submit" class="btn-submit">Agregar Ruta</button>
+            </form>
+        </div>
+
+        <div class="inscripciones">
+            <h3>Recuerda</h3>
+            <p>
+                Registra las rutas con precisión para garantizar un servicio eficiente y confiable.
+            </p>
+            <p>
+                Asegurate de posisionar bien los datos ingresados para evitar errores de autenticación. <br> ¡Esta accion no podra ser modificada posteriormente!
+            </p>
+        </div>
     </div>
 </div>

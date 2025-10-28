@@ -7,25 +7,35 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_form.css" />
 }
 
-<!-- Formulario para agregar un nuevo administrador -->
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Agregar Nuevo Administrador</h2>
-    </div>
+    <div class="form-inscripcion">
+        <div class="formulario">
+            <h2>Agregar Nuevo Administrador</h2>
 
-    <div class="container">
-        <form method="post" asp-action="AltaAdministrador" asp-controller="Empresa">
-            <div class="form-group">
-                <label asp-for="Nombre">Nombre de Usuario:</label>
-                <input type="text" asp-for="Nombre" required />
+            <form method="post" asp-action="AltaAdministrador" asp-controller="Empresa">
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre de Usuario:</label>
+                    <input type="text" asp-for="Nombre" required />
 
-                <label asp-for="Password">Contraseña del Administrador:</label>
-                <input type="text" type="password" asp-for="Password" required />
-            </div>
-            <button type="submit" class="btn-submit">Agregar Administrador</button>
-        </form>
+                    <label asp-for="Password">Contraseña del Administrador:</label>
+                    <input type="password" asp-for="Password" required />
+                </div>
+                <button type="submit" class="btn-submit">Agregar Administrador</button>
+            </form>
+        </div>
+
+        <div class="inscripciones">
+            <h3>Recuerda</h3>
+            <p>
+                La seguridad de tu empresa es fundamental. Asegúrate de asignar contraseñas seguras y mantener la confidencialidad de las credenciales de los administradores.
+            </p>
+            <p>
+                Asegurate de posisionar bien los datos ingresados para evitar errores de autenticación. <br> ¡Esta accion no podra ser modificada posteriormente!
+            </p>
+        </div>
     </div>
 </div>

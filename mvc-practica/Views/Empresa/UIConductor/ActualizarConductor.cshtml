@@ -7,27 +7,38 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_form.css" />
 }
 
-<!-- Formulario para agregar un nuevo administrador -->
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Actualizar Conductor</h2>
-    </div>
+    <div class="form-inscripcion">
+        <div class="formulario">
+            <h2>Actualizar datos del Conductor</h2>
 
-    <div class="container">
-        <form method="post" asp-action="UpdateConductor" asp-controller="Empresa">
-            <div class="form-group">
-                <input type="hidden" asp-for="IdConductor" />
+            <form method="post" asp-action="AltaAdministrador" asp-controller="Empresa">
+                <div class="form-group">
+                    <label asp-for="Name">Nombre de usuario del Conductor:</label>
+                    <input type="text" asp-for="Name" required />
 
-                <label for="nombre">Nombre del Conductor:</label>
-                <input type="text" asp-for="Name" required />
+                    <label asp-for="Licencia">Licencia del Conductor:</label>
+                    <input type="password" asp-for="Licencia" required />
+                </div>
+                <button type="submit" class="btn-submit">Actualizar Conductor</button>
+            </form>
+        </div>
 
-                <label for="nombre">Licencia:</label>
-                <input type="text" asp-for="Licencia" required />
-            </div>
-            <button type="submit" class="btn-submit">Actualizar Administrador</button>
-        </form>
+        <div class="inscripciones">
+            <h3>Recuerda</h3>
+            <p>
+                Tene en cuenta que la modificacion se vera reflejada en el sistema de gestion de conductores.
+            </p>
+            <p>
+                Asegurate de posisionar bien los datos ingresados para evitar errores de autenticación. <br> ¡Esta accion podra modificada posteriormente!
+            </p>
+            <p>
+                A partir de ahora, los conductores podran iniciar sesión con solo las nuevas credenciales.
+            </p>
+        </div>
     </div>
 </div>

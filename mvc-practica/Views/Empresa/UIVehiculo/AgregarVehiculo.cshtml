@@ -7,30 +7,41 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_form.css" />
 }
 
-<!-- Formulario para agregar un nuevo VEHICULO -->
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Agregar Nuevo Vehiculo</h2>
-    </div>
+    <div class="form-inscripcion">
+        <div class="formulario">
+            <h2>Agregar Vehiculo</h2>
 
-    <div class="container">
-        <form method="post" asp-action="AltaVehiculo" asp-controller="Empresa">
-            <div class="form-group">
-                <label asp-for="Tipo" for="nombre">Tipo:</label>
-                <input asp-for="Tipo" type="text" required />
+            <form method="post" asp-action="AltaVehiculo" asp-controller="Empresa">
+                <div class="form-group">
+                    <label asp-for="Tipo" for="nombre">Modelo:</label>
+                    <input asp-for="Tipo" type="text" required />
 
-                <label asp-for="Matricula" for="nombre">Matricula:</label>
-                <input type="text" asp-for="Matricula" required />
+                    <label asp-for="Matricula" for="nombre">Matricula:</label>
+                    <input type="text" asp-for="Matricula" required />
 
-                <label asp-for="CapacidadMax" for="nombre">Capacidad Maxima:</label>
-                <input type="text" asp-for="CapacidadMax" required />
-
-                <!-- El estado se define como true, osea disponible-->
+                    <label asp-for="CapacidadMax" for="nombre">Capacidad Maxima | KILOGRAMOS (KG)</label>
+                    <input type="text" asp-for="CapacidadMax" required/>
+                </div>
                 <button type="submit" class="btn-submit">Agregar Vehiculo</button>
-            </div>
-        </form>
+            </form>
+        </div>
+
+        <div class="inscripciones">
+            <h3>Recuerda</h3>
+            <p>
+                Los datos ingresados no podran ser modificados posteriormente.
+            </p>
+            <p>
+                Asegurate de ser claro y descriptivo con los datos del vehiculo
+            </p>
+            <p>
+                LA CAPACIDAD SE MIDE EN LA UNIDAD KILOGRAMOS (KG).
+            </p>
+        </div>
     </div>
 </div>
