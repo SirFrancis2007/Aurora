@@ -8,18 +8,19 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/_table.css" />
+    <link rel="stylesheet" href="~/css/_button.css" />
 }
 
 <div class="main-content">
     <div class="container">
         <h1>Bandeja de Entrada</h1>
 
-        <div class="actions">
+        <div class="actions" style="display:flex; flex-direction: row; gap: 20px; margin-bottom: 20px;">
             <form asp-action="IniciarViaje" method="post">
-                <button type="submit" class="btn btn-primary">Iniciar viaje</button>
+                <button type="submit" id="btn-conductor" class="btn btn-primary">Iniciar viaje</button>
             </form>
             <a asp-controller="Home" asp-action="index">
-                    <span>LogOut</span>
+                    <span id="btn-conductor">LogOut</span>
             </a>
         </div>
 
@@ -49,7 +50,7 @@
                             <td>
                                 @if (pedido.Estado == "En viaje")
                                 {
-                                    <button class="btn-entregar btn btn-warning">Entregar</button>
+                                    <button id="btn-conductor" class="btn-entregar btn btn-warning">Entregar</button>
                                 }
                                 else if (pedido.Estado == "Entregado")
                                 {

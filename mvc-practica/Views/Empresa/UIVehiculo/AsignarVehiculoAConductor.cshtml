@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_table.css" />
     <link rel="stylesheet" href="~/css/_select.css" />
+    <link rel="stylesheet" href="~/css/_button.css" />
 }
 
 
@@ -46,7 +47,7 @@
                                 <form asp-controller="Empresa" asp-action="DesvincularVehiculoConductor" method="post" style="display:inline;">
                                     <input type="hidden" name="idConductor" value="@item.IdConductor" />
                                     <input type="hidden" name="idVehiculo" value="@item.IdVehiculo" />
-                                    <button type="submit" class="btn-desvincular">
+                                    <button type="submit" id="btn-vehcon" class="btn-desvincular">
                                         Desvincular vehículo de conductor
                                     </button>
                                 </form>
@@ -72,10 +73,10 @@
                     }
                 </select>
 
-                <div id="vehiculo-info" class="info-box"></div>
+                <div style="margin-top: 10px; margin-button: 20px" id="vehiculo-info" class="info-box"></div>
 
                 <label for="Conductor">Conductor:</label>
-                <select id="conductor" name="idConductor" class="form-control">
+                <select id="conductor" name="idConductor" class="form-control" >
                     <option value="">-- Selecciona un conductor --</option>
                     @foreach (var c in Model.ConductoresNoAsignados)
                     {
@@ -85,7 +86,7 @@
                 <div id="conductor-info" class="info-box"></div>
             </div>
 
-            <button type="submit" class="btn-submit">Asignar Vehiculo a Conductor</button>
+            <button style="margin-top: 20px" type="submit" id="btn-conductor" class="btn-submit">Asignar Vehiculo a Conductor</button>
         </form>
     </div>
 </div>

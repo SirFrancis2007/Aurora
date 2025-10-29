@@ -8,60 +8,62 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_form.css" />
+    <link rel="stylesheet" href="~/css/_select.css" />
 }
 
 <div class="main-content">
-    <div class="text-empresa">
-        <h2>Agregar Nuevo Pedido</h2>
-    </div>
+    <div class="form-inscripcion">
+        <div class="formulario">
+            <h2>Despachar Pedido</h2>
 
-    <div class="container">
-        <form asp-action="AgregarPedido" method="post">
+            <form asp-action="AgregarPedido" method="post">
                 <div class="form-group">
-                    <label>Título:</label>
-                    <input asp-for="Titulo" type="text" required />
+                    <label for="Titulo">Título:</label>
+                    <input asp-for="Titulo" type="text" class="form-control" required />
 
-                    <label>Volumen (m³):</label>
-                    <input asp-for="Volumen" type="text" required />
+                    <label for="Volumen">Volumen (m³):</label>
+                    <input asp-for="Volumen" type="text" class="form-control" required />
 
-                    <label>Peso (kg):</label>
-                    <input asp-for="Peso" type="text" required />
+                    <label for="Peso">Peso (kg):</label>
+                    <input asp-for="Peso" type="text" class="form-control" required />
 
-                    <label>Estado:</label>
-                    <select asp-for="Estado">
+                    <label for="Estado">Estado:</label>
+                    <select asp-for="Estado" class="form-control">
                         <option value="Despachado">Despachado</option>
                     </select>
 
-                    <label>Fecha Despacho:</label>
-                    <input asp-for="FechaDespacho" type="date" required />
+                    <label for="FechaDespacho">Fecha Despacho:</label>
+                    <input asp-for="FechaDespacho" type="date" class="form-control" required />
 
-                    <label>Ruta:</label>
-                    <select asp-for="IdRuta">
+                    <label for="IdRuta">Ruta:</label>
+                    <select asp-for="IdRuta" class="form-control">
                         @foreach (var ruta in Model.Rutas)
                         {
                             <option value="@ruta.IdRuta">@ruta.Origen - @ruta.Destino</option>
                         }
                     </select>
 
-                    <label>Empresa Destino:</label>
-                    <select asp-for="IdEmpresaDestino">
+                    <label for="IdEmpresaDestino">Empresa Destino:</label>
+                    <select asp-for="IdEmpresaDestino" class="form-control">
                         @foreach (var empresa in Model.Empresas)
                         {
                             <option value="@empresa.IdEmpresa">@empresa.Nombre</option>
                         }
                     </select>
 
-                    <label>Vehículo:</label>
-                    <select asp-for="IdVehiculo">
+                    <label for="IdVehiculo">Vehículo:</label>
+                    <select asp-for="IdVehiculo" class="form-control">
                         @foreach (var v in Model.Vehiculos)
                         {
                             <option value="@v.IdVehiculo">
-                                @v.Tipo :Tipo - @v.Matricula :Matricula - @v.CapacidadMax kg)
+                                @v.Tipo (Tipo) - @v.Matricula (Matrícula) - @v.CapacidadMax kg
                             </option>
                         }
                     </select>
                 </div>
-            <button type="submit" class="btn-submit">Despachar Pedido</button>
-        </form>
+
+                <button type="submit" class="btn-submit">Despachar Pedido</button>
+            </form>
+        </div>
     </div>
 </div>

@@ -9,6 +9,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/_sidebar.css" />
     <link rel="stylesheet" href="~/css/_table.css" />
+    <link rel="stylesheet" href="~/css/_button.css" />
 }
 
 <div class="main-content">
@@ -45,7 +46,7 @@
                                             asp-route-idAdministrador="@admins.IdAdministrador"
                                             method="post"
                                             onsubmit="return confirm('¿Estás seguro de despedir a @admins.Nombre?');">
-                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            <button type="submit" id="btn-admins" class="btn btn-danger">Eliminar</button>
                                         </form>
                                     </td>
                                 </tr>

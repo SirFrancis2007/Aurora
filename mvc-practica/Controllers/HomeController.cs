@@ -36,23 +36,23 @@ public class HomeController : Controller
 
     //Mth para registrarse y crear empresa
     [HttpPost]
-    public async Task<IActionResult> Post_Empresa(Empresa empresa)
+    public async Task<IActionResult> Post_Empresa(AutenticacionDTO _datos)
     {
         if (ModelState.IsValid)
         {
             var _nuevaempresa = new Empresa
             {
                 IdEmpresa = 0,
-                Nombre = empresa.Nombre.Trim().ToLower(),
-                Contrasena = empresa.Contrasena.Trim().ToLower()
+                Nombre = _datos.Usuario.Trim().ToLower(),
+                Contrasena = _datos.Contrasena.Trim().ToLower()
             };
 
             await _repoEmpresa.AltaAsync(_nuevaempresa);
 
             TempData["Mensaje"] = "Empresa creada con éxito";
-            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = empresa.Nombre });
+            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _datos.Usuario });
         }
-        return View(empresa);
+        return View(_datos);
     }
     
     [HttpPost]

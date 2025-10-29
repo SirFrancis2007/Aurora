@@ -1,0 +1,44 @@
+#btn-conductor {
+    padding: 12px 12px;
+    background-color: #002f61;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-conductor:hover {
+    background-color: #00509e;
+}
+
+#btn-admins {
+    padding: 12px 12px;
+    background-color: #800000;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-admins:hover {
+    background-color: #b22222;
+}
+
+#btn-vehcon {
+    padding: 10px 10px;
+    background-color: #006400;
+    border: none;
+    color: white;
+    font-size: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-vehcon:hover {
+    background-color: #228b22;
+}

@@ -192,13 +192,15 @@ public class EmpresaController : Controller
         if (conductor == null)
             return NotFound();
 
+        HttpContext.Session.SetInt32("IdConductorActualizar", id);
         return View("UIConductor/ActualizarConductor", conductor);
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdateConductor(Conductor _conductor)
     {
-        while (VefDisponibilidadConductor(_conductor).Result == true)
+        var idConductor = HttpContext.Session.GetInt32("IdConductorActualizar");
+        while (await VefDisponibilidadConductor((int)idConductor))
         {
             if (!ModelState.IsValid)
                 return View("UIConductor/ActualizarConductor", _conductor);
@@ -216,9 +218,9 @@ public class EmpresaController : Controller
         return RedirectToAction(nameof(ConductorEmpresa));
     }
 
-    private async Task<bool> VefDisponibilidadConductor(Conductor _conductor)
+    private async Task<bool> VefDisponibilidadConductor(int id)
     {
-        Conductor resultado = await _repoConductor.DetalleAsync(_conductor.IdConductor);
+        Conductor resultado = await _repoConductor.DetalleAsync(id);
         if (resultado.Disponibilidad == false)
             return false;
         else
