@@ -207,6 +207,7 @@ public class EmpresaController : Controller
 
             var conductor = new Conductor
             {
+                IdConductor = (int)idConductor,
                 Name = _conductor.Name.Trim(),
                 Licencia = _conductor.Licencia.Trim(),
                 Disponibilidad = _conductor.Disponibilidad = true
