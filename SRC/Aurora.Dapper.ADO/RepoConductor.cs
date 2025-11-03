@@ -6,13 +6,15 @@ using Dapper;
 
 namespace Aurora.Dapper.ADO;
 
-public class RepoConductor : RepoGenerico, IRepoConductor
+public class RepoConductor : RepoGenerico, IRepoConductor, IRepoAutenticacion
 {
     public RepoConductor(IDbConnection conexion) : base(conexion)
     {
     }
 
     Task<IEnumerable<Conductor>> IRepoListado<Conductor>.ObtenerAsync => ObtenerDataAsync();
+
+    public string Rol => "conductor";
 
     public async Task AltaAsync(Conductor elemento)
     {
@@ -128,4 +130,13 @@ public class RepoConductor : RepoGenerico, IRepoConductor
         var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xidconductor = id });
         return result;
     }
+
+    public async Task<bool> LoguearseAsync(string usuario, string contrasena)
+    {
+        var funtionLogin = "SELECT FLoginConductor(@xNombre, @xLicencia);"; 
+        var result = await Conexion.ExecuteScalarAsync<bool>(funtionLogin, new { xNombre = usuario, xLicencia = contrasena });
+        return result;    }
+
+    public string ObtenerControladorRedireccion() => "Conductor";
+    public string ObtenerAccionRedireccion() => "IndexConductor";
 }

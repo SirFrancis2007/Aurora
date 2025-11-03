@@ -5,10 +5,12 @@ using Dapper;
 
 namespace Aurora.Dapper.ADO;
 
-public class RepoEmpresa : RepoGenerico, IRepoEmpresa
+public class RepoEmpresa : RepoGenerico, IRepoEmpresa, IRepoAutenticacion
 {
     private uint _idempresanueva;
+    public string Rol => "empresa";
     Task<IEnumerable<Empresa>> IRepoListado<Empresa>.ObtenerAsync => Obtener();
+
 
     public RepoEmpresa(IDbConnection conexion) : base(conexion) { }
 
@@ -80,4 +82,7 @@ public class RepoEmpresa : RepoGenerico, IRepoEmpresa
         return Resultado;
 
     }
+
+    public string ObtenerControladorRedireccion() => "Empresa";
+    public string ObtenerAccionRedireccion() => "IndexEmpresa";
 }

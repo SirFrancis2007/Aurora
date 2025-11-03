@@ -4,6 +4,7 @@ using mvc_practica.Models;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Aurora.Dapper.ADO;
 
 namespace mvc_practica.Controllers;
 
@@ -19,13 +20,17 @@ public class HomeController : Controller
     public Empresa _empresa;
     public Administrador _administrador;
     public Conductor _conductor;
+    public readonly IRepoAutenticacion _repoAutenticacion;
+    public readonly RepoAutenticar _repoAutenticar;
 
-    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdministrador, IRepoConductor repoConductor)
+    public HomeController(ILogger<HomeController> logger, IRepoEmpresa repoEmpresa, IRepoAdministrador repoAdministrador, IRepoConductor repoConductor, IRepoAutenticacion repoAutenticacion, RepoAutenticar repoAutenticar)
     {
         _logger = logger;
         _repoEmpresa = repoEmpresa;
         _repoAdministrador = repoAdministrador;
         _repoConductor = repoConductor;
+        _repoAutenticacion = repoAutenticacion;
+        _repoAutenticar = repoAutenticar;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -56,44 +61,33 @@ public class HomeController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> LoginUniversal(AutenticacionDTO _datos)
+    public async Task<IActionResult> LoginUniversal(AutenticacionDTO datos)
     {
-        bool resultado = false;
+        var usuario = datos.Usuario?.Trim().ToLower();
+        var contrasena = datos.Contrasena?.Trim().ToLower();
+        var rol = datos.Rol?.Trim().ToLower();
 
-        var _vefCredenciales = new AutenticacionDTO
+        var repo = _repoAutenticar.ObtenerPorRol(rol);
+
+        if (repo == null)
         {
-            Usuario = _datos.Usuario?.Trim().ToLower(),
-            Contrasena = _datos.Contrasena?.Trim().ToLower(),
-            Rol = _datos.Rol?.Trim().ToLower()
-        };
-
-        switch (_vefCredenciales.Rol.ToLower())
-        {
-            case "empresa":
-                resultado = await _repoEmpresa.LoguearseAsync(_vefCredenciales.Usuario, _vefCredenciales.Contrasena);
-                if (resultado)
-                    return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _vefCredenciales.Usuario });
-                break;
-
-            case "admin":
-                resultado = await _repoAdministrador.LoguearseAsync(_vefCredenciales.Usuario, _vefCredenciales.Contrasena);
-                if (resultado)
-                    return RedirectToAction("IndexAdmin", "Administrador", new { nombre = _vefCredenciales.Usuario });
-                break;
-
-            case "conductor":
-                resultado = await _repoConductor.Loguearse(_vefCredenciales.Usuario, _vefCredenciales.Contrasena);
-                if (resultado)
-                    return RedirectToAction("IndexConductor", "Conductor", new { nombre = _vefCredenciales.Usuario });
-                break;
-
-            default:
-                ModelState.AddModelError("", "Rol no válido.");
-                break;
+            ModelState.AddModelError("", "Rol no válido.");
+            return View("Index");
         }
 
-        ModelState.AddModelError("", "Credenciales incorrectas");
-        return View("Index");
+        bool autenticado = await repo.LoguearseAsync(usuario, contrasena);
+
+        if (!autenticado)
+        {
+            ModelState.AddModelError("", "Credenciales incorrectas.");
+            return View("Index");
+        }
+
+        // Redirección polimórfica
+        return RedirectToAction(
+            repo.ObtenerAccionRedireccion(),
+            repo.ObtenerControladorRedireccion(),
+            new { nombre = usuario });
     }
 }
 

@@ -22,6 +22,11 @@ builder.Services.AddScoped<IRepoPedido, RepoPedido>();
 builder.Services.AddScoped<IRepoHisrorialPedido, RepoHistorialPedido>();
 builder.Services.AddScoped<IRepoRuta, RepoRuta>();
 
+builder.Services.AddScoped<IRepoAutenticacion, RepoEmpresa>(); 
+builder.Services.AddScoped<IRepoAutenticacion, RepoAdministrador>();
+builder.Services.AddScoped<IRepoAutenticacion, RepoConductor>();
+builder.Services.AddScoped<RepoAutenticar>();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {

@@ -5,13 +5,15 @@ using Dapper;
 #pragma warning restore format
 namespace Aurora.Dapper.ADO;
 
-public class RepoAdministrador : RepoGenerico, IRepoAdministrador
+public class RepoAdministrador : RepoGenerico, IRepoAdministrador, IRepoAutenticacion
 {
     public RepoAdministrador(IDbConnection conexion) : base(conexion)
     {
     }
 
     public Task<IEnumerable<Administrador>> ObtenerAsync => ObtenerData();
+
+    public string Rol => "administrador";
 
     public async Task AltaAsync(Administrador _nuevoadministrador)
     {
@@ -101,4 +103,8 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador
         );
         return resultado;
     }
+
+    public string ObtenerControladorRedireccion() =>"IndexAdmin";
+
+    public string ObtenerAccionRedireccion() => "Administrador";
 }
