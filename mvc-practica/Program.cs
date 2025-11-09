@@ -2,6 +2,7 @@ using System.Data;
 using Aurora.Core.Interfaces;
 using Aurora.Dapper.ADO;
 using MySqlConnector;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +29,18 @@ builder.Services.AddScoped<IRepoAutenticacion, RepoConductor>();
 builder.Services.AddScoped<RepoAutenticar>();
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(61);
-});
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Login";          
+        options.LogoutPath = "/Home/Logout";        
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

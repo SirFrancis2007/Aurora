@@ -1,10 +1,9 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using mvc_practica.Models;
 using Aurora.Core;
 using Aurora.Core.Interfaces;
-using System.Collections;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace mvc_practica.Controllers;
 
@@ -29,24 +28,34 @@ public class AdministradorController : Controller
         _repoVehiculo = repoVehiculo;
     }
 
-    public async Task<IActionResult> IndexAdmin(string nombre)
+    [Authorize(Roles = "administrador")]
+    public async Task<IActionResult> IndexAdmin()
     {
+        var nombre = User.Identity?.Name;
+
         var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
-        HttpContext.Session.SetString("nombreAdministrador", nombre);
-        HttpContext.Session.SetInt32("idAdministrador", administrador.IdAdministrador);
+        if (administrador == null)
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Home");
+        }
+
         var empresa = await _repoEmpresa.DetalleAsync((uint)administrador.IdEmpresa);
-        var pedido = await _repoPedido.ObtenerPedidosEmpresa((int)empresa.IdEmpresa);
-        HttpContext.Session.SetInt32("idEmpresa", (int)empresa.IdEmpresa);
-        return View(pedido);
+        var pedidos = await _repoPedido.ObtenerPedidosEmpresa((int)empresa.IdEmpresa);
+
+        ViewBag.NombreAdministrador = nombre;
+        ViewBag.IdEmpresa = empresa.IdEmpresa;
+
+        return View(pedidos);
     }
 
 
     [HttpGet]
     public async Task<IActionResult> Historial()
     {
-        var idEmpresa = HttpContext.Session.GetInt32("idEmpresa");
-
-        var empresa = await _repoEmpresa.DetalleAsync((uint)idEmpresa);
+        var nombre = User.Identity?.Name;
+        var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
+        var empresa = await _repoEmpresa.DetalleAsync(administrador.IdEmpresa);
         var _empresa = await _repoEmpresa.ObtenerPorNombreAsync(empresa.Nombre);
         var _HistorialPedido = await _repoHistorial.ObtenerHistorialCompleto((int)empresa.IdEmpresa);
         return View(_HistorialPedido);
@@ -67,8 +76,7 @@ public class AdministradorController : Controller
 
             await _repoRuta.AltaAsync(_nuevaRuta);
             TempData["Mensaje"] = "Ruta Creada";
-            var Nombre = HttpContext.Session.GetString("nombreAdministrador");
-            return RedirectToAction("IndexAdmin", new { nombre = Nombre });
+            return RedirectToAction("IndexAdmin");
         }
 
         return View();
@@ -86,7 +94,9 @@ public class AdministradorController : Controller
     // Este mth solo muestra el 
     public async Task<IActionResult> AgregarPedido()
     {
-        var idAdministrador = HttpContext.Session.GetInt32("idAdministrador");
+        var nombre = User.Identity?.Name;
+        var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
+
         // Obtener datos necesarios
         var rutas = await _repoRuta.ObtenerAsync;
         var empresas = await _repoEmpresa.ObtenerAsync;
@@ -105,7 +115,7 @@ public class AdministradorController : Controller
             Rutas = rutas,
             Empresas = empresas,
             Vehiculos = vehiculos,
-            IdAdministrador = (int)idAdministrador
+            IdAdministrador = administrador.IdAdministrador
         };
 
         return View(dto);
@@ -116,7 +126,8 @@ public class AdministradorController : Controller
     //Este mth es literalmetne la accion de alta pedido
     public async Task<IActionResult> AgregarPedido(PedidoViewModel dto)
     {
-        var idAdministrador = HttpContext.Session.GetInt32("idAdministrador");
+        var nombre = User.Identity?.Name;
+        var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
         var pedido = new Pedido
         {
             NombrePedido = dto.Titulo,
@@ -127,14 +138,13 @@ public class AdministradorController : Controller
             XidRuta = dto.IdRuta,
             XidEmpresa = dto.IdEmpresaDestino,
             xidVehiculo = dto.IdVehiculo,
-            XidAdministrador = (int)idAdministrador
+            XidAdministrador = administrador.IdAdministrador
         };
 
         await _repoPedido.AltaAsync(pedido);        
         TempData["Mensaje"] = "Pedido creado exitosamente";
 
-        var nombre = HttpContext.Session.GetString("nombreAdministrador");
-        return RedirectToAction("IndexAdmin", new { nombre });
+        return RedirectToAction("IndexAdmin", new { nombre = nombre });
     }
 
     [HttpPost]

@@ -1,10 +1,8 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using mvc_practica.Models;
-using Aurora.Core;
 using Aurora.Core.Interfaces;
-using System.Text;
-using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace mvc_practica.Controllers;
 
@@ -24,15 +22,15 @@ public class ConductorController : Controller
         _repoVehiculo = repoVehiculo;
     }
 
-    public async Task<IActionResult> IndexConductor(string nombre)
+    [Authorize(Roles = "conductor")] 
+    public async Task<IActionResult> IndexConductor()
     {
-        HttpContext.Session.SetString("Nombre", nombre);
-        var _nombre = HttpContext.Session.GetString("Nombre");
+        var nombre = User.Identity?.Name;
 
-        if (string.IsNullOrEmpty(_nombre))
+        if (string.IsNullOrEmpty(nombre))
             return RedirectToAction("Login", "Home");
 
-        var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
+        var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
         var _idvehiculoVinculado = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
         var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(_idvehiculoVinculado);
 
@@ -42,6 +40,7 @@ public class ConductorController : Controller
         {
             await _repoVehiculo.CambiarEstadoAsync(_idvehiculoVinculado, true);
             await _repoConductor.FncLiberarEstadoConductor(conductor.IdConductor);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Home");
         }
         return View(pedidos);
@@ -50,11 +49,11 @@ public class ConductorController : Controller
     [HttpPost]
     public async Task<IActionResult> IniciarViaje()
     {
-        var _nombre = HttpContext.Session.GetString("Nombre");
-        if (string.IsNullOrEmpty(_nombre))
+        var nombre = User.Identity?.Name;
+        if (string.IsNullOrEmpty(nombre))
             return RedirectToAction("Login", "Home");
 
-        var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
+        var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
         var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
 
         var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
@@ -62,13 +61,13 @@ public class ConductorController : Controller
         if (pedidos.All(p => p.Estado == "Entregado"))
         {
             TempData["Mensaje"] = "Todos los pedidos ya fueron entregados. No se puede iniciar un nuevo viaje.";
-            return RedirectToAction("IndexConductor", new { nombre = _nombre });
+            return RedirectToAction("IndexConductor", new { nombre = nombre });
         }
 
         if (pedidos.Any(p => p.Estado == "Entregado"))
         {
             TempData["Mensaje"] = "Ya hay pedidos en viaje. No se puede reiniciar el viaje.";
-            return RedirectToAction("IndexConductor", new { nombre = _nombre });
+            return RedirectToAction("IndexConductor", new { nombre = nombre });
         }
 
         await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje
@@ -76,15 +75,15 @@ public class ConductorController : Controller
         await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
 
         TempData["Mensaje"] = "Viaje iniciado correctamente.";
-        return RedirectToAction("IndexConductor", new { nombre = _nombre });
+        return RedirectToAction("IndexConductor", new { nombre = nombre });
     }
 
     [HttpPost]
     [Route("/Conductor/MarcarEntregado/{idPedido}")]
     public async Task<IActionResult> MarcarEntregado(int idPedido)
     {
-        var _nombre = HttpContext.Session.GetString("Nombre");
-        var conductor = await _repoConductor.ObtenerConductorPorNombre(_nombre);
+        var nombre = User.Identity?.Name;
+        var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
         var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
 
         // RESUELTO: El problema es que el mth hace una modificacion parcial, osea si se entrega uno, se entregan todos. Lo que genera incosistencia. Hayq ue crear un mth que solo modifique el estado del pedido individualmente. 

@@ -5,6 +5,10 @@ using Aurora.Core;
 using Aurora.Core.Interfaces;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Aurora.Dapper.ADO;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+
 
 namespace mvc_practica.Controllers;
 
@@ -59,7 +63,7 @@ public class HomeController : Controller
         }
         return View(_datos);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> LoginUniversal(AutenticacionDTO datos)
     {
@@ -83,11 +87,37 @@ public class HomeController : Controller
             return View("Index");
         }
 
-        // Redirección polimórfica
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, usuario),
+            new Claim(ClaimTypes.Role, rol)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            IsPersistent = true,
+            ExpiresUtc = DateTime.UtcNow.AddHours(2)
+        };
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity),
+            authProperties
+        );
+
         return RedirectToAction(
             repo.ObtenerAccionRedireccion(),
             repo.ObtenerControladorRedireccion(),
             new { nombre = usuario });
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login", "Home");
     }
 }
 

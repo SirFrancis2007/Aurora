@@ -4,6 +4,9 @@
     <ProjectReference Include="..\src\Aurora.Dapper.ADO\Aurora.Dapper.ADO.csproj" />
     <ProjectReference Include="..\src\Aurora.Dapper.Test\Aurora.Dapper.Test.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
