@@ -14,9 +14,7 @@ namespace mvc_practica.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index() => View();
-    public IActionResult login() => View();
-    
+    public IActionResult Index() => View();    
     private readonly ILogger<HomeController> _logger;
     private readonly IRepoEmpresa _repoEmpresa;
     private readonly IRepoAdministrador _repoAdministrador;
@@ -117,7 +115,14 @@ public class HomeController : Controller
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Login", "Home");
+
+        Response.Cookies.Delete(".AspNetCore.Cookies"); 
+        Response.Cookies.Delete("UsuarioNombre");
+        Response.Cookies.Delete("UsuarioRol");
+
+        HttpContext.Session.Clear();
+
+        return RedirectToAction("Index");
     }
 }
 

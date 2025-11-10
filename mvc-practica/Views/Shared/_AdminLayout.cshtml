@@ -37,11 +37,13 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="Home" asp-action="Logout">
-                            <img src="~/images/LogOut.png" alt="">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>LogOut</span>
-                        </a>
+                        <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
+                            <button type="submit" class="btn-logout">
+                                <img src="~/images/LogOut.png" alt="">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>LogOut</span>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

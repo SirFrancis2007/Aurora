@@ -19,9 +19,11 @@
             <form asp-action="IniciarViaje" method="post">
                 <button type="submit" id="btn-conductor" class="btn btn-primary">Iniciar viaje</button>
             </form>
-            <a asp-controller="Home" asp-action="Logout">
-                    <span id="btn-conductor">LogOut</span>
-            </a>
+            <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
+                <button id="btn-conductor" type="submit" class="btn-logout">
+                    <span>LogOut</span>
+                </button>
+            </form>
         </div>
 
         <div class="table-container">

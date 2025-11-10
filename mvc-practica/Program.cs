@@ -6,14 +6,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("MySQL");
 
-//builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnector(connectionString));
 builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(connectionString));
-//builder.Services.AddScoped<(aca va la interface), (Aca va la capa de datos que hereda la interface)>();
 builder.Services.AddScoped<IRepoEmpresa, RepoEmpresa>();
 builder.Services.AddScoped<IRepoAdministrador, RepoAdministrador>();
 builder.Services.AddScoped<IRepoConductor, RepoConductor>();
@@ -30,12 +27,18 @@ builder.Services.AddScoped<RepoAutenticar>();
 
 builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // tiempo máximo inactividad
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Login";          
-        options.LogoutPath = "/Home/Logout";        
+        options.LoginPath = "/Home/Login";
+        options.LogoutPath = "/Home/Logout";
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
         options.SlidingExpiration = true;
     });
@@ -44,11 +47,9 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 else
@@ -58,16 +59,15 @@ else
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); 
 app.UseRouting();
-app.UseSession();
-app.UseAuthorization();
 
-app.MapStaticAssets();
+app.UseSession();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

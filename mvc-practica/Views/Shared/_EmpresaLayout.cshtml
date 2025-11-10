@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/css/Sidebar_shared.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/_sidebar.css" asp-append-version="true" />
     <title>@ViewData["Title"] Aurora</title>
     <link rel="icon" href="~/icon/Isotipo.ico" type="image/x-icon">
     <script type="importmap"></script>
@@ -44,11 +44,13 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="Home" asp-action="Logout">
-                            <img src="~/images/LogOut.png" alt="">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>LogOut</span>
-                        </a>
+                        <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
+                            <button type="submit" class="btn-logout">
+                                <img src="~/images/LogOut.png" alt="">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>LogOut</span>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

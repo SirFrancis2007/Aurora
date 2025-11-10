@@ -13,7 +13,7 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador, IRepoAutentic
 
     public Task<IEnumerable<Administrador>> ObtenerAsync => ObtenerData();
 
-    public string Rol => "administrador";
+    public string Rol => "Administrador";
 
     public async Task AltaAsync(Administrador _nuevoadministrador)
     {
@@ -104,7 +104,7 @@ public class RepoAdministrador : RepoGenerico, IRepoAdministrador, IRepoAutentic
         return resultado;
     }
 
-    public string ObtenerControladorRedireccion() =>"IndexAdmin";
+    public string ObtenerControladorRedireccion() =>"Administrador";
 
-    public string ObtenerAccionRedireccion() => "Administrador";
+    public string ObtenerAccionRedireccion() => "IndexAdmin";
 }
