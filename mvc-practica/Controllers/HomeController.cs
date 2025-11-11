@@ -14,7 +14,7 @@ namespace mvc_practica.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index() => View();    
+    public IActionResult Index() => View();
     private readonly ILogger<HomeController> _logger;
     private readonly IRepoEmpresa _repoEmpresa;
     private readonly IRepoAdministrador _repoAdministrador;
@@ -85,44 +85,64 @@ public class HomeController : Controller
             return View("Index");
         }
 
-        var claims = new List<Claim>
+        if (await CookieAsync(usuario, rol))
         {
-            new Claim(ClaimTypes.Name, usuario),
-            new Claim(ClaimTypes.Role, rol)
-        };
-
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        var authProperties = new AuthenticationProperties
-        {
-            IsPersistent = true,
-            ExpiresUtc = DateTime.UtcNow.AddHours(2)
-        };
-
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity),
-            authProperties
-        );
-
-        return RedirectToAction(
+            return RedirectToAction(
             repo.ObtenerAccionRedireccion(),
             repo.ObtenerControladorRedireccion(),
             new { nombre = usuario });
+        }
+        else
+        {
+            return RedirectToAction("Index");
+        }
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-        Response.Cookies.Delete(".AspNetCore.Cookies"); 
+        Response.Cookies.Delete(".AspNetCore.Cookies");
         Response.Cookies.Delete("UsuarioNombre");
         Response.Cookies.Delete("UsuarioRol");
 
         HttpContext.Session.Clear();
 
         return RedirectToAction("Index");
+    }
+
+    /*Mth para crear cookies*/
+    internal async Task<Boolean> CookieAsync(string usuario, string rol)
+    {
+        try
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, usuario),
+                new Claim(ClaimTypes.Role, rol)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddHours(1)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties
+            );
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
 
