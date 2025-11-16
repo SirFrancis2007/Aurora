@@ -7,7 +7,7 @@ Call SPNuevoAdministrador(@id1,'admin1', '1234', @Idempresa1);
 Call SPNuevoAdministrador(@id2,'admin2', '1234', @Idempresa2);
 
 Call SPNuevoConductor(@id1c,'conductor1', '1234', TRUE); -- disponible
-Call SPNuevoConductor(@id2c,'conductor2', '1234', TRUE); -- disponible
+Call SPNuevoConductor(@id2c,'conductor2', '45789', TRUE); -- disponible
 
 call SPCrearVehiculo(@Veh1,'vehiculo1', 'H4G23Z', 1000, TRUE); -- disponible
 call SPCrearVehiculo(@Veh2,'vehiculo2', 'ID3SBX', 1200, TRUE); -- disponible

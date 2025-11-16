@@ -1,87 +1,53 @@
-#bg-video {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100vw; 
-    height: 100vh;
-    object-fit: cover; 
-    z-index: -1; 
-}
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
 
-.main-container {
-    position: relative;
+.main-text {
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    height: 80vh;
-    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    justify-content: space-between; 
+    height: 60vh;
+    max-width: 100%; 
+    margin: 0 auto;
+    padding: 60px; 
+    box-sizing: border-box;
+    margin-top: 50px;
 }
 
-.overlay {
-    text-align: center;
-    color: white; 
-    padding: 20px;
+.main-text img {
+    border-radius: 16px;
+    width: 50%; 
+    height: auto;
+    object-fit: contain; 
 }
 
+.text {
+    font-family: Cabin;
+    width: 50%;
+    padding-right: 20px;
+}
 
-.title {
-    text-align: center;
+#t1 {
+    font-size: 3rem;
     margin-bottom: 20px;
-    color: whitesmoke;
 }
 
-.content {
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    text-align: center;
-    padding: 20px;
-    max-width: 600px;
-    color: whitesmoke;
+#span-text{
+    font-size: 1.4rem;
 }
 
-.content button {
-    margin: 10px 5px;
+#btn-header {
+    margin-top: 20px;
+    font-family: Cabin;
+    font-size: medium;
+    color: #e6e6e6;
+    background-color: #081524;
+    border-radius: 16px;
+    border: 2px solid #ffff;
+    width: 200px;
+    height: 50px;
+    transition: all 1s ease-in-out;
 }
 
-.btn-group {
-    display: flex;
-    justify-content: center;
-}
-
-.content button + button {
-    margin-top: 15px;
-    margin-left: 10px;
-}
-
-h1{
-    font-size: 5em;
-}
-
-h4 {
-    font-size: 1.2em;
-}
-
-span {
-    margin-bottom: 25px;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-button {
-    background-color: #e6e6e6;
-    color:#081524;
-    font-weight: bold;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 16px 0px 16px 0px;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    border-radius: 16px 16px 16px 16px;
-    font-size: 1rem;
+#btn-header:hover {
+    background-color: #123052;
+    border-radius: 0px 16px 0px 16px;
 }

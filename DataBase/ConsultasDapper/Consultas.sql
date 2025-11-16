@@ -111,3 +111,34 @@ FROM Vehiculo v
 LEFT JOIN Pedido p ON v.idVehiculo = p.idVehiculo
 WHERE v.Estado = 1
 GROUP BY v.idVehiculo, v.Matricula, v.CapacidadMax;
+
+
+SELECT 
+    p.idPedido,
+    p.Name AS NombrePedido,
+    p.Volumen,
+    p.Peso,
+    p.EstadoPedido,
+    p.FechaDespacho,
+    v.Tipo AS TipoVehiculo,
+    v.Matricula AS Matricula,
+    c.Name AS Conductor,
+    eo.Nombre AS EmpresaOrigen,  
+    ed.Nombre AS EmpresaDestino, 
+    r.Origen,
+    r.Destino,
+    h.EstadoAnterior,
+    h.EstadoNuevo,
+    h.FechaCambio
+FROM Pedido p
+INNER JOIN Administrador a ON p.idAdministrador = a.idAdministrador
+INNER JOIN Empresa eo ON a.idEmpresa = eo.idEmpresa  
+INNER JOIN Ruta r ON p.idRuta = r.idRuta
+INNER JOIN Vehiculo v ON p.idVehiculo = v.idVehiculo
+INNER JOIN Conductor_has_Vehiculo cv ON v.idVehiculo = cv.idVehiculo
+INNER JOIN Conductor c ON cv.idConductor = c.idConductor
+INNER JOIN HistorialPedido h ON p.idPedido = h.idPedido
+INNER JOIN Empresa ed ON p.idEmpresa = ed.idEmpresa  
+WHERE eo.idEmpresa = @IdEmpresa
+   OR ed.idEmpresa = @IdEmpresa;
+

@@ -53,33 +53,48 @@ public class AdministradorController : Controller
     [HttpGet]
     public async Task<IActionResult> Historial()
     {
-        var nombre = User.Identity?.Name;
-        var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
-        var empresa = await _repoEmpresa.DetalleAsync(administrador.IdEmpresa);
-        var _empresa = await _repoEmpresa.ObtenerPorNombreAsync(empresa.Nombre);
-        var _HistorialPedido = await _repoHistorial.ObtenerHistorialCompleto((int)empresa.IdEmpresa);
-        return View(_HistorialPedido);
+        try
+        {
+            var nombre = User.Identity?.Name;
+            var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
+            var empresa = await _repoEmpresa.DetalleAsync(administrador.IdEmpresa);
+            var _empresa = await _repoEmpresa.ObtenerPorNombreAsync(empresa.Nombre);
+            var _HistorialPedido = await _repoHistorial.ObtenerHistorialCompleto((int)empresa.IdEmpresa);
+            return View(_HistorialPedido);
+        }
+        catch (System.Exception)
+        {
+            return View(0);
+            throw;
+        }
+        
     }
 
     public IActionResult AgregarRuta() => View();
     [HttpPost]
     public async Task<IActionResult> AgregarRuta(Ruta _ruta)
     {
-        if (ModelState.IsValid)
+        try
         {
-            var _nuevaRuta = new Ruta
+            if (ModelState.IsValid)
             {
-                Origen = LimpiarCampo(_ruta.Origen, nameof(_ruta.Origen)),
-                Destino = LimpiarCampo(_ruta.Destino, nameof(_ruta.Destino))
-            };
-
-
-            await _repoRuta.AltaAsync(_nuevaRuta);
-            TempData["Mensaje"] = "Ruta Creada";
-            return RedirectToAction("IndexAdmin");
+                var _nuevaRuta = new Ruta
+                {
+                    Origen = LimpiarCampo(_ruta.Origen, nameof(_ruta.Origen)),
+                    Destino = LimpiarCampo(_ruta.Destino, nameof(_ruta.Destino))
+                };
+                await _repoRuta.AltaAsync(_nuevaRuta);
+                TempData["Mensaje"] = "Ruta Creada";
+                return RedirectToAction("IndexAdmin");
+            }
+            return View();
         }
-
-        return View();
+        catch (System.Exception)
+        {
+            return View();
+            throw;
+        }
+        
     }
 
     private string LimpiarCampo(string valor, string nombreCampo)
@@ -91,7 +106,6 @@ public class AdministradorController : Controller
     }
 
     [HttpGet]
-    // Este mth solo muestra el 
     public async Task<IActionResult> AgregarPedido()
     {
         var nombre = User.Identity?.Name;
@@ -126,39 +140,51 @@ public class AdministradorController : Controller
     //Este mth es literalmetne la accion de alta pedido
     public async Task<IActionResult> AgregarPedido(PedidoViewModel dto)
     {
-        var nombre = User.Identity?.Name;
-        var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
-        var pedido = new Pedido
+        try
         {
-            NombrePedido = dto.Titulo,
-            Volumen = await VefNumeros(dto.Volumen),
-            Peso = await VefNumeros(dto.Peso),
-            Estado = dto.Estado,
-            FechaDespacho = DateTime.Today,
-            XidRuta = dto.IdRuta,
-            XidEmpresa = dto.IdEmpresaDestino,
-            xidVehiculo = dto.IdVehiculo,
-            XidAdministrador = administrador.IdAdministrador
-        };
+            var nombre = User.Identity?.Name;
+            var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
+            var pedido = new Pedido
+            {
+                NombrePedido = dto.Titulo,
+                Volumen = await VefNumeros(dto.Volumen),
+                Peso = await VefNumeros(dto.Peso),
+                Estado = dto.Estado,
+                FechaDespacho = DateTime.Today,
+                XidRuta = dto.IdRuta,
+                XidEmpresa = dto.IdEmpresaDestino,
+                xidVehiculo = dto.IdVehiculo,
+                XidAdministrador = administrador.IdAdministrador
+            };
 
-        await _repoPedido.AltaAsync(pedido);        
-        TempData["Mensaje"] = "Pedido creado exitosamente";
+            await _repoPedido.AltaAsync(pedido);        
+            TempData["Mensaje"] = "Pedido creado exitosamente";
 
-        return RedirectToAction("IndexAdmin", new { nombre = nombre });
+            return RedirectToAction("IndexAdmin");
+        }
+        catch (System.Exception)
+        {
+            return View(IndexAdmin());
+            throw;
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> MarcarComoEntregado(int idPedido)
     {
-        if (idPedido <= 0)
-            return BadRequest("ID de pedido inválido.");
-
-        await _repoPedido.ActualizarEstadoPedidoPorAdmin(idPedido, "Recibido");
-
-        TempData["Mensaje"] = "Pedido marcado como Recibido.";
-
-        var nombre = HttpContext.Session.GetString("nombreAdministrador");
-        return RedirectToAction("IndexAdmin", new { nombre });
+        try
+        {
+            if (idPedido <= 0) return BadRequest("ID de pedido inválido.");
+            await _repoPedido.ActualizarEstadoPedidoPorAdmin(idPedido, "Recibido");
+            TempData["Mensaje"] = "Pedido marcado como Recibido.";
+            return RedirectToAction("IndexAdmin");
+        }
+        catch (System.Exception)
+        {
+            return View(IndexAdmin());
+            throw;
+        }
+        
     }
     
     private async Task<double> VefNumeros(double n)

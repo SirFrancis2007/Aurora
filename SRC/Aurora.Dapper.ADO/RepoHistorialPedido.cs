@@ -52,21 +52,22 @@ public class RepoHistorialPedido : RepoGenerico, IRepoHisrorialPedido
             v.Tipo AS TipoVehiculo,
             v.Matricula AS Matricula,
             c.Name AS Conductor,
-            eo.Nombre AS EmpresaOrigen,
+            eo.Nombre AS EmpresaOrigen,  
+            ed.Nombre AS EmpresaDestino, 
             r.Origen,
             r.Destino,
-            ed.Nombre AS EmpresaDestino,
             h.EstadoAnterior,
             h.EstadoNuevo,
             h.FechaCambio
         FROM Pedido p
-        INNER JOIN Empresa eo ON p.idEmpresa = eo.idEmpresa
+        INNER JOIN Administrador a ON p.idAdministrador = a.idAdministrador
+        INNER JOIN Empresa eo ON a.idEmpresa = eo.idEmpresa  
         INNER JOIN Ruta r ON p.idRuta = r.idRuta
         INNER JOIN Vehiculo v ON p.idVehiculo = v.idVehiculo
         INNER JOIN Conductor_has_Vehiculo cv ON v.idVehiculo = cv.idVehiculo
         INNER JOIN Conductor c ON cv.idConductor = c.idConductor
         INNER JOIN HistorialPedido h ON p.idPedido = h.idPedido
-        LEFT JOIN Empresa ed ON r.Destino = ed.Nombre
+        INNER JOIN Empresa ed ON p.idEmpresa = ed.idEmpresa  
         WHERE eo.idEmpresa = @IdEmpresa
         OR ed.idEmpresa = @IdEmpresa;";
 

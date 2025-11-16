@@ -3,6 +3,9 @@ using Aurora.Core.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics.Eventing.Reader;
+using Aurora.Core;
+using Aurora.Core.Models;
 
 namespace mvc_practica.Controllers;
 
@@ -49,56 +52,87 @@ public class ConductorController : Controller
     [HttpPost]
     public async Task<IActionResult> IniciarViaje()
     {
-        var nombre = User.Identity?.Name;
-        if (string.IsNullOrEmpty(nombre))
-            return RedirectToAction("Login", "Home");
-
-        var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
-        var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
-
-        var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
-
-        if (pedidos.All(p => p.Estado == "Entregado"))
+        try
         {
-            TempData["Mensaje"] = "Todos los pedidos ya fueron entregados. No se puede iniciar un nuevo viaje.";
-            return RedirectToAction("IndexConductor", new { nombre = nombre });
-        }
+            var nombre = User.Identity?.Name;
+            if (string.IsNullOrEmpty(nombre))
+                return RedirectToAction("Login", "Home");
 
+            var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
+            var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
+
+            var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
+
+            if (await FncVerificarPedidosEntregados(pedidos))
+                return RedirectToAction("IndexConductor");
+
+            if (await FncVerificarPedidosAlgunoEntregado(pedidos))
+            {
+                return RedirectToAction("IndexConductor");
+            }    
+            
+            await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje
+            await _repoVehiculo.ActualizarEstadoVehiculo(idVehiculo);              // En viaje
+            await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
+
+            return RedirectToAction("IndexConductor");
+        }
+        catch (System.Exception)
+        {
+            return RedirectToAction("IndexConductor");
+            throw;
+        }
+    }
+
+    internal async Task<bool> FncVerificarPedidosEntregados(IEnumerable<PedidoRutaDTO> pedidos)
+    {
+        if (pedidos.All(p => p.Estado == "Entregado"))
+            return true;
+        else
+            return false;
+    }
+
+    internal async Task<bool> FncVerificarPedidosAlgunoEntregado(IEnumerable<PedidoRutaDTO> pedidos)
+    {
         if (pedidos.Any(p => p.Estado == "Entregado"))
         {
             TempData["Mensaje"] = "Ya hay pedidos en viaje. No se puede reiniciar el viaje.";
-            return RedirectToAction("IndexConductor", new { nombre = nombre });
+            return true;
         }
+        else
+            return false;
 
-        await _repoConductor.ActualizarEstadoConductor(conductor.IdConductor); // En viaje
-        await _repoVehiculo.ActualizarEstadoVehiculo(idVehiculo);              // En viaje
-        await _repoPedido.ActualizarEstadoPedidoPorConductor(conductor.IdConductor, "En viaje");
-
-        TempData["Mensaje"] = "Viaje iniciado correctamente.";
-        return RedirectToAction("IndexConductor", new { nombre = nombre });
     }
 
     [HttpPost]
     [Route("/Conductor/MarcarEntregado/{idPedido}")]
     public async Task<IActionResult> MarcarEntregado(int idPedido)
     {
-        var nombre = User.Identity?.Name;
-        var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
-        var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
-
-        // RESUELTO: El problema es que el mth hace una modificacion parcial, osea si se entrega uno, se entregan todos. Lo que genera incosistencia. Hayq ue crear un mth que solo modifique el estado del pedido individualmente. 
-        await _repoPedido.ActualizarEstadoPedidoIndividual(idPedido, "Entregado");
-        await _repoVehiculo.RestaurarPesoVehiculo(idVehiculo, idPedido);
-
-        var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
-        bool todosEntregados = pedidos.All(p => p.Estado == "Entregado");
-
-        if (todosEntregados)
+        try
         {
-            await _repoVehiculo.CambiarEstadoAsync(idVehiculo, true);
-            await _repoConductor.FncLiberarEstadoConductor(conductor.IdConductor);
-        }
+            var nombre = User.Identity?.Name;
+            var conductor = await _repoConductor.ObtenerConductorPorNombre(nombre);
+            var idVehiculo = await _repoVehiculoConductor.ObtenerVehiculoPorIdConductor(conductor.IdConductor);
 
-        return Ok();
+            // problema resuelto: El problema es que el mth hace una modificacion parcial, osea si se entrega uno, se entregan todos. Lo que genera incosistencia. Hayq ue crear un mth que solo modifique el estado del pedido individualmente. 
+            await _repoPedido.ActualizarEstadoPedidoIndividual(idPedido, "Entregado");
+            await _repoVehiculo.RestaurarPesoVehiculo(idVehiculo, idPedido);
+
+            var pedidos = await _repoPedido.ObtenerPedidosPorVehiculo(idVehiculo);
+            bool todosEntregados = pedidos.All(p => p.Estado == "Entregado");
+
+            if (todosEntregados)
+            {
+                await _repoVehiculo.CambiarEstadoAsync(idVehiculo, true);
+                await _repoConductor.FncLiberarEstadoConductor(conductor.IdConductor);
+            }
+
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+            return BadRequest();
+            throw;
+        }
     }
 }

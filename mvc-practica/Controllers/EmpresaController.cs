@@ -1,5 +1,10 @@
 using Aurora.Core;
 using Aurora.Core.Interfaces;
+using Azure.Core;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics.Eventing.Reader;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using mvc_practica.Models;
@@ -35,10 +40,10 @@ public class EmpresaController : Controller
         _repoHisrorialPedido = repoHisrorialPedido;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> IndexEmpresa(string nombre)
+    [Authorize(Roles = "empresa")]
+    public async Task<IActionResult> IndexEmpresa()
     {
-        HttpContext.Session.SetString("NombreEmpresa", nombre);
+        var nombre = User.Identity?.Name;
 
         var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
         var pedidos = await _repoPedido.ObtenerPedidosPorEmpresa((int)empresa.IdEmpresa);
@@ -49,7 +54,7 @@ public class EmpresaController : Controller
     [HttpGet]
     public async Task<IActionResult> EmpresaAdministrador()
     {
-        var nombre = HttpContext.Session.GetString("NombreEmpresa");
+        var nombre = User.Identity?.Name;
 
         var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
         var administradores = await _repoAdmin.ObtenerPorEmpresaAsync((int)empresa.IdEmpresa);
@@ -74,79 +79,109 @@ public class EmpresaController : Controller
     [HttpPost]
     public async Task<IActionResult> AltaAdministrador(Administrador _admin)
     {
-        var nombre = HttpContext.Session.GetString("NombreEmpresa");
+        var nombre = User.Identity?.Name;
         var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre); //agarrar el id de la empresa logueada  
 
-
-        if (ModelState.IsValid)
+        try
         {
-            var _nuevoadmin = new Administrador
+            if (ModelState.IsValid)
             {
-                IdAdministrador = 0,
-                Nombre = _admin.Nombre.Trim(),
-                Password = _admin.Password.Trim(),
-                IdEmpresa = empresa.IdEmpresa
-            };
+                var _nuevoadmin = new Administrador
+                {
+                    IdAdministrador = 0,
+                    Nombre = _admin.Nombre.Trim(),
+                    Password = _admin.Password.Trim(),
+                    IdEmpresa = empresa.IdEmpresa
+                };
 
-            await _repoAdmin.AltaAsync(_nuevoadmin);
+                await _repoAdmin.AltaAsync(_nuevoadmin);
 
-            TempData["Mensaje"] = "Administrador creada con éxito";
-            return RedirectToAction(nameof(EmpresaController.EmpresaAdministrador));
+                TempData["Mensaje"] = "Administrador creada con éxito";
+                return RedirectToAction(nameof(EmpresaController.EmpresaAdministrador));
+            }
+            return View(empresa);
         }
-        return View(empresa);
+        catch (System.Exception)
+        {
+            return View(empresa);
+            throw;
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> AltaVehiculo(Vehiculo _vehiculo)
     {
-        if (ModelState.IsValid)
+        try
         {
-            var _nuevovehiculo = new Vehiculo
+            if (ModelState.IsValid)
             {
-                IdVehiculo = 0,
-                Tipo = _vehiculo.Tipo.Trim(),
-                Matricula = _vehiculo.Matricula.Trim(),
-                CapacidadMax = _vehiculo.CapacidadMax,
-                Estado = true //Disponible por defecto
-            };
+                var _nuevovehiculo = new Vehiculo
+                {
+                    IdVehiculo = 0,
+                    Tipo = _vehiculo.Tipo.Trim(),
+                    Matricula = _vehiculo.Matricula.Trim(),
+                    CapacidadMax = _vehiculo.CapacidadMax,
+                    Estado = true //Disponible por defecto
+                };
 
-            await _repoVehiculo.AltaAsync(_nuevovehiculo);
+                await _repoVehiculo.AltaAsync(_nuevovehiculo);
 
-            TempData["Mensaje"] = "Administrador creada con éxito";
-            return RedirectToAction(nameof(EmpresaController.VehiculoEmpresa));
+                TempData["Mensaje"] = "Administrador creada con éxito";
+                return RedirectToAction(nameof(EmpresaController.VehiculoEmpresa));
+            }
+            return View(_vehiculo);
         }
-        return View(_vehiculo);
+        catch (System.Exception)
+        {
+            return View(IndexEmpresa());
+            throw;
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> AltaConductor(Conductor _conductor)
     {
-        if (ModelState.IsValid)
+        try
         {
-            var _nuevoconductor = new Conductor
+            if (ModelState.IsValid)
             {
-                Name = _conductor.Name.Trim(),
-                Licencia = _conductor.Licencia.Trim(),
-                Disponibilidad = true //Disponible por defecto
-            };
+                var _nuevoconductor = new Conductor
+                {
+                    Name = _conductor.Name.Trim(),
+                    Licencia = _conductor.Licencia.Trim(),
+                    Disponibilidad = true //Disponible por defecto
+                };
 
-            await _repoConductor.AltaAsync(_nuevoconductor);
+                await _repoConductor.AltaAsync(_nuevoconductor);
 
-            TempData["Mensaje"] = "Conductor creado con éxito";
-            return RedirectToAction(nameof(EmpresaController.ConductorEmpresa));
+                TempData["Mensaje"] = "Conductor creado con éxito";
+                return RedirectToAction(nameof(EmpresaController.ConductorEmpresa));
+            }
+            return View(_conductor);
         }
-        return View(_conductor);
+        catch (System.Exception)
+        {
+            return View(IndexEmpresa());
+            throw;
+        }
     }
 
     [HttpGet]
     public async Task<IActionResult> HistorialPedido()
     {
-        var nombre = HttpContext.Session.GetString("NombreEmpresa");
+        try
+        {
+            var nombre = User.Identity?.Name;
+            var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
+            var _HistorialPedido = await _repoHisrorialPedido.ObtenerHistorialCompleto((int)empresa.IdEmpresa);
 
-        var empresa = await _repoEmpresa.ObtenerPorNombreAsync(nombre);
-        var _HistorialPedido = await _repoHisrorialPedido.ObtenerHistorialCompleto((int)empresa.IdEmpresa);
-
-        return View(_HistorialPedido);
+            return View(_HistorialPedido);
+        }
+        catch (System.Exception)
+        {
+            return View(IndexEmpresa());
+            throw;
+        }
     }
 
     [HttpGet]
@@ -165,25 +200,39 @@ public class EmpresaController : Controller
     [HttpPost]
     public async Task<IActionResult> AltaAsignacionVehiculoConductor(int idConductor, int idVehiculo, DateOnly FAsignacion)
     {
-        // inst de obj veh + con
-        var _nuevaasignacion = new VehiculoConductor
+        try
         {
-            XidConductor = idConductor,
-            XidVehiculo = idVehiculo,
-            FechaAsignacion = DateTime.Now
-        };
+            // inst de obj veh + con
+            var _nuevaasignacion = new VehiculoConductor
+            {
+                XidConductor = idConductor,
+                XidVehiculo = idVehiculo,
+                FechaAsignacion = DateTime.Now
+            };
 
-        await _repoVehCon.AltaAsync(_nuevaasignacion);
-
-        TempData["Mensaje"] = "La asignacion fue exitosa";
-        return RedirectToAction(nameof(EmpresaController.AsignarVehiculoAConductor));
+            await _repoVehCon.AltaAsync(_nuevaasignacion);
+            return RedirectToAction(nameof(EmpresaController.AsignarVehiculoAConductor));
+        }
+        catch (System.Exception)
+        {
+            return View(AsignarVehiculoAConductor());
+            throw;
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> EliminarAdministrador(int idAdministrador)
     {
-        await _repoAdmin.EliminarAsync(idAdministrador);
-        return RedirectToAction(nameof(EmpresaAdministrador));
+        try
+        {
+            await _repoAdmin.EliminarAsync(idAdministrador);
+            return RedirectToAction(nameof(EmpresaAdministrador));
+        }
+        catch (System.Exception)
+        {
+            return View(EmpresaAdministrador());
+            throw;
+        }
     }
 
     public async Task<IActionResult> ActualizarConductor(int id)

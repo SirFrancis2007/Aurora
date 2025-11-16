@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `aurorabd`.`Empresa` ;
 
 CREATE TABLE IF NOT EXISTS `aurorabd`.`Empresa` (
   `idEmpresa` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NULL,
+  `Nombre` VARCHAR(45) NULL UNIQUE,
   `Contrasena` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idEmpresa`),
   UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) VISIBLE)
@@ -72,7 +72,7 @@ DROP TABLE IF EXISTS `aurorabd`.`Vehiculo` ;
 CREATE TABLE IF NOT EXISTS `aurorabd`.`Vehiculo` (
   `idVehiculo` INT NOT NULL AUTO_INCREMENT,
   `Tipo` VARCHAR(45) NULL,
-  `Matricula` VARCHAR(45) NULL,
+  `Matricula` VARCHAR(45) NULL UNIQUE,
   `CapacidadMax` DOUBLE NULL,
   `Estado` TINYINT NULL,
   PRIMARY KEY (`idVehiculo`))
@@ -129,7 +129,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `aurorabd`.`Conductor` (
   `idConductor` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(45) NOT NULL,
-  `Licencia` VARCHAR(45) NULL,
+  `Licencia` VARCHAR(45) NULL UNIQUE,
   `Disponibilidad` BOOLEAN NOT NULL DEFAULT 1,
   PRIMARY KEY (`idConductor`)) 
   ENGINE = InnoDB;

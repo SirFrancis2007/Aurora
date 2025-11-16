@@ -45,21 +45,30 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Post_Empresa(AutenticacionDTO _datos)
     {
-        if (ModelState.IsValid)
+        try
         {
-            var _nuevaempresa = new Empresa
+            if (ModelState.IsValid)
             {
-                IdEmpresa = 0,
-                Nombre = _datos.Usuario.Trim().ToLower(),
-                Contrasena = _datos.Contrasena.Trim().ToLower()
-            };
+                var _nuevaempresa = new Empresa
+                {
+                    IdEmpresa = 0,
+                    Nombre = _datos.Usuario.Trim().ToLower(),
+                    Contrasena = _datos.Contrasena.Trim().ToLower()
+                };
 
-            await _repoEmpresa.AltaAsync(_nuevaempresa);
+                await _repoEmpresa.AltaAsync(_nuevaempresa);
 
-            TempData["Mensaje"] = "Empresa creada con éxito";
-            return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _datos.Usuario });
+                TempData["Mensaje"] = "Empresa creada con éxito";
+                return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _datos.Usuario });
+            }
+            return View(_datos);
         }
-        return View(_datos);
+        catch (System.Exception)
+        {
+            return View("Index");
+            throw;
+        }
+        
     }
 
     [HttpPost]
@@ -71,31 +80,34 @@ public class HomeController : Controller
 
         var repo = _repoAutenticar.ObtenerPorRol(rol);
 
-        if (repo == null)
-        {
-            ModelState.AddModelError("", "Rol no válido.");
-            return View("Index");
-        }
-
         bool autenticado = await repo.LoguearseAsync(usuario, contrasena);
 
-        if (!autenticado)
+        try
         {
-            ModelState.AddModelError("", "Credenciales incorrectas.");
-            return View("Index");
-        }
+            if (!autenticado)
+            {
+                ModelState.AddModelError("", "Credenciales incorrectas.");
+                return View("Index");
+            }
 
-        if (await CookieAsync(usuario, rol))
-        {
-            return RedirectToAction(
-            repo.ObtenerAccionRedireccion(),
-            repo.ObtenerControladorRedireccion(),
-            new { nombre = usuario });
+            if (await CookieAsync(usuario, rol))
+            {
+                return RedirectToAction(
+                repo.ObtenerAccionRedireccion(),
+                repo.ObtenerControladorRedireccion(),
+                new { nombre = usuario });
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
-        else
+        catch (System.Exception)
         {
             return RedirectToAction("Index");
+            throw;
         }
+        
     }
 
     [HttpPost]
