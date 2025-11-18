@@ -32,12 +32,10 @@
                             <th>Nombre Pedido</th>
                             <th>Peso (KG)</th>
                             <th>Volumen (M3)</th>
-                            <th>Estado actual</th>
                             <th>Fecha Despacho</th>
                             <th>Surcursal Origen</th>
                             <th>Surcursal Destino</th>
                             <th>Lugar de Origen</th>
-                            <th>Lugar de Destino</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -49,10 +47,8 @@
                                 <td data-label="Nombre">@pedido.NombrePedido</td>
                                 <td data-label="Peso">@pedido.Peso</td>
                                 <td data-label="Volumen">@pedido.Volumen</td>
-                                <td data-label="Estado">@pedido.Estado</td>
                                 <td data-label="Fecha de despacho">@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
                                 <td data-label="Sucursal de Origen">@pedido.EmpresaOrigen</td>
-                                <td data-label="Sucursal de Destino">@pedido.EmpresaDestino</td>
                                 <td data-label="Lugar de Origen">@pedido.Origen</td>
                                 <td data-label="Lugar de Destino">@pedido.Destino</td>
                                 <td>
