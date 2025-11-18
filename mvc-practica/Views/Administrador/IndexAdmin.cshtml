@@ -45,16 +45,16 @@
                         @foreach (var pedido in Model)
                         {
                             <tr>
-                                <td>@pedido.IdPedido</td>
-                                <td>@pedido.NombrePedido</td>
-                                <td>@pedido.Peso</td>
-                                <td>@pedido.Volumen</td>
-                                <td>@pedido.Estado</td>
-                                <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
-                                <td>@pedido.EmpresaOrigen</td>
-                                <td>@pedido.EmpresaDestino</td>
-                                <td>@pedido.Origen</td>
-                                <td>@pedido.Destino</td>
+                                <td data-label="Código">@pedido.IdPedido</td>
+                                <td data-label="Nombre">@pedido.NombrePedido</td>
+                                <td data-label="Peso">@pedido.Peso</td>
+                                <td data-label="Volumen">@pedido.Volumen</td>
+                                <td data-label="Estado">@pedido.Estado</td>
+                                <td data-label="Fecha de despacho">@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                                <td data-label="Sucursal de Origen">@pedido.EmpresaOrigen</td>
+                                <td data-label="Sucursal de Destino">@pedido.EmpresaDestino</td>
+                                <td data-label="Lugar de Origen">@pedido.Origen</td>
+                                <td data-label="Lugar de Destino">@pedido.Destino</td>
                                 <td>
                                     @if (pedido.Estado != "Entregado")
                                     {

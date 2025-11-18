@@ -133,7 +133,6 @@ a {
     }
 }
 
-/* 📌 Celulares grandes y medianos (máx. 768px) */
 @media (max-width: 768px) {
     .text-empresa h2 {
         font-size: 1.45rem;
@@ -163,7 +162,6 @@ a {
     }
 }
 
-/* 📌 Celulares pequeños (máx. 480px) */
 @media (max-width: 480px) {
     .main-content {
         padding: 12px;
@@ -188,7 +186,7 @@ a {
     }
 
     .Content-table thead {
-        display: none; /* Oculta encabezado */
+        display: none; 
     }
 
     .Content-table tbody tr {
@@ -209,7 +207,7 @@ a {
     }
 
     .Content-table tbody td::before {
-        content: attr(data-label); /* agrega el nombre de la columna */
+        content: attr(data-label);
         font-weight: 600;
         color: #1e293b;
         margin-right: 8px;

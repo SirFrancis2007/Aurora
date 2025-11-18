@@ -37,12 +37,12 @@
                         @foreach (var pedido in Model)
                         {
                             <tr>
-                                <td>@pedido.NombreEmpresa</td>
-                                <td>@pedido.NombrePedido</td>
-                                <td>@(pedido.Volumen + "m3")</td>
-                                <td>@(pedido.Peso + "Kg")</td>
-                                <td>@pedido.Estado</td>
-                                <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                                <td data-label="Nombre Sucursal">@pedido.NombreEmpresa</td>
+                                <td data-label="Nombre">@pedido.NombrePedido</td>
+                                <td data-label="Volumen">@(pedido.Volumen + "m3")</td>
+                                <td data-label="Peso">@(pedido.Peso + "Kg")</td>
+                                <td data-label="Estaod">@pedido.Estado</td>
+                                <td data-label="Fecha depacho">@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
                             </tr>
                         }
                     }

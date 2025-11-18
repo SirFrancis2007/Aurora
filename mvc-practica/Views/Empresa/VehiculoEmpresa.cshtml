@@ -42,11 +42,11 @@
                         @foreach (var flota in Model)
                         {
                             <tr>
-                                <td>@flota.IdVehiculo</td>
-                                <td>@flota.Tipo</td>
-                                <td>@flota.Matricula</td>
-                                <td>@(flota.CapacidadMax + "Kg")</td>
-                                <td>@(flota.Estado ? "Disponible" : "En viaje")</td>
+                                <td data-label="Código">@flota.IdVehiculo</td>
+                                <td data-label="Tipo">@flota.Tipo</td>
+                                <td data-label="Matricula">@flota.Matricula</td>
+                                <td data-label="Capacidad">@(flota.CapacidadMax + "Kg")</td>
+                                <td data-label="Estado">@(flota.Estado ? "Disponible" : "En viaje")</td>
                             </tr>
                         }
                     }

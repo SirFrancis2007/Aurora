@@ -91,7 +91,7 @@
     }
 
     .links ul {
-        display: flex;
+        display: contents;
         justify-content: space-around;
         width: 100%;
     }

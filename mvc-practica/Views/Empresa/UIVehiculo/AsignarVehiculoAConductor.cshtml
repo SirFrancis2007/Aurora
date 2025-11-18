@@ -37,12 +37,12 @@
                     @foreach (var item in Model.ConductoresAsignados)
                     {
                         <tr>
-                            <td>@item.NombreConductor</td>
-                            <td>@item.Licencia</td>
-                            <td>@item.Tipo</td>
-                            <td>@item.Matricula</td>
-                            <td>@item.FechaAsignado?.ToString("dd/MM/yyyy")</td>
-                            <td>@(item.Disponibilidad == 1 ? "Disponible" : "En viaje")</td>
+                            <td data-label="Nombre">@item.NombreConductor</td>
+                            <td data-label="Licencia">@item.Licencia</td>
+                            <td data-label="Tipo">@item.Tipo</td>
+                            <td data-label="Matricula">@item.Matricula</td>
+                            <td data-label="Fecha">@item.FechaAsignado?.ToString("dd/MM/yyyy")</td>
+                            <td data-label="Disponibilidad">@(item.Disponibilidad == 1 ? "Disponible" : "En viaje")</td>
                             <td>
                                 <form asp-controller="Empresa" asp-action="DesvincularVehiculoConductor" method="post" style="display:inline;">
                                     <input type="hidden" name="idConductor" value="@item.IdConductor" />

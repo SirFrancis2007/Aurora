@@ -40,22 +40,22 @@
                     @foreach (var historial in Model)
                     {
                         <tr>
-                            <td>@historial.idPedido</td>
-                            <td>@historial.NombrePedido</td>
-                            <td>@(historial.Volumen + "m3")</td>
-                            <td>@(historial.Peso + "kg")</td>
-                            <td>@historial.EstadoPedido</td>
-                            <td>@historial.FechaDespacho.ToString("dd/MM/yyyy")</td>                                    
-                            <td>@historial.TipoVehiculo</td>
-                            <td>@historial.Matricula</td>
-                            <td>@historial.Conductor</td>
-                            <td>@historial.EmpresaOrigen</td>
-                            <td>@historial.EmpresaDestino</td>
-                            <td>@historial.Origen</td>
-                            <td>@historial.Destino</td>
-                            <td>@historial.EstadoAnterior</td>
-                            <td>@historial.EstadoNuevo</td>
-                            <td>@historial.FechaCambio</td>
+                            <td data-label="Código">@historial.idPedido</td>
+                            <td data-label="Nombre">@historial.NombrePedido</td>
+                            <td data-label="Volumen">@(historial.Volumen + "m3")</td>
+                            <td data-label="Peso">@(historial.Peso + "kg")</td>
+                            <td data-label="Estado">@historial.EstadoPedido</td>
+                            <td data-label="FechaDespacho">@historial.FechaDespacho.ToString("dd/MM/yyyy")</td>                                    
+                            <td data-label="Tipo">@historial.TipoVehiculo</td>
+                            <td data-label="Matricula">@historial.Matricula</td>
+                            <td data-label="Conductor">@historial.Conductor</td>
+                            <td data-label="Surcursal de Origen">@historial.EmpresaOrigen</td>
+                            <td data-label="Sucursal de destino">@historial.EmpresaDestino</td>
+                            <td data-label="Origen">@historial.Origen</td>
+                            <td data-label="Destino">@historial.Destino</td>
+                            <td data-label="Estado anterior">@historial.EstadoAnterior</td>
+                            <td data-label="Estado Nuevo">@historial.EstadoNuevo</td>
+                            <td data-label="FechaCambio">@historial.FechaCambio</td>
                         </tr>
                     }
             </table>

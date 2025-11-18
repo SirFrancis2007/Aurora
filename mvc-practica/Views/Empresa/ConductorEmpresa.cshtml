@@ -32,9 +32,9 @@
                     @foreach (var conductor in Model)
                     {
                         <tr>
-                            <td>@conductor.Name</td>
-                            <td>@conductor.Licencia</td>
-                            <td>@(conductor.Disponibilidad ? "Disponible" : "En viaje")</td>
+                            <td data-label="Nombre">@conductor.Name</td>
+                            <td data-label="Licencia">@conductor.Licencia</td>
+                            <td data-label="Disponibilidad">@(conductor.Disponibilidad ? "Disponible" : "En viaje")</td>
                             <td>
                                 <td>
                                     <a asp-action="ActualizarConductor"

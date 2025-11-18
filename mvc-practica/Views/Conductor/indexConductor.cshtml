@@ -43,12 +43,12 @@
                     @foreach (var pedido in Model.Where(p => p.Estado != "Entregado"))                    
                     {
                         <tr data-id="@pedido.IdPedido" data-estado="@pedido.Estado">
-                            <td>@pedido.IdPedido</td>
-                            <td>@pedido.NombrePedido</td>
-                            <td>@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
-                            <td>@pedido.Origen</td>
-                            <td>@pedido.Destino</td>
-                            <td class="estado">@pedido.Estado</td>
+                            <td data-label="Código">@pedido.IdPedido</td>
+                            <td data-label="Nombre Pedido">@pedido.NombrePedido</td>
+                            <td data-label="Fecha de Despacho">@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
+                            <td data-label="Origen">@pedido.Origen</td>
+                            <td data-label="Destino">@pedido.Destino</td>
+                            <td data-label="Estado" class="estado">@pedido.Estado</td>
                             <td>
                                 @if (pedido.Estado == "En viaje")
                                 {
