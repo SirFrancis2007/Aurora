@@ -9,4 +9,4 @@ SOURCE StoreProcedure/SP_Vehiculo/SP_Vehiculo.sql
 SOURCE Funtions.sql
 SOURCE Triggers.sql
 SOURCE Permisos.sql
-SOURCE Tests.sql
+-- SOURCE Tests.sql

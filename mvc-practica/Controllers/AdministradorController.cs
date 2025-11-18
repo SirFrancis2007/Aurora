@@ -146,7 +146,7 @@ public class AdministradorController : Controller
             var administrador = await _repoAdmin.ObtenerCredenciales(nombre);
             var pedido = new Pedido
             {
-                NombrePedido = dto.Titulo,
+                NombrePedido = dto.Titulo.Trim().ToLower(),
                 Volumen = await VefNumeros(dto.Volumen),
                 Peso = await VefNumeros(dto.Peso),
                 Estado = dto.Estado,
