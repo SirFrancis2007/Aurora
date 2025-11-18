@@ -15,10 +15,10 @@
 <section>
     <div class="main-text">
         <div class="text">
-            <h1 id="t1">Logistic System</h1>
-            <span id="span-text">Prepare your package! Control your business and track every package. Easy, Free, secure. Aurora offers a unique service for your business to thrive. Register and get started. Welcome!</span>
-            <button id="btn-header" class="btn-registro">Registrer</button>
-            <button id="btn-header" class="btn-login">Login in</button>
+            <h1 id="t1">Sistema de Logistica</h1>
+            <span id="span-text">Prepara tus paquetes! <strong>Aurora</strong> es un servicio para realizar seguimiento a tus pedidos detallado entre sucursales. Podras controlar tu administradores, conductores, y los vehiculos. ¡Unete y sigue la estrella polar!</span>
+            <button id="btn-header" class="btn-registro">Registro</button>
+            <button id="btn-header" class="btn-login">Inicio de sesion</button>
         </div>
         <img src="~/images/background.jpg" alt="Logistica">
     </div>
@@ -56,18 +56,18 @@
 <section id="modal-signup-empresa" class="modal">
     <div class="modal__container">
         <div class="modal__header">
-            <h2 class="modal__title">Registro Empresa</h2>
+            <h2 class="modal__title">Registro de surcursal</h2>
             <a href="#" class="modal__close">×</a>
         </div>
         <form asp-action="Post_Empresa" asp-controller="Home" method="post" class="modal__form">
             <div class="modal__field">
-                <label asp-for="Usuario" class="modal__label">Nombre de la Empresa</label>
+                <label asp-for="Usuario" class="modal__label">Razón social de la sucursal</label>
                 <input asp-for="Usuario" type="text" class="modal__input" placeholder="Ingresa el nombre de tu empresa">
                 
                 <label asp-for="Contrasena" class="modal__label">Contraseña</label>
                 <input asp-for="Contrasena" type="password"  class="modal__input" placeholder="Ingrese la contraseña">
             </div>
-            <button type="submit" class="modal__submit">Registrar Empresa</button>
+            <button type="submit" class="modal__submit">Registrar sucursal</button>
         </form>
     </div>
 </section>

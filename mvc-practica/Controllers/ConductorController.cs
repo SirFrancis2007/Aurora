@@ -44,7 +44,7 @@ public class ConductorController : Controller
             await _repoVehiculo.CambiarEstadoAsync(_idvehiculoVinculado, true);
             await _repoConductor.FncLiberarEstadoConductor(conductor.IdConductor);
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("index", "Home");
         }
         return View(pedidos);
     }

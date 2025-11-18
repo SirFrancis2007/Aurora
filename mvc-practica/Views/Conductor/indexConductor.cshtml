@@ -13,7 +13,7 @@
 
 <div class="main-content">
     <div class="container">
-        <h1>Bandeja de Entrada</h1>
+        <h1>Listado de pedidos asignados a su vehiculo:</h1>
 
         <div class="actions" style="display:flex; flex-direction: row; gap: 20px; margin-bottom: 20px;">
             <form asp-action="IniciarViaje" method="post">
@@ -21,7 +21,7 @@
             </form>
             <form asp-controller="Home" asp-action="Logout" method="post" style="display:inline;">
                 <button id="btn-conductor" type="submit" class="btn-logout">
-                    <span>LogOut</span>
+                    <span>Cerrar sesion</span>
                 </button>
             </form>
         </div>
@@ -30,12 +30,12 @@
             <table class="Content-table">
                 <thead class="table-header">
                     <tr>
-                        <th>ID</th>
-                        <th>Paquete</th>
+                        <th>Codigo</th>
+                        <th>Nombre del Paquete</th>
                         <th>Fecha Despacho</th>
-                        <th>Origen</th>
-                        <th>Destino</th>
-                        <th>Estado</th>
+                        <th>Lugar de Origen</th>
+                        <th>Lugar de Destino</th>
+                        <th>Estado Actual</th>
                         <th>Acción</th>
                     </tr>
                 </thead>

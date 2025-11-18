@@ -18,7 +18,7 @@
 
             <form asp-action="AgregarPedido" method="post">
                 <div class="form-group">
-                    <label for="Titulo">Título:</label>
+                    <label for="Titulo">Nombre del pedido:</label>
                     <input asp-for="Titulo" type="text" class="form-control" required />
 
                     <label for="Volumen">Volumen (m³):</label>
@@ -43,7 +43,7 @@
                         }
                     </select>
 
-                    <label for="IdEmpresaDestino">Empresa Destino:</label>
+                    <label for="IdEmpresaDestino">Sucursal de destino:</label>
                     <select asp-for="IdEmpresaDestino" class="form-control">
                         @foreach (var empresa in Model.Empresas)
                         {

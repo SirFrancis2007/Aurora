@@ -57,9 +57,14 @@ public class HomeController : Controller
                 };
 
                 await _repoEmpresa.AltaAsync(_nuevaempresa);
-
-                TempData["Mensaje"] = "Empresa creada con éxito";
-                return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _datos.Usuario });
+                if (await CookieAsync(_datos.Usuario, "empresa"))
+                {
+                    return RedirectToAction("IndexEmpresa", "Empresa", new { nombre = _datos.Usuario });
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             return View(_datos);
         }

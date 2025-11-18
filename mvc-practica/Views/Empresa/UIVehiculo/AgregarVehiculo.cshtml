@@ -14,11 +14,11 @@
 <div class="main-content">
     <div class="form-inscripcion">
         <div class="formulario">
-            <h2>Agregar Vehiculo</h2>
+            <h2>Agregar Vehiculo a <strong>Aurora</strong></h2>
 
             <form method="post" asp-action="AltaVehiculo" asp-controller="Empresa">
                 <div class="form-group">
-                    <label asp-for="Tipo" for="nombre">Modelo:</label>
+                    <label asp-for="Tipo" for="nombre">Tipo de vehiculo:</label>
                     <input asp-for="Tipo" type="text" required />
 
                     <label asp-for="Matricula" for="nombre">Matricula:</label>
@@ -27,7 +27,7 @@
                     <label asp-for="CapacidadMax" for="nombre">Capacidad Maxima | KILOGRAMOS (KG)</label>
                     <input type="text" asp-for="CapacidadMax" required/>
                 </div>
-                <button type="submit" class="btn-submit">Agregar Vehiculo</button>
+                <button type="submit" class="btn-submit">Registrar el vehiculo</button>
             </form>
         </div>
 
