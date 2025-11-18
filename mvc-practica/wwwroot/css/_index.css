@@ -51,3 +51,63 @@
     background-color: #123052;
     border-radius: 0px 16px 0px 16px;
 }
+
+@media (max-width: 600px) {
+    .main-text {
+        flex-direction: column;
+        text-align: center;
+        height: auto;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .main-text img {
+        width: 90%;
+    }
+
+    .text {
+        width: 100%;
+        padding-right: 0;
+    }
+
+    #t1 {
+        font-size: 2rem;
+    }
+
+    #span-text {
+        font-size: 1.1rem;
+    }
+
+    #btn-header {
+        width: 100%;
+        height: 45px;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 992px) {
+    .main-text {
+        flex-direction: column;
+        text-align: center;
+        height: auto;
+        padding: 40px;
+        gap: 30px;
+    }
+
+    .main-text img {
+        width: 70%;
+    }
+
+    .text {
+        width: 90%;
+        padding-right: 0;
+    }
+
+    #t1 {
+        font-size: 2.5rem;
+    }
+
+    #span-text {
+        font-size: 1.25rem;
+    }
+}

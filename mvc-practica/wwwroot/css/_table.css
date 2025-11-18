@@ -105,3 +105,113 @@ a {
     font-size: 1rem;
     color: #081524;
 }
+
+@media (max-width: 991px) {
+    .text-empresa h2 {
+        font-size: 1.6rem;
+    }
+
+    .container {
+        padding: 22px;
+    }
+
+    .menu {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .menu a {
+        width: 100%;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+
+    .Content-table tbody td,
+    .table-header th {
+        padding: 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* 📌 Celulares grandes y medianos (máx. 768px) */
+@media (max-width: 768px) {
+    .text-empresa h2 {
+        font-size: 1.45rem;
+        text-align: center;
+    }
+
+    .container h1 {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .menu a {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+
+    .Content-table tbody td,
+    .table-header th {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* 📌 Celulares pequeños (máx. 480px) */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 18px;
+        border-radius: 8px;
+    }
+
+    .container h1 {
+        font-size: 1.15rem;
+    }
+
+    .text-empresa h2 {
+        font-size: 1.25rem;
+    }
+
+    .menu a {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .Content-table thead {
+        display: none; /* Oculta encabezado */
+    }
+
+    .Content-table tbody tr {
+        display: block;
+        margin-bottom: 18px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        padding: 6px;
+    }
+
+    .Content-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        padding: 10px;
+        border-bottom: none;
+    }
+
+    .Content-table tbody td::before {
+        content: attr(data-label); /* agrega el nombre de la columna */
+        font-weight: 600;
+        color: #1e293b;
+        margin-right: 8px;
+    }
+}
