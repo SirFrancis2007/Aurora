@@ -19,7 +19,6 @@
     z-index: 1000;
 }
 
-/* Modal activo */
 .modal--active {
     opacity: 1;
     visibility: visible;

@@ -40,6 +40,8 @@ ul figure img {
     border: none;
     cursor: pointer;
     font-size: 18px;
+    cursor: pointer;
+
 }
 
 main {
@@ -47,7 +49,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center; 
-    
 }
 
 /* FOOTER */

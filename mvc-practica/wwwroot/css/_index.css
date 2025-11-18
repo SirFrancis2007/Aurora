@@ -50,6 +50,7 @@
 #btn-header:hover {
     background-color: #123052;
     border-radius: 0px 16px 0px 16px;
+    cursor: pointer;
 }
 
 @media (max-width: 600px) {

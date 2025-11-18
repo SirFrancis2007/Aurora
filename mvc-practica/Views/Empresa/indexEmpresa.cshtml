@@ -41,7 +41,19 @@
                                 <td data-label="Nombre">@pedido.NombrePedido</td>
                                 <td data-label="Volumen">@(pedido.Volumen + "m3")</td>
                                 <td data-label="Peso">@(pedido.Peso + "Kg")</td>
-                                <td data-label="Estaod">@pedido.Estado</td>
+                                <td data-label="Estado">
+                                    @{
+                                        var estadoClass = pedido.Estado switch
+                                        {
+                                            "Despachado" => "estado-despachado",
+                                            "En viaje" => "estado-en-viaje",
+                                            "Entregado" => "estado-entregado",
+                                            "Recibido" => "estado-recibido",
+                                            _ => ""
+                                        };
+                                    }
+                                    <span class="estado-badge @estadoClass">@pedido.Estado</span>
+                                </td>
                                 <td data-label="Fecha depacho">@pedido.FechaDespacho.ToString("dd/MM/yyyy")</td>
                             </tr>
                         }

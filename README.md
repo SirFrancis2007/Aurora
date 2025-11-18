@@ -5,9 +5,9 @@
 </p>
 
 **Aurora** es un sistema de logística desarrollado como proyecto académico para la materia **Programación sobre Redes (6° Año, 8° División)**.  
-Su propósito es gestionar y realizar un **seguimiento dinámico y simple de los paquetes despachados**, integrando distintos roles y entidades dentro del proceso de envío y recepción.
+Su propósito es gestionar y realizar un **seguimiento dinámico y simple de los paquetes despachados** entre surcursales, integrando distintos roles y entidades dentro del proceso de envío y recepción.
 
-El proyecto está desarrollado en **.NET 8.0**, utilizando **Dapper** como micro ORM y una base de datos **MySQL** para el almacenamiento de datos.
+El proyecto está desarrollado en **.NET 8.0**, utilizando **Dapper** para la gestion de datos y una base de datos **MySQL** para el almacenamiento de datos.
 
 ---
 
@@ -25,7 +25,7 @@ El proyecto está desarrollado en **.NET 8.0**, utilizando **Dapper** como micro
 ---
 
 ## 🚀 Características principales
-- Gestión de empresas, administradores, conductores y vehículos.
+- Gestión de sucursales, administradores, conductores y vehículos.
 - Control de pedidos con distintos estados predefinidos.
 - Registro histórico de cada pedido.
 - Validaciones mediante **triggers** y métodos de verificación en vehículos.
